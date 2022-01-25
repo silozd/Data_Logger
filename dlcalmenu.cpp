@@ -41,26 +41,26 @@ DLCalMenu::DLCalMenu(QWidget *parent) :
     int RealLabelH = vr*30/i;
     int RealLabelW = hr*180/i;
     int RealLCDH = vr*45/i;
-    int CalibScrollH = RealLCDH+RealLabelH;
+    int CalibScrollH = RealLCDH*2+RealLabelH*2+SideMargin*3;
     int MainScrollW = RealLabelW;
-    int TabW = hr*110/i;
+    int TabBarW = hr*115/i;
+    int TabBarH = hr*100/i;
     qDebug()<<"SideMargin"<<SideMargin;
     qDebug()<<"RealLabelH"<<RealLabelH;
     qDebug()<<"RealLabelW"<<RealLabelW;
     qDebug()<<"RealLcdH"<<RealLCDH;
     qDebug()<<"CalibScrollH"<<CalibScrollH;
     qDebug()<<"MainScrollW"<<MainScrollW;
-    qDebug()<<"TabW"<<TabW;
+    qDebug()<<"TabBarW"<<TabBarW;
 
     tabBar = ui->tabWidget->tabBar();
-    ui->tabWidget->setStyleSheet(QString("QTabBar::tab { height: %1px; width: %1px;};").arg(TabW));
+    ui->tabWidget->setStyleSheet(QString("QTabBar::tab { width: %1px; height: %1px;};").arg(TabBarW,TabBarH));
     ui->tabWidget->setFont(Font1);
     tabBar   ->setStyle(new CustomTabStyle);
 
+    tabBar_alarm = ui->tabWidget_alarm->tabBar();
 
-
-
-    // toolbar :
+// toolbar :
     ui->toolBar -> toggleViewAction()->setVisible(false);
     QWidget *spacer = new QWidget();
     spacer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
@@ -172,9 +172,9 @@ DLCalMenu::DLCalMenu(QWidget *parent) :
         ui->scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
         dataBox     -> setLayout(boxLayout);
         boxLayout   -> setContentsMargins(0,0,0,0);
-        dataBox -> setMaximumHeight(130);
-        ui->scrollArea->setMinimumHeight(130);
-        ui->scrollArea->setMaximumHeight(130);
+        dataBox -> setMaximumHeight(CalibScrollH);
+        ui->scrollArea->setMinimumHeight(CalibScrollH);
+        ui->scrollArea->setMaximumHeight(CalibScrollH);
 
 // cal points :
     for (int i = 0; i < MaxCalPoint; ++i) {
@@ -222,7 +222,6 @@ DLCalMenu::DLCalMenu(QWidget *parent) :
     CalGridLayout   ->  addWidget(useless3 , 0, 2);
 
     qcustomplot_initilize();
-
 }
 int DLCalMenu::GetScreenHRes(int s){
     auto screens = QGuiApplication::screens();
@@ -245,21 +244,6 @@ int DLCalMenu::GetScreenHRes(int s){
     if (px >= lx) i = (1000*lx)/px;;
     return (i) ;
     return ((1000*lx)/px) ;
-//    if  (s == 1) {
-//        PriScrenRect = QGuiApplication::primaryScreen()->geometry();
-//        int sppx = physicalDpiX();x
-//        int splx = logicalDpiX();
-//        qDebug() << "Ekran Yatay FaktÃ¶r " << "SPPX =" << sppx << "SPLX " << splx << "SR =" << ((100*sppx)/splx);
-//        //int sppy = physicalDpiY();
-//        //int sply = logicalDpiY();
-//        //qDebug() << "Ekran Dikey FaktÃ¶r " << "SPPY =" << sppy << "SPLY " << sply << "SR =" << ((100*sppx)/splx);
-//        return ((100*splx)/sppx) ;
-//    }
-//    else {
-//        //PriScrenRect = QGuiApplication::screens()->geometry();
-//        return 1;
-//    }
-//       ChnRawLabel[i] = new QLabel(tr("Channel_Raw %1").arg(i + 1),CalPointsFrame);
 }
 int DLCalMenu::GetScreenVRes(int s){
     auto screens = QGuiApplication::screens();

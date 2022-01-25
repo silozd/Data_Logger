@@ -33,7 +33,7 @@
        <enum>QTabWidget::West</enum>
       </property>
       <property name="currentIndex">
-       <number>4</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="MainPage">
        <attribute name="title">
@@ -62,7 +62,7 @@
         </item>
         <item row="0" column="0">
          <widget class="QWidget" name="frameInfo" native="true">
-          <layout class="QGridLayout" name="gridLayout_3" columnstretch="1,2,1,1,1">
+          <layout class="QGridLayout" name="gridLayout_3" columnstretch="1,2,1,2,1,1">
            <property name="leftMargin">
             <number>3</number>
            </property>
@@ -78,17 +78,7 @@
            <property name="horizontalSpacing">
             <number>24</number>
            </property>
-           <item row="0" column="0">
-            <widget class="QLabel" name="m_serialPortLabel">
-             <property name="text">
-              <string>Serial Port :</string>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignCenter</set>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="3">
+           <item row="2" column="4">
             <widget class="QLabel" name="lbl_inputType">
              <property name="text">
               <string>Input Type :</string>
@@ -96,26 +86,26 @@
              <property name="alignment">
               <set>Qt::AlignCenter</set>
              </property>
+             <property name="indent">
+              <number>3</number>
+             </property>
             </widget>
            </item>
-           <item row="2" column="1">
-            <widget class="QComboBox" name="combo_axis2"/>
-           </item>
-           <item row="2" column="4">
+           <item row="2" column="5">
             <widget class="QLabel" name="info_inputType">
              <property name="text">
               <string>-</string>
              </property>
             </widget>
            </item>
-           <item row="1" column="4">
+           <item row="1" column="5">
             <widget class="QLabel" name="info_filterType">
              <property name="text">
               <string>-</string>
              </property>
             </widget>
            </item>
-           <item row="0" column="3">
+           <item row="0" column="4">
             <widget class="QLabel" name="lbl_sampeRate">
              <property name="text">
               <string>Sampe Rate :</string>
@@ -123,10 +113,44 @@
              <property name="alignment">
               <set>Qt::AlignCenter</set>
              </property>
+             <property name="indent">
+              <number>-1</number>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="4">
+            <widget class="QLabel" name="lbl_filterType">
+             <property name="text">
+              <string>Filter Type :</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+             <property name="indent">
+              <number>3</number>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="5">
+            <widget class="QLabel" name="info_sampeRate">
+             <property name="text">
+              <string>-</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="0">
+            <widget class="QRadioButton" name="radioBtn_dispGraph">
+             <property name="text">
+              <string>Display Graph</string>
+             </property>
             </widget>
            </item>
            <item row="0" column="1">
-            <widget class="QComboBox" name="m_serialPortComboBox"/>
+            <widget class="QRadioButton" name="radioBtn_dispList">
+             <property name="text">
+              <string>Display Table</string>
+             </property>
+            </widget>
            </item>
            <item row="1" column="0">
             <widget class="QLabel" name="lbl_axis1">
@@ -136,20 +160,13 @@
              <property name="alignment">
               <set>Qt::AlignCenter</set>
              </property>
+             <property name="indent">
+              <number>3</number>
+             </property>
             </widget>
            </item>
-           <item row="0" column="2">
-            <spacer name="horizontalSpacer">
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>40</width>
-               <height>20</height>
-              </size>
-             </property>
-            </spacer>
+           <item row="1" column="1">
+            <widget class="QComboBox" name="combo_axis1"/>
            </item>
            <item row="2" column="0">
             <widget class="QLabel" name="lbl_axis2">
@@ -159,27 +176,55 @@
              <property name="alignment">
               <set>Qt::AlignCenter</set>
              </property>
+             <property name="indent">
+              <number>3</number>
+             </property>
             </widget>
            </item>
-           <item row="1" column="1">
-            <widget class="QComboBox" name="combo_axis1"/>
+           <item row="2" column="1">
+            <widget class="QComboBox" name="combo_axis2"/>
            </item>
-           <item row="1" column="3">
-            <widget class="QLabel" name="lbl_filterType">
+           <item row="1" column="2">
+            <widget class="QLabel" name="label_2">
              <property name="text">
-              <string>Filter Type :</string>
+              <string>Period :</string>
              </property>
              <property name="alignment">
               <set>Qt::AlignCenter</set>
              </property>
-            </widget>
-           </item>
-           <item row="0" column="4">
-            <widget class="QLabel" name="info_sampeRate">
-             <property name="text">
-              <string>-</string>
+             <property name="indent">
+              <number>3</number>
              </property>
             </widget>
+           </item>
+           <item row="0" column="3">
+            <widget class="QComboBox" name="m_serialPortComboBox"/>
+           </item>
+           <item row="0" column="2">
+            <widget class="QLabel" name="m_serialPortLabel">
+             <property name="text">
+              <string>Serial Port :</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+             <property name="indent">
+              <number>3</number>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="3">
+            <widget class="QComboBox" name="comboBox"/>
+           </item>
+           <item row="2" column="2">
+            <widget class="QLabel" name="label_3">
+             <property name="text">
+              <string>Show Data :</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="3">
+            <widget class="QComboBox" name="comboBox_2"/>
            </item>
           </layout>
          </widget>
@@ -189,6 +234,13 @@
           <property name="spacing">
            <number>3</number>
           </property>
+          <item>
+           <widget class="QPushButton" name="btn_graphDialog">
+            <property name="text">
+             <string>Set Device</string>
+            </property>
+           </widget>
+          </item>
           <item>
            <widget class="QPushButton" name="btn_dispGraph">
             <property name="text">
@@ -394,7 +446,7 @@
             <widget class="QComboBox" name="combo_axisX"/>
            </item>
            <item row="1" column="0">
-            <widget class="QRadioButton" name="radioBtn_dispList">
+            <widget class="QRadioButton" name="radioButton_2">
              <property name="text">
               <string>Display Graph</string>
              </property>
@@ -423,7 +475,7 @@
             <widget class="QComboBox" name="combo_axisY"/>
            </item>
            <item row="0" column="0">
-            <widget class="QRadioButton" name="radioBtn_dispGraph">
+            <widget class="QRadioButton" name="radioButton_5">
              <property name="text">
               <string>Display List</string>
              </property>
@@ -476,7 +528,7 @@
             </widget>
            </item>
            <item row="0" column="6">
-            <widget class="QPushButton" name="btn_graphDialog">
+            <widget class="QPushButton" name="pushButton">
              <property name="text">
               <string>Set Device</string>
              </property>
@@ -841,9 +893,9 @@
          </widget>
         </item>
         <item row="1" column="0">
-         <widget class="QTabWidget" name="tabWidget_2">
+         <widget class="QTabWidget" name="tabWidget_alarm">
           <property name="currentIndex">
-           <number>3</number>
+           <number>2</number>
           </property>
           <widget class="QWidget" name="tab_7">
            <attribute name="title">

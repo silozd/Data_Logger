@@ -126,6 +126,7 @@ public:
 
     // page layout groups :
     QTabBar *tabBar;
+    QTabBar *tabBar_alarm;
     QWidget *wdgReals;
     QWidget *dataBox;                           // calib raw real data display
     QFrame *CalPointsFrame;

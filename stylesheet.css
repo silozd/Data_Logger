@@ -1,0 +1,9 @@
+QTabWidget{
+
+}
+
+
+/* ALARM */
+QTabBar#tabBar_alarm::tab{
+    height : 40px;
+}

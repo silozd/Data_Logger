@@ -30,5 +30,6 @@
         <file>icon/check.png</file>
         <file>icon/bell.png</file>
         <file>icon/alarm.png</file>
+        <file>stylesheet.css</file>
     </qresource>
 </RCC>
