@@ -16,6 +16,11 @@ DLCalMenu::DLCalMenu(QWidget *parent) :
     tabBar   ->setStyle(new CustomTabStyle);
     QFont ComboFont ("Arial" , 13, QFont::Normal);
 
+    int hr = DLCalMenu::GetScreenHRes(0);
+    int vr = DLCalMenu::GetScreenVRes(0);
+    qDebug()<<"hr = "<<hr;
+    qDebug()<<"vr = "<<vr;
+
 // toolbar :
     ui->toolBar -> toggleViewAction()->setVisible(false);
     QWidget *spacer = new QWidget();
@@ -46,7 +51,6 @@ DLCalMenu::DLCalMenu(QWidget *parent) :
     ui->scrollReals->setWidget(wdgReals);
     ui->scrollReals->setWidgetResizable(1);
     ui->scrollReals->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
-    qcustomplot_initilize();
     for (int i=0; i<MaxChnCounts; i++){
         ChnLCDRaw.append(new QLCDNumber(CalPointsFrame));
     }
@@ -55,7 +59,7 @@ DLCalMenu::DLCalMenu(QWidget *parent) :
         ChnLCDReal_Main.append(new QLCDNumber(wdgReals));
     }
 
-    // real data - main page :
+// real data - main page :
     for (int i = 0; i < MaxChnCounts; ++i) {            // real- raw array loop
         ChnRealLabel[i]     = new QLabel(tr("Channel %1 Real").arg(i + 1),wdgReals);
         ChnRealLabel[i]     -> setAlignment(Qt::AlignCenter);
@@ -110,7 +114,7 @@ DLCalMenu::DLCalMenu(QWidget *parent) :
             boxLayout       -> setVerticalSpacing(2);
             boxLayout       -> setHorizontalSpacing(5);
         }
-    // combobox channel items :
+// combobox channel items :
             ui->combo_axis1     -> addItem(QString(tr("Channel %1").arg(i+1)),i);
             ui->combo_axis2     -> addItem(QString(tr("Channel %1").arg(i+1)),i);
             ui->combo_axisX     -> addItem(QString(tr("Channel %1").arg(i+1)),i);
@@ -135,17 +139,15 @@ DLCalMenu::DLCalMenu(QWidget *parent) :
     for (int i = 0; i < MaxCalPoint; ++i) {
         CalStep[i]          =   new QLabel(tr("%1").arg(i + 1));
         CalStep[i]          ->  setAlignment(Qt::AlignCenter);
-        //CalStep[i]          ->  setSizePolicy(QSizePolicy::Fixed , QSizePolicy::Fixed);
-        CalStep[i]          ->  setMinimumWidth(18);
         CalStep[i]          ->  setStyleSheet("font-size: 16px; margin: 3px");
+        CalStep[i]          ->  setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Expanding);
 
         UserCalLabel[i]     =   new QLabel(CalPointsFrame);
         UserCalLabel[i]     ->  setText(QString::number((i)*200*10));
         UserCalLabel[i]     ->  setAlignment(Qt::AlignRight);
         UserCalLabel[i]     ->  setFont(ComboFont);
         UserCalLabel[i]     ->  setStyleSheet("background-color: rgb(123, 168, 246); border: 1px solid rgb(83,128,206); margin-right: 5px;  padding: 1px; ");
-        //UserCalLabel[i]     ->  setSizePolicy(QSizePolicy::Fixed , QSizePolicy::Fixed);
-        UserCalLabel[i]     ->  setMinimumSize(90,20);
+        UserCalLabel[i]     ->  setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
         ChnCalArray[0][8 + i] = QString::number((i)*200*10);
 
         ChnRawData[i]       =   new QLabel(QString::number(00).arg(i+1));
@@ -153,13 +155,13 @@ DLCalMenu::DLCalMenu(QWidget *parent) :
         ChnRawData[i]       ->  setAlignment(Qt::AlignRight);
         ChnRawData[i]       ->  setFont(ComboFont);
         ChnRawData[i]       ->  setStyleSheet("border: 1px solid gray; margin-right: 5px ; padding: 1px; background-color: rgb(255,255,255);");
-        //ChnRawData[i]       ->  setSizePolicy(QSizePolicy::Fixed , QSizePolicy::Fixed);
-        ChnRawData[i]       ->  setMinimumSize(90,20);
+        ChnRawData[i]       ->  setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
         ChnCalArray[0][8 + 16 + i] = QString::number((i+1)*2000);
 
         CalStepCheckBox[i]  =   new QCheckBox;
         CalStepCheckBox[i]  ->  setStyleSheet(QString("QCheckBox::indicator {height: %1px; width: %1px;}"
-                                                      "QCheckBox::indicator:checked{ border-image: url(:/icon/check.png); height: %1px; width: %1px;};").arg(18));
+                                                      "QCheckBox::indicator:checked{ border-image: url(:/icon/check.png); height: %1px; width: %1px;};").arg(25));
+        CalStepCheckBox[i]  ->  setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Expanding);
         if  (i > 0){
             CalStepCheckBox[i]->setDisabled(true);
         }
@@ -177,8 +179,57 @@ DLCalMenu::DLCalMenu(QWidget *parent) :
     CalGridLayout   ->  addWidget(useless1 , 0, 0);
     CalGridLayout   ->  addWidget(useless2 , 0, 1);
     CalGridLayout   ->  addWidget(useless3 , 0, 2);
-}
 
+    qcustomplot_initilize();
+
+}
+int DLCalMenu::GetScreenHRes(int s){
+    auto screens = QGuiApplication::screens();
+    qDebug() << "Ekran Listesi " << screens.count();
+    int i = 0;
+    if (screens.count() >= 1) i = s;
+    auto SecScrenRect = screens[s]->geometry();
+    QString Text = QString ("%1 Ekran Resolution "). arg(s);//.arg(s));
+    qDebug() << Text << SecScrenRect;
+    auto px = screens[i]-> physicalDotsPerInchX(); //size();
+    auto lx = screens[i]-> logicalDotsPerInchX();
+    //QRect rec = QGuiApplication::primaryScreen()->geometry();
+    QRect rec = screens[i]->geometry();
+    ScreenWidth = rec.width();
+    ScreenHeight = rec.height();
+    Text = QString ("%1 Ekran"). arg(s);
+    qDebug() << Text << "Yatay:" << ScreenWidth << "Pixel  &  Dikey : " << ScreenHeight << "Pixel";
+    qDebug() << Text << "Yatay Faktor:"  << "PX =" << px << "LX " << lx << "SR =" << lx/px;
+    i = (1000*px)/lx;
+    if (px >= lx) i = (1000*lx)/px;;
+    return (i) ;
+    return ((1000*lx)/px) ;
+//    if  (s == 1) {
+//        PriScrenRect = QGuiApplication::primaryScreen()->geometry();
+//        int sppx = physicalDpiX();x
+//        int splx = logicalDpiX();
+//        qDebug() << "Ekran Yatay FaktÃ¶r " << "SPPX =" << sppx << "SPLX " << splx << "SR =" << ((100*sppx)/splx);
+//        //int sppy = physicalDpiY();
+//        //int sply = logicalDpiY();
+//        //qDebug() << "Ekran Dikey FaktÃ¶r " << "SPPY =" << sppy << "SPLY " << sply << "SR =" << ((100*sppx)/splx);
+//        return ((100*splx)/sppx) ;
+//    }
+//    else {
+//        //PriScrenRect = QGuiApplication::screens()->geometry();
+//        return 1;
+//    }
+//       ChnRawLabel[i] = new QLabel(tr("Channel_Raw %1").arg(i + 1),CalPointsFrame);
+}
+int DLCalMenu::GetScreenVRes(int s){
+    auto screens = QGuiApplication::screens();
+    auto ly = screens[s]-> physicalDotsPerInchY(); //size();
+    auto py = screens[s]-> logicalDotsPerInchY();
+    QString Text = QString (" %1 Ekran Dikey Faktor "). arg(s);//.arg(s));
+    qDebug() << Text<< "PY =" << py << "LY " << ly << "SR =" << py / ly;
+    int i = (1000*py)/ly;
+    if (py >= ly) i = (1000*ly)/py;;
+    return (i) ;
+}
 DLCalMenu::~DLCalMenu()
 {
     delete ui;

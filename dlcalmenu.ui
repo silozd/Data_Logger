@@ -33,7 +33,7 @@
        <enum>QTabWidget::West</enum>
       </property>
       <property name="currentIndex">
-       <number>1</number>
+       <number>3</number>
       </property>
       <widget class="QWidget" name="MainPage">
        <attribute name="title">
@@ -231,31 +231,61 @@
         </item>
         <item row="1" column="1">
          <widget class="QWidget" name="wdgCalib" native="true">
-          <layout class="QGridLayout" name="gridLayout_6" rowstretch="1,4,1">
+          <layout class="QGridLayout" name="gridLayout_6" rowstretch="2,9,1">
+           <property name="topMargin">
+            <number>0</number>
+           </property>
+           <property name="bottomMargin">
+            <number>0</number>
+           </property>
            <item row="1" column="0">
             <widget class="QWidget" name="wdgInput" native="true"/>
            </item>
            <item row="0" column="0">
             <widget class="QFrame" name="frameCalibSet">
-             <layout class="QGridLayout" name="gridLayout_7">
+             <layout class="QGridLayout" name="gridLayout_7" columnstretch="1,1,1,1,1">
+              <item row="2" column="4">
+               <widget class="QComboBox" name="CoBoxFilterType"/>
+              </item>
+              <item row="2" column="1">
+               <widget class="QComboBox" name="CoBoxInputType"/>
+              </item>
+              <item row="0" column="3">
+               <widget class="QLabel" name="SampeRate">
+                <property name="text">
+                 <string>Sampe Rate :</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="4">
+               <widget class="QComboBox" name="CoBoxSampeRate"/>
+              </item>
+              <item row="1" column="3">
+               <widget class="QLabel" name="DataFormat">
+                <property name="text">
+                 <string>Data Format :</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="4">
+               <widget class="QComboBox" name="CoBoxDataFormat"/>
+              </item>
+              <item row="1" column="1">
+               <widget class="QComboBox" name="CoBoxChannel"/>
+              </item>
+              <item row="2" column="3">
+               <widget class="QLabel" name="FilterType">
+                <property name="text">
+                 <string>Filter Type :</string>
+                </property>
+               </widget>
+              </item>
               <item row="1" column="0">
                <widget class="QLabel" name="Channel">
                 <property name="text">
                  <string>Channels :</string>
                 </property>
                </widget>
-              </item>
-              <item row="2" column="1">
-               <widget class="QComboBox" name="CoBoxInputType"/>
-              </item>
-              <item row="0" column="3">
-               <widget class="QComboBox" name="CoBoxSampeRate"/>
-              </item>
-              <item row="1" column="3">
-               <widget class="QComboBox" name="CoBoxDataFormat"/>
-              </item>
-              <item row="1" column="1">
-               <widget class="QComboBox" name="CoBoxChannel"/>
               </item>
               <item row="2" column="0">
                <widget class="QLabel" name="InputType">
@@ -264,29 +294,18 @@
                 </property>
                </widget>
               </item>
-              <item row="2" column="3">
-               <widget class="QComboBox" name="CoBoxFilterType"/>
-              </item>
-              <item row="0" column="2">
-               <widget class="QLabel" name="SampeRate">
-                <property name="text">
-                 <string>Sampe Rate :</string>
-                </property>
-               </widget>
-              </item>
-              <item row="1" column="2">
-               <widget class="QLabel" name="DataFormat">
-                <property name="text">
-                 <string>Data Format :</string>
-                </property>
-               </widget>
-              </item>
               <item row="2" column="2">
-               <widget class="QLabel" name="FilterType">
-                <property name="text">
-                 <string>Filter Type :</string>
+               <spacer name="horizontalSpacer_3">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
                 </property>
-               </widget>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>40</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
               </item>
              </layout>
             </widget>
@@ -359,92 +378,126 @@
         <string>Graphics</string>
        </attribute>
        <layout class="QGridLayout" name="gridLayout_9" rowstretch="1,6">
-        <item row="0" column="0">
-         <layout class="QGridLayout" name="gridLayout_8">
-          <item row="0" column="0">
-           <widget class="QRadioButton" name="radioButton">
-            <property name="text">
-             <string>RadioButton</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="0">
-           <widget class="QRadioButton" name="radioButton_2">
-            <property name="text">
-             <string>RadioButton</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="3">
-           <widget class="QLabel" name="label_17">
-            <property name="text">
-             <string>Axis X :</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignCenter</set>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="4">
-           <widget class="QComboBox" name="combo_axisX"/>
-          </item>
-          <item row="1" column="2">
-           <widget class="QComboBox" name="comboBox_10"/>
-          </item>
-          <item row="1" column="4">
-           <widget class="QComboBox" name="combo_axisY"/>
-          </item>
-          <item row="1" column="3">
-           <widget class="QLabel" name="label_18">
-            <property name="text">
-             <string>Axis Y :</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignCenter</set>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="1">
-           <widget class="QLabel" name="label_16">
-            <property name="text">
-             <string>TextLabel</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignCenter</set>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="1">
-           <widget class="QLabel" name="label_15">
-            <property name="text">
-             <string>TextLabel</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignCenter</set>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="2">
-           <widget class="QComboBox" name="comboBox_9"/>
-          </item>
-          <item row="0" column="5">
-           <widget class="QPushButton" name="pushButton_6">
-            <property name="text">
-             <string>PushButton</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="5">
-           <widget class="QPushButton" name="pushButton_7">
-            <property name="text">
-             <string>PushButton</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
         <item row="1" column="0">
          <widget class="QWidget" name="wdgPlot" native="true"/>
+        </item>
+        <item row="0" column="0">
+         <widget class="QFrame" name="frame">
+          <layout class="QGridLayout" name="gridLayout_8" columnstretch="1,1,1,1,1,1,1,1">
+           <item row="0" column="4">
+            <widget class="QComboBox" name="combo_axisX"/>
+           </item>
+           <item row="1" column="0">
+            <widget class="QRadioButton" name="radioBtn_dispList">
+             <property name="text">
+              <string>Display Graph</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="1">
+            <widget class="QLabel" name="label_16">
+             <property name="text">
+              <string>Period (.msec):</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+             </property>
+             <property name="indent">
+              <number>5</number>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="2">
+            <widget class="QComboBox" name="comboBox_10"/>
+           </item>
+           <item row="0" column="2">
+            <widget class="QComboBox" name="comboBox_9"/>
+           </item>
+           <item row="1" column="4">
+            <widget class="QComboBox" name="combo_axisY"/>
+           </item>
+           <item row="0" column="0">
+            <widget class="QRadioButton" name="radioBtn_dispGraph">
+             <property name="text">
+              <string>Display List</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="3">
+            <widget class="QLabel" name="lbl_axisY">
+             <property name="text">
+              <string>Axis Y :</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+             </property>
+             <property name="indent">
+              <number>5</number>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="3">
+            <widget class="QLabel" name="lbl_axisX">
+             <property name="text">
+              <string>Axis X :</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+             </property>
+             <property name="indent">
+              <number>5</number>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QLabel" name="label_15">
+             <property name="text">
+              <string>Choose data :</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+             </property>
+             <property name="indent">
+              <number>5</number>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="6">
+            <widget class="QPushButton" name="btn_dispGraph2">
+             <property name="text">
+              <string>Plot Graph</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="6">
+            <widget class="QPushButton" name="btn_graphDialog">
+             <property name="text">
+              <string>Set Device</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="7">
+            <widget class="QPushButton" name="btn_stopGraph2">
+             <property name="text">
+              <string>Pause Graph</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="5">
+            <spacer name="horizontalSpacer_2">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+          </layout>
+         </widget>
         </item>
        </layout>
       </widget>
@@ -452,14 +505,7 @@
        <attribute name="title">
         <string>Settings</string>
        </attribute>
-       <layout class="QGridLayout" name="gridLayout_10">
-        <item row="6" column="0">
-         <widget class="QLabel" name="label_24">
-          <property name="text">
-           <string>Active Channel :</string>
-          </property>
-         </widget>
-        </item>
+       <layout class="QGridLayout" name="gridLayout_10" columnstretch="1,2,2,1,1,1,1,1,1">
         <item row="8" column="1">
          <widget class="QProgressBar" name="progressBar">
           <property name="value">
@@ -467,15 +513,15 @@
           </property>
          </widget>
         </item>
-        <item row="8" column="3">
-         <widget class="QLabel" name="label_30">
+        <item row="4" column="0">
+         <widget class="QLabel" name="label_22">
           <property name="text">
-           <string>TextLabel</string>
+           <string>Channel :</string>
           </property>
          </widget>
         </item>
-        <item row="7" column="0">
-         <widget class="QLabel" name="label_26">
+        <item row="6" column="1">
+         <widget class="QLabel" name="activeChannels">
           <property name="text">
            <string>TextLabel</string>
           </property>
@@ -488,75 +534,10 @@
           </property>
          </widget>
         </item>
-        <item row="5" column="2">
-         <widget class="QRadioButton" name="radioButton_4">
+        <item row="6" column="0">
+         <widget class="QLabel" name="label_24">
           <property name="text">
-           <string>RadioButton</string>
-          </property>
-         </widget>
-        </item>
-        <item row="5" column="0">
-         <widget class="QLabel" name="label_23">
-          <property name="text">
-           <string>TextLabel</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="1">
-         <widget class="QLineEdit" name="lineEdit"/>
-        </item>
-        <item row="6" column="1">
-         <widget class="QLabel" name="activeChannels">
-          <property name="text">
-           <string>TextLabel</string>
-          </property>
-         </widget>
-        </item>
-        <item row="3" column="0">
-         <widget class="QLabel" name="label_21">
-          <property name="text">
-           <string>TextLabel</string>
-          </property>
-         </widget>
-        </item>
-        <item row="4" column="0">
-         <widget class="QLabel" name="label_22">
-          <property name="text">
-           <string>Channel :</string>
-          </property>
-         </widget>
-        </item>
-        <item row="9" column="0">
-         <widget class="QLabel" name="label_29">
-          <property name="text">
-           <string>TextLabel</string>
-          </property>
-         </widget>
-        </item>
-        <item row="4" column="1">
-         <widget class="QComboBox" name="combo_channels"/>
-        </item>
-        <item row="4" column="2">
-         <widget class="QLineEdit" name="lineEdit_2"/>
-        </item>
-        <item row="7" column="1">
-         <widget class="QLabel" name="label_27">
-          <property name="text">
-           <string>TextLabel</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="2">
-         <widget class="QPushButton" name="pushButton_9">
-          <property name="text">
-           <string>PushButton</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="0">
-         <widget class="QLabel" name="label_19">
-          <property name="text">
-           <string>TextLabel</string>
+           <string>Active Channel :</string>
           </property>
          </widget>
         </item>
@@ -567,15 +548,35 @@
           </property>
          </widget>
         </item>
-        <item row="4" column="3">
-         <widget class="QPushButton" name="pushButton_10">
+        <item row="0" column="0">
+         <widget class="QLabel" name="label_19">
           <property name="text">
-           <string>PushButton</string>
+           <string>TextLabel</string>
           </property>
          </widget>
         </item>
         <item row="1" column="0">
          <widget class="QLabel" name="label_20">
+          <property name="text">
+           <string>TextLabel</string>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="2">
+         <widget class="QLineEdit" name="lineEdit_2"/>
+        </item>
+        <item row="7" column="0">
+         <widget class="QLabel" name="label_26">
+          <property name="text">
+           <string>TextLabel</string>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="1">
+         <widget class="QComboBox" name="combo_channels"/>
+        </item>
+        <item row="9" column="0">
+         <widget class="QLabel" name="label_29">
           <property name="text">
            <string>TextLabel</string>
           </property>
@@ -588,24 +589,89 @@
           </property>
          </widget>
         </item>
-        <item row="8" column="5">
+        <item row="10" column="8">
+         <widget class="QLabel" name="label_33">
+          <property name="text">
+           <string>TextLabel</string>
+          </property>
+         </widget>
+        </item>
+        <item row="10" column="4">
+         <spacer name="horizontalSpacer_4">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item row="3" column="0">
+         <widget class="QLabel" name="label_21">
+          <property name="text">
+           <string>TextLabel</string>
+          </property>
+         </widget>
+        </item>
+        <item row="5" column="0">
+         <widget class="QLabel" name="label_23">
+          <property name="text">
+           <string>TextLabel</string>
+          </property>
+         </widget>
+        </item>
+        <item row="7" column="1">
+         <widget class="QLabel" name="label_27">
+          <property name="text">
+           <string>TextLabel</string>
+          </property>
+         </widget>
+        </item>
+        <item row="5" column="2">
+         <widget class="QRadioButton" name="radioButton_4">
+          <property name="text">
+           <string>RadioButton</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="QLineEdit" name="lineEdit"/>
+        </item>
+        <item row="4" column="3">
+         <widget class="QPushButton" name="pushButton_10">
+          <property name="text">
+           <string>PushButton</string>
+          </property>
+         </widget>
+        </item>
+        <item row="10" column="5">
          <widget class="QLabel" name="label_32">
           <property name="text">
            <string>TextLabel</string>
           </property>
          </widget>
         </item>
-        <item row="8" column="4">
+        <item row="10" column="7">
          <widget class="QLabel" name="label_31">
           <property name="text">
            <string>TextLabel</string>
           </property>
          </widget>
         </item>
-        <item row="8" column="6">
-         <widget class="QLabel" name="label_33">
+        <item row="10" column="6">
+         <widget class="QLabel" name="label">
           <property name="text">
            <string>TextLabel</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="3">
+         <widget class="QPushButton" name="pushButton_9">
+          <property name="text">
+           <string>PushButton</string>
           </property>
          </widget>
         </item>

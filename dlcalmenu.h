@@ -275,6 +275,9 @@ private:
     Ui::DLCalMenu *ui;
 
 public slots:
+    int GetScreenHRes(int s);
+    int GetScreenVRes(int s);
+
     void qcustomplot_initilize();
 };
 
