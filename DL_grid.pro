@@ -30,7 +30,8 @@ SOURCES += \
         main.cpp \
         dlcalmenu.cpp \
     qcustomplot.cpp \
-    plotting.cpp
+    plotting.cpp \
+    process.cpp
 
 HEADERS += \
         dlcalmenu.h \

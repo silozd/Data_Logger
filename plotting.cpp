@@ -3,7 +3,7 @@
 #include "qcustomplot.h"
 #include <QFont>
 
-void DLCalMenu::qcustomplot_initilize()
+void DLCalMenu::setup_customPlot()
 {
     QFont legendFont = font();
     QFont AxisFont("Newyork");

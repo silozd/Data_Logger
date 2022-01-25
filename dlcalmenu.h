@@ -31,8 +31,16 @@
 #include <QTimer>
 #include <QtSerialPort/QSerialPort>
 #include <QVector>
-
 #include "qcustomplot.h"
+
+typedef unsigned char u8;
+
+#define SCR_MAIN            0
+#define SCR_CALIB           1
+#define SCR_GRAPH           2
+#define SCR_SET             3
+#define SCR_PORTSET         4
+#define SCR_ALERTS          5
 
 namespace Ui {
 class DLCalMenu;
@@ -45,7 +53,30 @@ class DLCalMenu : public QMainWindow
 public:
     explicit DLCalMenu(QWidget *parent = 0);
     ~DLCalMenu();
+    ///const int MaxCalPoint = 16;
+    ///const int MaxChnCounts = 4;
+    const int KeyDigitCount = 6;
+    ///const int MaxDataSend = 40;
 
+    enum Mode { NavigationMode, AddingMode };
+    int PreChnNo = 0;
+    int PreDpLoc = 0;
+    ///int PreInputType = 0;
+    ///int PreSampeRate = 0;
+    ///int PreFilterType = 0;
+    ///
+    u8 current_page;                            // to assign index for each tab
+
+private:
+    Ui::DLCalMenu *ui;
+    //stopwatch *watch;                           // for serial port connection time count
+
+protected:
+//    void mousePressEvent(QMouseEvent *);
+//    void keyPressEvent(QKeyEvent *);
+//    void keyReleaseEvent(QKeyEvent *);
+
+public :
     enum { MaxCalPoint = 16 };
     QLabel *CalStep[MaxCalPoint];               // cal step numbers
     QLabel *UserCalLabel[MaxCalPoint];          // key cal inputs
@@ -181,6 +212,7 @@ public:
     QWidget *wdg_dialogPsw;
     QLineEdit *newPswd;
     QLineEdit *oldPswd;
+    QLineEdit *password ;
     QPushButton *btn_saveNewPswd;
     QPushButton *btn_cancelNewPswd;
     QLabel *keyicon;
@@ -272,14 +304,19 @@ public:
     bool sdSelected=false;
     int linecnt=0;
 
-private:
-    Ui::DLCalMenu *ui;
+private slots:
+    void scroll_movement(); // Added Scroll Movement
+    void slider_Pressed();  // Get Position of scroll_bar when pressed
+    void slider_Released(); // Get Position of scroll_bar when released
+
+    void on_tabWidget_currentChanged(int index);
 
 public slots:
     int GetScreenHRes(int s);
     int GetScreenVRes(int s);
 
-    void qcustomplot_initilize();
+    void setup_combobox();
+    void setup_customPlot();
 };
 
 #endif // DLCALMENU_H

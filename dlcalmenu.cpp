@@ -2,6 +2,29 @@
 #include "ui_dlcalmenu.h"
 #include "customtabstyle.h"
 #include <QDebug>
+#include <QAction>
+#include <QApplication>
+#include <QDateEdit>
+#include <QDebug>
+#include <QDesktopWidget>
+#include <QFile>
+#include <QFileDialog>
+#include <QIcon>
+#include <QMessageBox>
+#include <QMouseEvent>
+#include <QProgressBar>
+#include <QRadioButton>
+#include <QScreen>
+#include <QTextStream>
+#include <QTimeEdit>
+#include <QToolBar>
+#include <QtSerialPort/QSerialPort>
+#include <QtSerialPort/QSerialPortInfo>
+
+#include <iostream>
+#include <string>
+#include <stdio.h>
+#include <stdlib.h>
 
 DLCalMenu::DLCalMenu(QWidget *parent) :
     QMainWindow(parent),
@@ -23,7 +46,7 @@ DLCalMenu::DLCalMenu(QWidget *parent) :
     }
     else if (ScreenWidth <=1920){
         i = 1000;
-        Fontsize = 13;
+        Fontsize = 12;
         Font1.setPointSize(Fontsize);
     }
     else if (ScreenWidth > 1920){
@@ -34,17 +57,18 @@ DLCalMenu::DLCalMenu(QWidget *parent) :
 
     int hr = DLCalMenu::GetScreenHRes(0);
     int vr = DLCalMenu::GetScreenVRes(0);
-    qDebug()<<"hr = "<<hr;
-    qDebug()<<"vr = "<<vr;
-
     int SideMargin = hr*10/i;
     int RealLabelH = vr*30/i;
+    int CalPointH = vr*38/i;
     int RealLabelW = hr*180/i;
     int RealLCDH = vr*45/i;
     int CalibScrollH = RealLCDH*2+RealLabelH*2+SideMargin*3;
     int MainScrollW = RealLabelW;
     int TabBarW = hr*115/i;
     int TabBarH = hr*100/i;
+
+    qDebug()<<"hr = "<<hr;
+    qDebug()<<"vr = "<<vr;
     qDebug()<<"SideMargin"<<SideMargin;
     qDebug()<<"RealLabelH"<<RealLabelH;
     qDebug()<<"RealLabelW"<<RealLabelW;
@@ -57,15 +81,16 @@ DLCalMenu::DLCalMenu(QWidget *parent) :
     ui->tabWidget->setStyleSheet(QString("QTabBar::tab { width: %1px; height: %1px;};").arg(TabBarW,TabBarH));
     ui->tabWidget->setFont(Font1);
     tabBar   ->setStyle(new CustomTabStyle);
-
     tabBar_alarm = ui->tabWidget_alarm->tabBar();
+    ui->MainPage->setStyleSheet(QString("QLabel,QComboBox,QPushButton,QRadioButton{font-size: %1pt;};").arg(Fontsize));
+    ui->MainPage->setFont(Font1);
 
 // toolbar :
     ui->toolBar -> toggleViewAction()->setVisible(false);
     QWidget *spacer = new QWidget();
-    spacer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
-    ui->toolBar->addWidget(spacer);
     QLabel  *logo = new QLabel;
+    spacer  -> setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+    ui      -> toolBar->addWidget(spacer);
     logo    -> setSizeIncrement(350, 40);
     logo    -> setPixmap(QPixmap(":/icon/logo.png"));
     logo    -> setContentsMargins(0,0,0,0);
@@ -84,12 +109,63 @@ DLCalMenu::DLCalMenu(QWidget *parent) :
     connect (quit, &QAction::triggered, qApp, &QApplication::quit);
 //    connect (exportfile, SIGNAL(triggered()), this, SLOT(exportCsv()));       // OPEN
 
+// dialog password initilize:       // OPEN DIALOG
+/*    dialog_newPswd          =  new QDialog;
+    password                -> setEchoMode(QLineEdit::Password);
+    password                -> setPlaceholderText("Type password");
+    password                -> setClearButtonEnabled(true);
+    password                -> setMaxLength(4);
+    wdg_dialogPsw           =  new QWidget;
+    newPswd                 =  new QLineEdit ;
+    oldPswd                 =  new QLineEdit;
+    btn_saveNewPswd         =  new QPushButton("Apply");
+    btn_cancelNewPswd       =  new QPushButton("Cancel");
+    keyicon                 =  new QLabel(wdg_dialogPsw);
+
+// dialog set device:
+    dialog_setDevice        = new QDialog;
+    wdg_dialogSetDev        = new QWidget;
+    combo_device            = new QComboBox;
+    btn_okDialog            = new QPushButton("OK");
+    btn_cancelDialog        = new QPushButton("CANCEL");
+    lbl_startDate           = new QLabel("Start :");
+    lbl_endDate             = new QLabel("End :");
+    lbl_device              = new QLabel("Device :");
+    dateEdit_1              = new QDateEdit;
+    dateEdit_2              = new QDateEdit;
+    timeEdit_1              = new QTimeEdit;
+    timeEdit_2              = new QTimeEdit;
+
+// dialog add graph:
+    grid_dialogAddMain      = new QGridLayout;
+    grid_dialogAddGra       = new QGridLayout;
+    dialog_addToGraph       = new QDialog;
+    dialog_addToMain        = new QDialog;
+    wdg_dialogAddGra        = new QWidget;
+    wdg_dialogAddMain       = new QWidget;
+    combo_diaMain           = new QComboBox;
+    combo_diaGraph          = new QComboBox;
+    btn_diaOKMain           = new QPushButton("Apply");
+    btn_diaOKGra            = new QPushButton("Apply");
+    btn_diaCancelMain       = new QPushButton("Cancel");
+    btn_diaCancelGra        = new QPushButton("Cancel");
+    lbl_diaAxisMain         = new QLabel("Axis Y : ");
+    lbl_diaAxisGra          = new QLabel("Axis Y : ");
+*/
     grid_reals  = new QGridLayout(wdgReals);
     boxLayout   = new QGridLayout(dataBox);
     CalGridLayout = new QGridLayout(CalPointsFrame);
     ui->scrollReals->setWidget(wdgReals);
     ui->scrollReals->setWidgetResizable(1);
     ui->scrollReals->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+
+// serial port:
+    const auto infos = QSerialPortInfo::availablePorts();
+    for (const QSerialPortInfo &info : infos){
+        ui->m_serialPortComboBox->addItem(info.portName());
+        ui->currentPort->setText(ui->m_serialPortComboBox->currentText());
+    }
+
     for (int i=0; i<MaxChnCounts; i++){
         ChnLCDRaw.append(new QLCDNumber(CalPointsFrame));
     }
@@ -98,12 +174,21 @@ DLCalMenu::DLCalMenu(QWidget *parent) :
         ChnLCDReal_Main.append(new QLCDNumber(wdgReals));
     }
 
+// scrollbar - main :
+        scroll_main = new QScrollBar;
+        scroll_main = ui->scrollReals -> verticalScrollBar();
+        scroll_main -> setTracking(true);
+        scroll_main -> setSingleStep(RealLCDH+RealLabelH+SideMargin/1.5);
+        connect(scroll_main, SIGNAL(sliderPressed()),    this,   SLOT(slider_Pressed()));
+        connect(scroll_main, SIGNAL(sliderReleased()),   this,   SLOT(slider_Released()));
+        connect(scroll_main, SIGNAL(sliderReleased()),   this,   SLOT(scroll_movement()));
+
 // real data - main page :
     for (int i = 0; i < MaxChnCounts; ++i) {            // real- raw array loop
-        ChnRealLabel[i]     = new QLabel(tr("Channel %1 Real").arg(i + 1),wdgReals);
+        ChnRealLabel[i]     = new QLabel(tr("Channel %1 Real").arg(i + 1), wdgReals);
         ChnRealLabel[i]     -> setAlignment(Qt::AlignCenter);
         ChnRealLabel[i]     -> setStyleSheet("background-color: rgb(20,20,20); color: rgb(255,255,255)");
-        ChnRealLabel[i]     -> setMinimumHeight(RealLabelH);
+        ChnRealLabel[i]     -> setMinimumSize(RealLabelW,RealLabelH);
         ChnRealLabel[i]     -> setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
         ChnRealLabel[i]     -> setFont(Font1);
 
@@ -119,6 +204,7 @@ DLCalMenu::DLCalMenu(QWidget *parent) :
         grid_reals          -> setVerticalSpacing(SideMargin/3);
         grid_reals          -> addWidget(ChnRealLabel[i]   , i*2   , 0);
         grid_reals          -> addWidget(ChnLCDReal_Main[i], i*2+1 , 0);
+        ui->scrollReals     -> setMaximumWidth(RealLabelW*2);
 
 // real raw data - calibration page :
         if(int j = 1){
@@ -152,9 +238,10 @@ DLCalMenu::DLCalMenu(QWidget *parent) :
             boxLayout       -> addWidget(ChnLCDRaw[i]    , j+1 , i);
             boxLayout       -> addWidget(ChnRealLabel[i] , j+2 , i);
             boxLayout       -> addWidget(ChnLCDReal[i]   , j+3 , i);
-            boxLayout       -> setVerticalSpacing(1);
+            boxLayout       -> setVerticalSpacing(SideMargin/4);
             boxLayout       -> setHorizontalSpacing(SideMargin/1.5);
         }
+
 // combobox channel items :
             ui->combo_axis1     -> addItem(QString(tr("Channel %1").arg(i+1)),i);
             ui->combo_axis2     -> addItem(QString(tr("Channel %1").arg(i+1)),i);
@@ -180,28 +267,32 @@ DLCalMenu::DLCalMenu(QWidget *parent) :
     for (int i = 0; i < MaxCalPoint; ++i) {
         CalStep[i]          =   new QLabel(tr("%1").arg(i + 1));
         CalStep[i]          ->  setAlignment(Qt::AlignCenter);
-        CalStep[i]          ->  setStyleSheet("font-size: 16px; margin: 3px");
+        CalStep[i]          ->  setStyleSheet("margin: 3px");
+        CalStep[i]          ->  setFont(Font1);
+        CalStep[i]          ->  setMinimumHeight(CalPointH);
         CalStep[i]          ->  setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Expanding);
 
         UserCalLabel[i]     =   new QLabel(CalPointsFrame);
         UserCalLabel[i]     ->  setText(QString::number((i)*200*10));
-        UserCalLabel[i]     ->  setAlignment(Qt::AlignRight);
+        UserCalLabel[i]     ->  setAlignment(Qt::AlignRight | Qt::AlignVCenter);
         UserCalLabel[i]     ->  setFont(Font1);
         UserCalLabel[i]     ->  setStyleSheet("background-color: rgb(123, 168, 246); border: 1px solid rgb(83,128,206); margin-right: 5px;  padding: 1px; ");
         UserCalLabel[i]     ->  setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
+        UserCalLabel[i]     ->  setMinimumSize(65,CalPointH);
         ChnCalArray[0][8 + i] = QString::number((i)*200*10);
 
         ChnRawData[i]       =   new QLabel(QString::number(00).arg(i+1));
         ChnRawData[i]       ->  setText(QString::number((i+1)*2000));
-        ChnRawData[i]       ->  setAlignment(Qt::AlignRight);
+        ChnRawData[i]       ->  setAlignment(Qt::AlignRight | Qt::AlignVCenter);
         ChnRawData[i]       ->  setFont(Font1);
         ChnRawData[i]       ->  setStyleSheet("border: 1px solid gray; margin-right: 5px ; padding: 1px; background-color: rgb(255,255,255);");
         ChnRawData[i]       ->  setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
+        ChnRawData[i]     ->  setMinimumSize(65,CalPointH);
         ChnCalArray[0][8 + 16 + i] = QString::number((i+1)*2000);
 
         CalStepCheckBox[i]  =   new QCheckBox;
         CalStepCheckBox[i]  ->  setStyleSheet(QString("QCheckBox::indicator {height: %1px; width: %1px;}"
-                                                      "QCheckBox::indicator:checked{ border-image: url(:/icon/check.png); height: %1px; width: %1px;};").arg(25));
+                                                      "QCheckBox::indicator:checked{ border-image: url(:/icon/check.png); height: %1px; width: %1px;};").arg(CalPointH));
         CalStepCheckBox[i]  ->  setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Expanding);
         if  (i > 0){
             CalStepCheckBox[i]->setDisabled(true);
@@ -213,15 +304,124 @@ DLCalMenu::DLCalMenu(QWidget *parent) :
     }
     UserCalLabel[0] ->  setText("ZERO");
     ui->scrollCalPoint->setWidget(CalPointsFrame);
+    ui->scrollCalPoint->setMinimumWidth(RealLabelW*2);
+    ui->scrollCalPoint->setMaximumWidth(RealLabelW*4+SideMargin*2);
+    ui->CoBoxInputType->setMinimumWidth(RealLabelW);
     CalPointsFrame  ->  setLayout(CalGridLayout);
     useless1 = new QLabel("Step");
-    useless2 = new QLabel("Key Cal Input");
+    useless2 = new QLabel("Cal Input");
     useless3 = new QLabel("Raw Data");
+    useless2->setAlignment(Qt::AlignHCenter);
+    useless3->setAlignment(Qt::AlignHCenter);
     CalGridLayout   ->  addWidget(useless1 , 0, 0);
     CalGridLayout   ->  addWidget(useless2 , 0, 1);
     CalGridLayout   ->  addWidget(useless3 , 0, 2);
+    CalGridLayout   ->  setHorizontalSpacing(SideMargin/SideMargin);
 
-    qcustomplot_initilize();
+// scrollbar - calib:
+    scroll_bar  = new QScrollBar;
+    scroll_bar  = ui->scrollArea  -> horizontalScrollBar();
+    scroll_bar  -> setTracking(true);
+    scroll_bar  -> setSingleStep(RealLabelW+SideMargin/1.5);
+    connect(scroll_bar, SIGNAL(sliderPressed()),    this,   SLOT(slider_Pressed()))  ;
+    connect(scroll_bar, SIGNAL(sliderReleased()),   this,   SLOT(slider_Released())) ;
+    connect(scroll_bar, SIGNAL(sliderReleased()),   this,   SLOT(scroll_movement())) ;
+
+    ui->radioBtn_dispGraph->hide();
+    setup_combobox();
+    setup_customPlot();
+}
+void DLCalMenu::on_tabWidget_currentChanged(int index)
+{
+    switch (index) {
+    case 0:
+        current_page = SCR_MAIN;
+        break;
+    case 1:
+        current_page = SCR_CALIB;
+        break;
+    case 2:
+        current_page = SCR_GRAPH;
+        break;
+    case 3:
+        current_page = SCR_SET;
+        break;
+    case 4:
+        current_page = SCR_PORTSET;
+        break;
+    case 5:
+        current_page = SCR_ALERTS;
+        break;
+    }
+}
+void DLCalMenu::setup_combobox()
+{
+    // Ports tab :
+    ui->combo_portType      -> addItem("Choose port",0);
+    ui->combo_portType      -> addItem("USB",1);
+    ui->combo_portType      -> addItem("Ethernet",2);
+    ui->combo_portType      -> addItem("RTU",3);
+    // Main tab :
+    ui->CoBoxInputType      -> insertItem(0, QObject::tr("LoadCell 1-2mV/V"));
+    ui->CoBoxInputType      -> insertItem(1, QObject::tr("LoadCell 3mV/V"));
+    ui->CoBoxInputType      -> insertItem(2, QObject::tr("0-100mV Transducer"));
+    ui->CoBoxInputType      -> insertItem(3, QObject::tr("0-100mV Transducer Differential"));
+    ui->CoBoxInputType      -> insertItem(4, QObject::tr("0-10V Transducer"));
+    ui->CoBoxInputType      -> insertItem(5, QObject::tr("4-20mA Transducer"));
+    ui->CoBoxInputType      -> insertItem(6, QObject::tr("LVTD Single Ended Output"));
+    ui->CoBoxInputType      -> insertItem(7, QObject::tr("LVTD Diffrential Output"));
+    ui->CoBoxInputType      -> insertItem(8, QObject::tr("120 Ohm Single strain Gauge"));
+    ui->CoBoxInputType      -> insertItem(9, QObject::tr("120 Ohm Dual strain Gauge"));
+    ui->CoBoxInputType      -> insertItem(10, QObject::tr("350 Ohm Single strain Gauge"));
+    ui->CoBoxInputType      -> insertItem(11, QObject::tr("350 Ohm Dual strain Gauge"));
+    ui->CoBoxInputType      -> insertItem(12, QObject::tr("1000 Ohm Single strain Gauge"));
+    ui->CoBoxInputType      -> insertItem(13, QObject::tr("1000 Ohm Dual strain Gauge"));
+    ui->CoBoxInputType      -> insertItem(14, QObject::tr("Custom 1"));
+    ui->CoBoxInputType      -> insertItem(15, QObject::tr("Custom 2"));
+    ui->CoBoxInputType      -> insertItem(16, QObject::tr("Custom 3"));
+    ///CoBoxInputType   ->setItemData(5,5, Qt::UserRole - 1); pasif etme
+    ui->CoBoxInputType      -> setCurrentText("LoadCell 1-2mV/V");
+    ui->CoBoxInputType      -> setCurrentIndex(0);
+    ui->CoBoxSampeRate      -> addItem("2"  ,0);
+    ui->CoBoxSampeRate      -> addItem("4"  ,1);
+    ui->CoBoxSampeRate      -> addItem("8"  ,2);
+    ui->CoBoxSampeRate      -> addItem("16" ,3);
+    ui->CoBoxSampeRate      -> addItem("32" ,4);
+    ui->CoBoxSampeRate      -> addItem("64" ,5);
+    ui->CoBoxSampeRate      -> addItem("128",6);
+    ui->CoBoxSampeRate      -> addItem("256",7);
+    ui->CoBoxSampeRate      -> addItem("512",8);
+    ui->CoBoxSampeRate      -> addItem("1024",9);
+    ui->CoBoxSampeRate      -> setCurrentIndex(3);
+    ui->CoBoxDataFormat     -> addItems(QStringList() << tr("#####") << tr("####.#") << tr("###.##") << tr("##.###"));
+    ui->CoBoxDataFormat     -> setCurrentText("#####");
+    ui->CoBoxDataFormat     -> setCurrentIndex(0);
+    ui->CoBoxSampeRate      -> setCurrentText("8");
+    ui->CoBoxFilterType     -> addItem("None"       ,0);
+    ui->CoBoxFilterType     -> addItem("Average"    ,1);
+    ui->CoBoxFilterType     -> addItem("Moving Average",2);
+    ui->CoBoxFilterType     -> addItem("EMA"        ,3);
+    ui->CoBoxFilterType     -> addItem("Butterworth",4);
+    ui->CoBoxFilterType     -> setCurrentText("None");
+    ui->CoBoxFilterType     -> setCurrentIndex(0);
+    ui->combo_rawreal       -> addItem("Real"   ,0);
+    ui->combo_rawreal       -> addItem("Raw"    ,1);
+    ui->combo_rawreal       -> setCurrentIndex(0);
+    ui->combo_recPeriod     -> addItem("500"    ,0);    //1sn
+    ui->combo_recPeriod     -> addItem("2500"   ,1);    //5sn
+    ui->combo_recPeriod     -> addItem("5000"   ,2);    //10sn
+    ui->combo_recPeriod     -> addItem("15000"  ,3);    //30sn
+    ui->combo_recPeriod     -> addItem("30000"  ,4);    //1dk
+    ui->combo_recPeriod     -> addItem("150000" ,5);    //5dk
+    ui->combo_recPeriod     -> addItem("300000" ,6);    //10dk
+    ui->combo_recPeriod     -> addItem("900000" ,7);    //30dk
+    ui->combo_recPeriod     -> setCurrentIndex(1);
+//    combo_device        -> addItem("Current device",0);     // DIALOG TOO
+//    combo_device        -> addItem("External",1);
+//    combo_device        -> addItem("SD Card",2);
+//    combo_device        -> setCurrentIndex(0);
+    ui->CoBoxChannel        -> setCurrentText("Channel 1");
+    ui->CoBoxChannel        -> setCurrentIndex(0);
 }
 int DLCalMenu::GetScreenHRes(int s){
     auto screens = QGuiApplication::screens();
@@ -259,3 +459,5 @@ DLCalMenu::~DLCalMenu()
 {
     delete ui;
 }
+
+
