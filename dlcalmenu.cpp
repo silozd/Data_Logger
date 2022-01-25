@@ -11,17 +11,56 @@ DLCalMenu::DLCalMenu(QWidget *parent) :
     ui(new Ui::DLCalMenu)
 {
     ui->setupUi(this);
-    tabBar = ui->tabWidget->tabBar();
-    ui->tabWidget->setStyleSheet(QString("QTabBar::tab { height: %1px; width: %1px; font-size: 15px; };").arg(84));
-    tabBar   ->setStyle(new CustomTabStyle);
-    QFont ComboFont ("Arial" , 13, QFont::Normal);
+
+    int i = 1000;
+    int Fontsize;
+    QFont Font1 ("Arial", Fontsize, QFont::Normal);
+
+    if  (ScreenWidth == 3840){
+        i = i/2;
+        Fontsize =16;
+        Font1.setPointSize(Fontsize);
+    }
+    else if (ScreenWidth <=1920){
+        i = 1000;
+        Fontsize = 13;
+        Font1.setPointSize(Fontsize);
+    }
+    else if (ScreenWidth > 1920){
+        Fontsize = 14;
+        Font1.setPointSize(Fontsize);
+    }
+    qDebug()<<"i"<<i;
 
     int hr = DLCalMenu::GetScreenHRes(0);
     int vr = DLCalMenu::GetScreenVRes(0);
     qDebug()<<"hr = "<<hr;
     qDebug()<<"vr = "<<vr;
 
-// toolbar :
+    int SideMargin = hr*10/i;
+    int RealLabelH = vr*30/i;
+    int RealLabelW = hr*180/i;
+    int RealLCDH = vr*45/i;
+    int CalibScrollH = RealLCDH+RealLabelH;
+    int MainScrollW = RealLabelW;
+    int TabW = hr*110/i;
+    qDebug()<<"SideMargin"<<SideMargin;
+    qDebug()<<"RealLabelH"<<RealLabelH;
+    qDebug()<<"RealLabelW"<<RealLabelW;
+    qDebug()<<"RealLcdH"<<RealLCDH;
+    qDebug()<<"CalibScrollH"<<CalibScrollH;
+    qDebug()<<"MainScrollW"<<MainScrollW;
+    qDebug()<<"TabW"<<TabW;
+
+    tabBar = ui->tabWidget->tabBar();
+    ui->tabWidget->setStyleSheet(QString("QTabBar::tab { height: %1px; width: %1px;};").arg(TabW));
+    ui->tabWidget->setFont(Font1);
+    tabBar   ->setStyle(new CustomTabStyle);
+
+
+
+
+    // toolbar :
     ui->toolBar -> toggleViewAction()->setVisible(false);
     QWidget *spacer = new QWidget();
     spacer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
@@ -64,18 +103,20 @@ DLCalMenu::DLCalMenu(QWidget *parent) :
         ChnRealLabel[i]     = new QLabel(tr("Channel %1 Real").arg(i + 1),wdgReals);
         ChnRealLabel[i]     -> setAlignment(Qt::AlignCenter);
         ChnRealLabel[i]     -> setStyleSheet("background-color: rgb(20,20,20); color: rgb(255,255,255)");
-        ChnRealLabel[i]     -> setMinimumSize(110,25);
-        ChnRealLabel[i]     -> setFont(ComboFont);
+        ChnRealLabel[i]     -> setMinimumHeight(RealLabelH);
+        ChnRealLabel[i]     -> setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
+        ChnRealLabel[i]     -> setFont(Font1);
 
         ChnLCDReal_Main[i]  -> display(QString("%1000").arg(i+1));
         ChnLCDReal_Main[i]  -> setSegmentStyle(QLCDNumber::Flat);
         ChnLCDReal_Main[i]  -> setDigitCount(RealDigitCount);
         ChnLCDReal_Main[i]  -> setSmallDecimalPoint(true);
         ChnLCDReal_Main[i]  -> setStyleSheet("background-color: rgb(20,20,20); color: rgb(100,220,255)");
-        ChnLCDReal_Main[i]  -> setMinimumSize(110, 30);
+        ChnLCDReal_Main[i]  -> setMinimumHeight(RealLCDH);
+        ChnLCDReal_Main[i]  -> setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
 
         grid_reals          -> setContentsMargins(0,0,0,0);
-        grid_reals          -> setVerticalSpacing(3);
+        grid_reals          -> setVerticalSpacing(SideMargin/3);
         grid_reals          -> addWidget(ChnRealLabel[i]   , i*2   , 0);
         grid_reals          -> addWidget(ChnLCDReal_Main[i], i*2+1 , 0);
 
@@ -83,36 +124,36 @@ DLCalMenu::DLCalMenu(QWidget *parent) :
         if(int j = 1){
             ChnRawLabel[i]  = new QLabel(tr("Channel %1 Raw").arg(i + 1),ui->scrollArea);
             ChnRawLabel[i]  -> setAlignment(Qt::AlignCenter);
-            ChnRawLabel[i]  -> setFont(ComboFont);
+            ChnRawLabel[i]  -> setFont(Font1);
             ChnRawLabel[i]  -> setStyleSheet("background-color: rgb(10, 10, 10); color: rgb(255, 255, 255);");
-            ChnRawLabel[i]  -> setMinimumSize(125, 20);
+            ChnRawLabel[i]  -> setMinimumSize(RealLabelW, RealLabelH);
 
             ChnLCDRaw[i]    -> display(QString("%1000").arg(i+1));
             ChnLCDRaw[i]    -> setSegmentStyle(QLCDNumber::Flat);
             ChnLCDRaw[i]    -> setDigitCount(RawDigitCount);
             ChnLCDRaw[i]    -> setSmallDecimalPoint(true);
             ChnLCDRaw[i]    -> setStyleSheet("background-color: rgb(0, 0, 0); color: rgb(255, 10, 0)");
-            ChnLCDRaw[i]    -> setMinimumSize(125, 25);
+            ChnLCDRaw[i]    -> setMinimumSize(RealLabelW, RealLCDH);
 
             ChnRealLabel[i] = new QLabel(tr("Channel %1 Real").arg(i + 1),ui->scrollArea);
             ChnRealLabel[i] -> setAlignment(Qt::AlignCenter);
-            ChnRealLabel[i] -> setFont(ComboFont);
+            ChnRealLabel[i] -> setFont(Font1);
             ChnRealLabel[i] -> setStyleSheet("background-color: rgb(10, 10, 10); color: rgb(255, 255, 255)");
-            ChnRealLabel[i] -> setMinimumSize(125, 20);
+            ChnRealLabel[i] -> setMinimumSize(RealLabelW, RealLabelH);
 
             ChnLCDReal[i]   -> display(QString("%1000").arg(i+1));
             ChnLCDReal[i]   -> setSegmentStyle(QLCDNumber::Flat);
             ChnLCDReal[i]   -> setDigitCount(RealDigitCount);
             ChnLCDReal[i]   -> setSmallDecimalPoint(true);
             ChnLCDReal[i]   -> setStyleSheet("background-color: rgb(0, 0, 0); color: rgb(50, 255, 0)");
-            ChnLCDReal[i]   -> setMinimumSize(125, 25);
+            ChnLCDReal[i]   -> setMinimumSize(RealLabelW, RealLCDH);
 
             boxLayout       -> addWidget(ChnRawLabel[i]  , j   , i);
             boxLayout       -> addWidget(ChnLCDRaw[i]    , j+1 , i);
             boxLayout       -> addWidget(ChnRealLabel[i] , j+2 , i);
             boxLayout       -> addWidget(ChnLCDReal[i]   , j+3 , i);
-            boxLayout       -> setVerticalSpacing(2);
-            boxLayout       -> setHorizontalSpacing(5);
+            boxLayout       -> setVerticalSpacing(1);
+            boxLayout       -> setHorizontalSpacing(SideMargin/1.5);
         }
 // combobox channel items :
             ui->combo_axis1     -> addItem(QString(tr("Channel %1").arg(i+1)),i);
@@ -145,7 +186,7 @@ DLCalMenu::DLCalMenu(QWidget *parent) :
         UserCalLabel[i]     =   new QLabel(CalPointsFrame);
         UserCalLabel[i]     ->  setText(QString::number((i)*200*10));
         UserCalLabel[i]     ->  setAlignment(Qt::AlignRight);
-        UserCalLabel[i]     ->  setFont(ComboFont);
+        UserCalLabel[i]     ->  setFont(Font1);
         UserCalLabel[i]     ->  setStyleSheet("background-color: rgb(123, 168, 246); border: 1px solid rgb(83,128,206); margin-right: 5px;  padding: 1px; ");
         UserCalLabel[i]     ->  setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
         ChnCalArray[0][8 + i] = QString::number((i)*200*10);
@@ -153,7 +194,7 @@ DLCalMenu::DLCalMenu(QWidget *parent) :
         ChnRawData[i]       =   new QLabel(QString::number(00).arg(i+1));
         ChnRawData[i]       ->  setText(QString::number((i+1)*2000));
         ChnRawData[i]       ->  setAlignment(Qt::AlignRight);
-        ChnRawData[i]       ->  setFont(ComboFont);
+        ChnRawData[i]       ->  setFont(Font1);
         ChnRawData[i]       ->  setStyleSheet("border: 1px solid gray; margin-right: 5px ; padding: 1px; background-color: rgb(255,255,255);");
         ChnRawData[i]       ->  setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
         ChnCalArray[0][8 + 16 + i] = QString::number((i+1)*2000);
