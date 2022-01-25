@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>945</width>
-    <height>596</height>
+    <height>573</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -39,10 +39,10 @@
        <attribute name="title">
         <string>Main</string>
        </attribute>
-       <layout class="QGridLayout" name="gridLayout_2" rowstretch="1,6" columnstretch="4,1">
-        <item row="1" column="0">
-         <widget class="QWidget" name="wdgGraph" native="true"/>
-        </item>
+       <layout class="QGridLayout" name="gridLayout_2" rowstretch="1,5" columnstretch="4,1">
+        <property name="topMargin">
+         <number>6</number>
+        </property>
         <item row="1" column="1">
          <widget class="QScrollArea" name="scrollReals">
           <property name="widgetResizable">
@@ -54,7 +54,7 @@
              <x>0</x>
              <y>0</y>
              <width>175</width>
-             <height>443</height>
+             <height>437</height>
             </rect>
            </property>
           </widget>
@@ -76,7 +76,10 @@
             <number>3</number>
            </property>
            <property name="horizontalSpacing">
-            <number>24</number>
+            <number>18</number>
+           </property>
+           <property name="verticalSpacing">
+            <number>3</number>
            </property>
            <item row="0" column="0">
             <widget class="QRadioButton" name="radioBtn_dispGraph">
@@ -119,7 +122,14 @@
             </widget>
            </item>
            <item row="1" column="1">
-            <widget class="QComboBox" name="combo_axis1"/>
+            <widget class="QComboBox" name="combo_axis1">
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>25</height>
+              </size>
+             </property>
+            </widget>
            </item>
            <item row="0" column="4">
             <widget class="QLabel" name="lbl_sampeRate">
@@ -165,13 +175,34 @@
             </widget>
            </item>
            <item row="2" column="3">
-            <widget class="QComboBox" name="combo_rawreal"/>
+            <widget class="QComboBox" name="combo_rawreal">
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>25</height>
+              </size>
+             </property>
+            </widget>
            </item>
            <item row="0" column="3">
-            <widget class="QComboBox" name="m_serialPortComboBox"/>
+            <widget class="QComboBox" name="m_serialPortComboBox">
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>25</height>
+              </size>
+             </property>
+            </widget>
            </item>
            <item row="1" column="3">
-            <widget class="QComboBox" name="combo_recPeriod"/>
+            <widget class="QComboBox" name="combo_recPeriod">
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>25</height>
+              </size>
+             </property>
+            </widget>
            </item>
            <item row="0" column="5">
             <widget class="QLabel" name="info_sampeRate">
@@ -194,7 +225,14 @@
             </widget>
            </item>
            <item row="2" column="1">
-            <widget class="QComboBox" name="combo_axis2"/>
+            <widget class="QComboBox" name="combo_axis2">
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>25</height>
+              </size>
+             </property>
+            </widget>
            </item>
            <item row="1" column="2">
             <widget class="QLabel" name="label_2">
@@ -239,6 +277,12 @@
           </property>
           <item>
            <widget class="QPushButton" name="btn_graphDialog">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>25</height>
+             </size>
+            </property>
             <property name="text">
              <string>Set Device</string>
             </property>
@@ -246,6 +290,12 @@
           </item>
           <item>
            <widget class="QPushButton" name="btn_dispGraph">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>25</height>
+             </size>
+            </property>
             <property name="text">
              <string>Plot Graph</string>
             </property>
@@ -253,12 +303,21 @@
           </item>
           <item>
            <widget class="QPushButton" name="btn_stopGraph">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>25</height>
+             </size>
+            </property>
             <property name="text">
              <string>Pause Plotting</string>
             </property>
            </widget>
           </item>
          </layout>
+        </item>
+        <item row="1" column="0">
+         <widget class="QWidget" name="wdgGraph" native="true"/>
         </item>
        </layout>
       </widget>
@@ -278,7 +337,7 @@
              <x>0</x>
              <y>0</y>
              <width>292</width>
-             <height>436</height>
+             <height>417</height>
             </rect>
            </property>
           </widget>
@@ -420,7 +479,7 @@
              <x>0</x>
              <y>0</y>
              <width>887</width>
-             <height>107</height>
+             <height>103</height>
             </rect>
            </property>
           </widget>
@@ -980,7 +1039,7 @@ color: rgb(250, 250, 250);</string>
              <x>0</x>
              <y>0</y>
              <width>887</width>
-             <height>272</height>
+             <height>260</height>
             </rect>
            </property>
           </widget>

@@ -304,6 +304,9 @@ public :
     bool sdSelected=false;
     int linecnt=0;
 
+    int Fontsize;
+    QTimer *resizer;
+
 private slots:
     void scroll_movement(); // Added Scroll Movement
     void slider_Pressed();  // Get Position of scroll_bar when pressed
@@ -317,6 +320,8 @@ public slots:
 
     void setup_combobox();
     void setup_customPlot();
+
+    void size_tracker();
 };
 
 #endif // DLCALMENU_H

@@ -34,9 +34,7 @@ DLCalMenu::DLCalMenu(QWidget *parent) :
     ui(new Ui::DLCalMenu)
 {
     ui->setupUi(this);
-
     int i = 1000;
-    int Fontsize;
     QFont Font1 ("Arial", Fontsize, QFont::Normal);
 
     if  (ScreenWidth == 3840){
@@ -46,7 +44,7 @@ DLCalMenu::DLCalMenu(QWidget *parent) :
     }
     else if (ScreenWidth <=1920){
         i = 1000;
-        Fontsize = 12;
+        Fontsize = 13;
         Font1.setPointSize(Fontsize);
     }
     else if (ScreenWidth > 1920){
@@ -59,9 +57,10 @@ DLCalMenu::DLCalMenu(QWidget *parent) :
     int vr = DLCalMenu::GetScreenVRes(0);
     int SideMargin = hr*10/i;
     int RealLabelH = vr*30/i;
-    int CalPointH = vr*38/i;
     int RealLabelW = hr*180/i;
     int RealLCDH = vr*45/i;
+    int CalPointH = vr*38/i;
+    int ToolH = vr*60/i;
     int CalibScrollH = RealLCDH*2+RealLabelH*2+SideMargin*3;
     int MainScrollW = RealLabelW;
     int TabBarW = hr*115/i;
@@ -82,7 +81,7 @@ DLCalMenu::DLCalMenu(QWidget *parent) :
     ui->tabWidget->setFont(Font1);
     tabBar   ->setStyle(new CustomTabStyle);
     tabBar_alarm = ui->tabWidget_alarm->tabBar();
-    ui->MainPage->setStyleSheet(QString("QLabel,QComboBox,QPushButton,QRadioButton{font-size: %1pt;};").arg(Fontsize));
+    ui->MainPage->setStyleSheet(QString("QLabel,QComboBox,QPushButton,QRadioButton{font-size: %1pt;}").arg(Fontsize));
     ui->MainPage->setFont(Font1);
 
 // toolbar :
@@ -91,12 +90,12 @@ DLCalMenu::DLCalMenu(QWidget *parent) :
     QLabel  *logo = new QLabel;
     spacer  -> setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
     ui      -> toolBar->addWidget(spacer);
-    logo    -> setSizeIncrement(350, 40);
+    logo    -> setSizeIncrement(350, ToolH);
     logo    -> setPixmap(QPixmap(":/icon/logo.png"));
     logo    -> setContentsMargins(0,0,0,0);
     //ui->toolBar -> addWidget(logo);       // OPEN
-    ui->toolBar -> setMaximumHeight(40);
-    ui->toolBar -> setIconSize(QSize(40, 40));
+    ui->toolBar -> setMaximumHeight(ToolH);
+    ui->toolBar -> setIconSize(QSize(ToolH, ToolH));
     ui->toolBar -> setMovable(false);
     clear      = ui->toolBar -> addAction(QIcon(":/icon/clear.png") ,"Clear"       );//,this, SLOT(ClearKey()));
     exportfile = ui->toolBar -> addAction(QIcon(":/icon/export.png"),"Export File");
@@ -330,7 +329,24 @@ DLCalMenu::DLCalMenu(QWidget *parent) :
     ui->radioBtn_dispGraph->hide();
     setup_combobox();
     setup_customPlot();
+
+    resizer =  new QTimer;
+    resizer->start(10);
+    connect(resizer,SIGNAL(timeout()),this,SLOT(size_tracker()));
 }
+void DLCalMenu::size_tracker()
+{
+    int w = ui->tabWidget->width();
+    qDebug()<<Fontsize;
+    if (w<3840){
+        for(w=w ; w<3840 ; w++){
+            w=w;
+            Fontsize++;
+            //qDebug()<<Fontsize;
+        }
+    }
+}
+
 void DLCalMenu::on_tabWidget_currentChanged(int index)
 {
     switch (index) {
