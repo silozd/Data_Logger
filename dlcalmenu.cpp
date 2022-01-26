@@ -34,37 +34,42 @@ DLCalMenu::DLCalMenu(QWidget *parent) :
     ui(new Ui::DLCalMenu)
 {
     ui->setupUi(this);
+    int hr = DLCalMenu::GetScreenHRes(0);
+    int vr = DLCalMenu::GetScreenVRes(0);
     int i = 1000;
     QFont Font1 ("Arial", Fontsize, QFont::Normal);
 
-    if  (ScreenWidth == 3840){
-        i = i/2;
-        Fontsize =16;
-        Font1.setPointSize(Fontsize);
-    }
-    else if (ScreenWidth <=1920){
+    if (ScreenWidth <=1920){
         i = 1000;
-        Fontsize = 13;
+        Fontsize = 12;
         Font1.setPointSize(Fontsize);
     }
     else if (ScreenWidth > 1920){
-        Fontsize = 14;
+        Fontsize = 13;
+        Font1.setPointSize(Fontsize);
+    }
+    else if  (ScreenWidth == 3840){
+        i = i/2;
+        Fontsize =14;
         Font1.setPointSize(Fontsize);
     }
     qDebug()<<"i"<<i;
 
-    int hr = DLCalMenu::GetScreenHRes(0);
-    int vr = DLCalMenu::GetScreenVRes(0);
     int SideMargin = hr*10/i;
     int RealLabelH = vr*30/i;
     int RealLabelW = hr*180/i;
-    int RealLCDH = vr*45/i;
+    int RealLCDH = vr*40/i;
     int CalPointH = vr*38/i;
+    int CalPointW = vr*86/i;
     int ToolH = vr*60/i;
     int CalibScrollH = RealLCDH*2+RealLabelH*2+SideMargin*3;
     int MainScrollW = RealLabelW;
     int TabBarW = hr*115/i;
     int TabBarH = hr*100/i;
+    int AppW = hr*1260/i;
+    int AppH = vr*806/i;
+
+    resize(AppW,AppH);
 
     qDebug()<<"hr = "<<hr;
     qDebug()<<"vr = "<<vr;
@@ -77,11 +82,12 @@ DLCalMenu::DLCalMenu(QWidget *parent) :
     qDebug()<<"TabBarW"<<TabBarW;
 
     tabBar = ui->tabWidget->tabBar();
-    ui->tabWidget->setStyleSheet(QString("QTabBar::tab { width: %1px; height: %1px;};").arg(TabBarW,TabBarH));
+    ui->tabWidget->setStyleSheet(QString("QTabBar::tab { width: %1px; height: %1px;}").arg(TabBarW,TabBarH)
+                                 + QString("QLabel{font-family: Times New Roman; font-size: %1pt;} QComboBox,QPushButton,QRadioButton,QPushButton{font-family: Arial; font-size: %1pt;}").arg(Fontsize,Fontsize));
     ui->tabWidget->setFont(Font1);
     tabBar   ->setStyle(new CustomTabStyle);
     tabBar_alarm = ui->tabWidget_alarm->tabBar();
-    ui->MainPage->setStyleSheet(QString("QLabel,QComboBox,QPushButton,QRadioButton{font-size: %1pt;}").arg(Fontsize));
+//    ui->tabWidget->setStyleSheet(QString("QLabel{font-family: Times New Roman; font-size: %1pt;} QComboBox,QPushButton,QRadioButton,QPushButton{font-family: Arial; font-size: %1pt;}").arg(Fontsize,Fontsize));
     ui->MainPage->setFont(Font1);
 
 // toolbar :
@@ -186,7 +192,7 @@ DLCalMenu::DLCalMenu(QWidget *parent) :
     for (int i = 0; i < MaxChnCounts; ++i) {            // real- raw array loop
         ChnRealLabel[i]     = new QLabel(tr("Channel %1 Real").arg(i + 1), wdgReals);
         ChnRealLabel[i]     -> setAlignment(Qt::AlignCenter);
-        ChnRealLabel[i]     -> setStyleSheet("background-color: rgb(20,20,20); color: rgb(255,255,255)");
+        ChnRealLabel[i]     -> setStyleSheet("font-family: Arial; background-color: rgb(20,20,20); color: rgb(255,255,255)");
         ChnRealLabel[i]     -> setMinimumSize(RealLabelW,RealLabelH);
         ChnRealLabel[i]     -> setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
         ChnRealLabel[i]     -> setFont(Font1);
@@ -210,7 +216,7 @@ DLCalMenu::DLCalMenu(QWidget *parent) :
             ChnRawLabel[i]  = new QLabel(tr("Channel %1 Raw").arg(i + 1),ui->scrollArea);
             ChnRawLabel[i]  -> setAlignment(Qt::AlignCenter);
             ChnRawLabel[i]  -> setFont(Font1);
-            ChnRawLabel[i]  -> setStyleSheet("background-color: rgb(10, 10, 10); color: rgb(255, 255, 255);");
+            ChnRawLabel[i]  -> setStyleSheet("font-family: Arial; background-color: rgb(10, 10, 10); color: rgb(255, 255, 255);");
             ChnRawLabel[i]  -> setMinimumSize(RealLabelW, RealLabelH);
 
             ChnLCDRaw[i]    -> display(QString("%1000").arg(i+1));
@@ -223,7 +229,7 @@ DLCalMenu::DLCalMenu(QWidget *parent) :
             ChnRealLabel[i] = new QLabel(tr("Channel %1 Real").arg(i + 1),ui->scrollArea);
             ChnRealLabel[i] -> setAlignment(Qt::AlignCenter);
             ChnRealLabel[i] -> setFont(Font1);
-            ChnRealLabel[i] -> setStyleSheet("background-color: rgb(10, 10, 10); color: rgb(255, 255, 255)");
+            ChnRealLabel[i] -> setStyleSheet("font-family: Arial; background-color: rgb(10, 10, 10); color: rgb(255, 255, 255)");
             ChnRealLabel[i] -> setMinimumSize(RealLabelW, RealLabelH);
 
             ChnLCDReal[i]   -> display(QString("%1000").arg(i+1));
@@ -275,8 +281,9 @@ DLCalMenu::DLCalMenu(QWidget *parent) :
         UserCalLabel[i]     ->  setText(QString::number((i)*200*10));
         UserCalLabel[i]     ->  setAlignment(Qt::AlignRight | Qt::AlignVCenter);
         UserCalLabel[i]     ->  setFont(Font1);
-        UserCalLabel[i]     ->  setStyleSheet("background-color: rgb(123, 168, 246); border: 1px solid rgb(83,128,206); margin-right: 5px;  padding: 1px; ");
+        UserCalLabel[i]     ->  setStyleSheet("font-family: Arial; background-color: rgb(123, 168, 246); border: 1px solid rgb(83,128,206); margin-right: 5px;  padding: 1px; ");
         UserCalLabel[i]     ->  setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
+        UserCalLabel[i]     ->  setMinimumSize(CalPointW,CalPointH);
         UserCalLabel[i]     ->  setMinimumSize(65,CalPointH);
         ChnCalArray[0][8 + i] = QString::number((i)*200*10);
 
@@ -284,9 +291,10 @@ DLCalMenu::DLCalMenu(QWidget *parent) :
         ChnRawData[i]       ->  setText(QString::number((i+1)*2000));
         ChnRawData[i]       ->  setAlignment(Qt::AlignRight | Qt::AlignVCenter);
         ChnRawData[i]       ->  setFont(Font1);
-        ChnRawData[i]       ->  setStyleSheet("border: 1px solid gray; margin-right: 5px ; padding: 1px; background-color: rgb(255,255,255);");
+        ChnRawData[i]       ->  setStyleSheet("font-family: Arial; border: 1px solid gray; margin-right: 5px ; padding: 1px; background-color: rgb(255,255,255);");
         ChnRawData[i]       ->  setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
-        ChnRawData[i]     ->  setMinimumSize(65,CalPointH);
+        ChnRawData[i]       ->  setMinimumSize(CalPointW,CalPointH);
+        ChnRawData[i]       ->  setMinimumSize(65,CalPointH);
         ChnCalArray[0][8 + 16 + i] = QString::number((i+1)*2000);
 
         CalStepCheckBox[i]  =   new QCheckBox;
@@ -334,10 +342,10 @@ DLCalMenu::DLCalMenu(QWidget *parent) :
     resizer->start(10);
     connect(resizer,SIGNAL(timeout()),this,SLOT(size_tracker()));
 }
-void DLCalMenu::size_tracker()
+void DLCalMenu::size_tracker()      // TODO
 {
     int w = ui->tabWidget->width();
-    qDebug()<<Fontsize;
+  //  qDebug()<<Fontsize;
     if (w<3840){
         for(w=w ; w<3840 ; w++){
             w=w;
