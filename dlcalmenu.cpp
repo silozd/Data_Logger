@@ -49,8 +49,9 @@ DLCalMenu::DLCalMenu(QWidget *parent) :
         SideMargin = hr*10/i;
         RealLabelH = vr*30/i;
         RealLabelW = hr*180/i;
-        RealLCDH = vr*40/i;
-        RawLCDH  = vr*50/i;
+        RealLCDH = vr*45/i;
+        RawLabelW= hr*180/i;
+        RawLCDH  = vr*30/i;
         CalPointH = vr*38/i;
         CalPointW = vr*86/i;
         ToolH = vr*60/i;
@@ -69,8 +70,9 @@ DLCalMenu::DLCalMenu(QWidget *parent) :
         SideMargin = hr*10/i;
         RealLabelH = vr*30/i;
         RealLabelW = hr*180/i;
-        RealLCDH = vr*40/i;
-        RawLCDH  = vr*50/i;
+        RealLCDH = vr*45/i;
+        RawLabelW= hr*180/i;
+        RawLCDH  = vr*30/i;
         CalPointH = vr*38/i;
         CalPointW = vr*86/i;
         ToolH = vr*60/i;
@@ -85,20 +87,21 @@ DLCalMenu::DLCalMenu(QWidget *parent) :
     else if  (ScreenWidth == 3840){
         i = i/2;
         Fontsize =18;
-        FontsizeTab = 20;
+        FontsizeTab = 19;
         Font1.setPointSize(Fontsize);
         SideMargin = hr*10/i;
         RealLabelH = vr*20/i;
-        RealLabelW = hr*130/i;
+        RealLabelW = hr*85/i;
         RealLCDH = vr*30/i;
-        RawLCDH  = vr*20/i;
+        RawLabelW= hr*140/i;
+        RawLCDH  = vr*25/i;
         CalPointH = vr*25/i;
         CalPointW = vr*60/i;
         ToolH = vr*40/i;
-        CalibScrollH = RealLCDH*2+RealLabelH*2+SideMargin*3;
+        CalibScrollH = RawLCDH*2+RealLabelH*2+SideMargin*2;
         MainScrollW = RealLabelW;
-        TabBarH = hr*100/i;
-        TabBarW = hr*70/i;
+        TabBarH = hr*90/i;
+        TabBarW = hr*60/i;
         AppW = hr*1260/i;
         AppH = vr*795/i;
         qDebug()<<"Screen Width == 3840 :?"<<ScreenWidth;
@@ -112,6 +115,8 @@ DLCalMenu::DLCalMenu(QWidget *parent) :
         RealLabelH = vr*30/i;
         RealLabelW = hr*180/i;
         RealLCDH = vr*45/i;
+        RawLabelW= hr*130/i;
+        RawLCDH  = vr*20/i;
         CalPointH = vr*38/i;
         CalPointW = vr*86/i;
         ToolH = vr*60/i;
@@ -274,7 +279,7 @@ DLCalMenu::DLCalMenu(QWidget *parent) :
             ChnRawLabel[i]  = new QLabel(tr("Channel %1 Raw").arg(i + 1),ui->scrollArea);
             ChnRawLabel[i]  -> setAlignment(Qt::AlignCenter);
             ChnRawLabel[i]  -> setStyleSheet("font-family: Arial; background-color: rgb(10, 10, 10); color: rgb(255, 255, 255);");
-            ChnRawLabel[i]  -> setMinimumSize(RealLabelW, RealLabelH);
+            ChnRawLabel[i]  -> setMinimumSize(RawLabelW, RealLabelH);
             ChnRawLabel[i]  -> setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Preferred);
             ChnRawLabel[i]  -> setFont(Font1);
 
@@ -283,14 +288,14 @@ DLCalMenu::DLCalMenu(QWidget *parent) :
             ChnLCDRaw[i]    -> setDigitCount(RawDigitCount);
             ChnLCDRaw[i]    -> setSmallDecimalPoint(true);
             ChnLCDRaw[i]    -> setStyleSheet("background-color: rgb(0, 0, 0); color: rgb(255, 10, 0)");
-            ChnLCDRaw[i]    -> setMinimumSize(RealLabelW, RawLCDH);
+            ChnLCDRaw[i]    -> setMinimumSize(RawLabelW, RawLCDH);
             ChnLCDRaw[i]    -> setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
 
             ChnRealLabel[i] = new QLabel(tr("Channel %1 Real").arg(i + 1),ui->scrollArea);
             ChnRealLabel[i] -> setAlignment(Qt::AlignCenter);
             ChnRealLabel[i] -> setFont(Font1);
             ChnRealLabel[i] -> setStyleSheet("font-family: Arial; background-color: rgb(10, 10, 10); color: rgb(255, 255, 255)");
-            ChnRealLabel[i] -> setMinimumSize(RealLabelW, RealLabelH);
+            ChnRealLabel[i] -> setMinimumSize(RawLabelW, RealLabelH);
             ChnRealLabel[i] -> setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Preferred);
 
             ChnLCDReal[i]   -> display(QString("%1000").arg(i+1));
@@ -298,7 +303,7 @@ DLCalMenu::DLCalMenu(QWidget *parent) :
             ChnLCDReal[i]   -> setDigitCount(RealDigitCount);
             ChnLCDReal[i]   -> setSmallDecimalPoint(true);
             ChnLCDReal[i]   -> setStyleSheet("background-color: rgb(0, 0, 0); color: rgb(50, 255, 0)");
-            ChnLCDReal[i]   -> setMinimumSize(RealLabelW, RawLCDH);
+            ChnLCDReal[i]   -> setMinimumSize(RawLabelW, RawLCDH);
             ChnLCDReal[i]   -> setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
 
             boxLayout       -> addWidget(ChnRawLabel[i]  , j   , i);
@@ -371,8 +376,8 @@ DLCalMenu::DLCalMenu(QWidget *parent) :
     }
     UserCalLabel[0] ->  setText("ZERO");
     ui->scrollCalPoint->setWidget(CalPointsFrame);
-    ui->scrollCalPoint->setMinimumWidth(RealLabelW*2);
-    ui->scrollCalPoint->setMaximumWidth(RealLabelW*4+SideMargin*2);
+    ui->scrollCalPoint->setMinimumWidth(RawLabelW*2);
+    ui->scrollCalPoint->setMaximumWidth(RawLabelW*4+SideMargin*2);
     ui->CoBoxInputType->setMinimumWidth(RealLabelW);
     CalPointsFrame  ->  setLayout(CalGridLayout);
     useless1 = new QLabel("Step");
@@ -389,7 +394,7 @@ DLCalMenu::DLCalMenu(QWidget *parent) :
     scroll_bar  = new QScrollBar;
     scroll_bar  = ui->scrollArea  -> horizontalScrollBar();
     scroll_bar  -> setTracking(true);
-    scroll_bar  -> setSingleStep(RealLabelW+SideMargin/1.5);
+    scroll_bar  -> setSingleStep(RawLabelW+SideMargin/1.5);
     connect(scroll_bar, SIGNAL(sliderPressed()),    this,   SLOT(slider_Pressed()))  ;
     connect(scroll_bar, SIGNAL(sliderReleased()),   this,   SLOT(slider_Released())) ;
     connect(scroll_bar, SIGNAL(sliderReleased()),   this,   SLOT(scroll_movement())) ;

@@ -133,6 +133,7 @@ public :
     int RealLabelH;
     int RealLabelW;
     int RealLCDH;
+    int RawLabelW;
     int RawLCDH;
     int CalPointH;
     int CalPointW;
