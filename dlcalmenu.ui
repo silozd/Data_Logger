@@ -33,7 +33,7 @@
        <enum>QTabWidget::West</enum>
       </property>
       <property name="currentIndex">
-       <number>1</number>
+       <number>4</number>
       </property>
       <widget class="QWidget" name="MainPage">
        <attribute name="title">
@@ -338,7 +338,7 @@
          <number>3</number>
         </property>
         <property name="bottomMargin">
-         <number>3</number>
+         <number>9</number>
         </property>
         <item row="1" column="0">
          <widget class="QScrollArea" name="scrollCalPoint">
@@ -351,7 +351,7 @@
              <x>0</x>
              <y>0</y>
              <width>296</width>
-             <height>451</height>
+             <height>446</height>
             </rect>
            </property>
           </widget>
@@ -441,6 +441,9 @@
            <item row="2" column="0">
             <widget class="QFrame" name="CalbtnFrame1">
              <layout class="QHBoxLayout" name="horizontalLayout">
+              <property name="bottomMargin">
+               <number>0</number>
+              </property>
               <item>
                <widget class="QPushButton" name="btnSendParData">
                 <property name="text">
@@ -493,7 +496,7 @@
              <x>0</x>
              <y>0</y>
              <width>899</width>
-             <height>111</height>
+             <height>110</height>
             </rect>
            </property>
           </widget>
@@ -1051,7 +1054,7 @@ color: rgb(250, 250, 250);</string>
         <item row="3" column="1">
          <widget class="QWidget" name="widget_8" native="true"/>
         </item>
-        <item row="0" column="0" colspan="2">
+        <item row="0" column="0">
          <widget class="QFrame" name="frame">
           <property name="frameShape">
            <enum>QFrame::StyledPanel</enum>
@@ -1059,17 +1062,10 @@ color: rgb(250, 250, 250);</string>
           <property name="frameShadow">
            <enum>QFrame::Raised</enum>
           </property>
-          <layout class="QGridLayout" name="gridLayout_4" columnstretch="1,1,1,2">
+          <layout class="QGridLayout" name="gridLayout_4" columnstretch="1,1,1">
            <property name="horizontalSpacing">
             <number>9</number>
            </property>
-           <item row="0" column="2">
-            <widget class="QPushButton" name="pushButton_11">
-             <property name="text">
-              <string>CONNECT</string>
-             </property>
-            </widget>
-           </item>
            <item row="0" column="1">
             <widget class="QComboBox" name="combo_portType"/>
            </item>
@@ -1080,18 +1076,12 @@ color: rgb(250, 250, 250);</string>
              </property>
             </widget>
            </item>
-           <item row="0" column="3">
-            <spacer name="horizontalSpacer_5">
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
+           <item row="0" column="2">
+            <widget class="QPushButton" name="pushButton_11">
+             <property name="text">
+              <string>CONNECT</string>
              </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>40</width>
-               <height>20</height>
-              </size>
-             </property>
-            </spacer>
+            </widget>
            </item>
           </layout>
          </widget>

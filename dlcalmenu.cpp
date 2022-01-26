@@ -44,26 +44,29 @@ DLCalMenu::DLCalMenu(QWidget *parent) :
         Fontsize = 13;
         FontsizeTab = 13;
         Font1.setPointSize(Fontsize);
+        qDebug()<<"Screen Width <= 1920 :?"<<ScreenWidth;
     }
     else if (ScreenWidth > 1920){
         Fontsize = 13;
         FontsizeTab = 13;
         Font1.setPointSize(Fontsize);
+        qDebug()<<"Screen Width > 1920 :?"<<ScreenWidth;
     }
     else if  (ScreenWidth == 3840){
         i = i/2;
         Fontsize =14;
         FontsizeTab = 16;
         Font1.setPointSize(Fontsize);
+        qDebug()<<"Screen Width == 3840 :?"<<ScreenWidth;
     }
     if  (ScreenHeight <= 960){        //dlcalmenu org
         i = 1500;
         Fontsize = 11;
         FontsizeTab = 9;
+        qDebug()<<"Screen Width :?"<<ScreenWidth;
+        qDebug()<<"Screen Height <= 960 :?"<<ScreenHeight;
     }
     qDebug()<<"i"<<i;
-    qDebug()<<"Screen Width"<<ScreenWidth;
-    qDebug()<<"Screen Height"<<ScreenHeight;
 
     int SideMargin = hr*10/i;
     int RealLabelH = vr*30/i;
