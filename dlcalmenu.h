@@ -305,6 +305,7 @@ public :
     int linecnt=0;
 
     int Fontsize;
+    int FontsizeTab;
     QTimer *resizer;
 
 private slots:

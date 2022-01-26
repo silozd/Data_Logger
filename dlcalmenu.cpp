@@ -42,18 +42,28 @@ DLCalMenu::DLCalMenu(QWidget *parent) :
     if (ScreenWidth <=1920){
         i = 1000;
         Fontsize = 13;
+        FontsizeTab = 13;
         Font1.setPointSize(Fontsize);
     }
     else if (ScreenWidth > 1920){
         Fontsize = 13;
+        FontsizeTab = 13;
         Font1.setPointSize(Fontsize);
     }
     else if  (ScreenWidth == 3840){
         i = i/2;
         Fontsize =14;
+        FontsizeTab = 16;
         Font1.setPointSize(Fontsize);
     }
+    if  (ScreenHeight <= 960){        //dlcalmenu org
+        i = 1500;
+        Fontsize = 11;
+        FontsizeTab = 9;
+    }
     qDebug()<<"i"<<i;
+    qDebug()<<"Screen Width"<<ScreenWidth;
+    qDebug()<<"Screen Height"<<ScreenHeight;
 
     int SideMargin = hr*10/i;
     int RealLabelH = vr*30/i;
@@ -64,10 +74,10 @@ DLCalMenu::DLCalMenu(QWidget *parent) :
     int ToolH = vr*60/i;
     int CalibScrollH = RealLCDH*2+RealLabelH*2+SideMargin*3;
     int MainScrollW = RealLabelW;
-    int TabBarW = hr*115/i;
-    int TabBarH = hr*100/i;
+    int TabBarH = hr*135/i;
+    int TabBarW = hr*100/i;
     int AppW = hr*1260/i;
-    int AppH = vr*806/i;
+    int AppH = vr*795/i;
 
     resize(AppW,AppH);
 
@@ -82,13 +92,10 @@ DLCalMenu::DLCalMenu(QWidget *parent) :
     qDebug()<<"TabBarW"<<TabBarW;
 
     tabBar = ui->tabWidget->tabBar();
-    ui->tabWidget->setStyleSheet(QString("QTabBar::tab { width: %1px; height: %1px;}").arg(TabBarW,TabBarH)
-                                 + QString("QLabel{font-family: Times New Roman; font-size: %1pt;} QComboBox,QPushButton,QRadioButton,QPushButton{font-family: Arial; font-size: %1pt;}").arg(Fontsize,Fontsize));
-    ui->tabWidget->setFont(Font1);
+    ui->tabWidget->setStyleSheet(QString("QTabBar::tab { width: %1px; height: %2px; font-size: %3pt}").arg(TabBarW).arg(TabBarH).arg(FontsizeTab)
+                                 + QString("QLabel{font-family: Times New Roman; font-size: %1pt;} QComboBox,QPushButton,QRadioButton,QPushButton{font-family: Arial; font-size: %1pt;}").arg(Fontsize));
     tabBar   ->setStyle(new CustomTabStyle);
     tabBar_alarm = ui->tabWidget_alarm->tabBar();
-//    ui->tabWidget->setStyleSheet(QString("QLabel{font-family: Times New Roman; font-size: %1pt;} QComboBox,QPushButton,QRadioButton,QPushButton{font-family: Arial; font-size: %1pt;}").arg(Fontsize,Fontsize));
-    ui->MainPage->setFont(Font1);
 
 // toolbar :
     ui->toolBar -> toggleViewAction()->setVisible(false);
@@ -215,9 +222,10 @@ DLCalMenu::DLCalMenu(QWidget *parent) :
         if(int j = 1){
             ChnRawLabel[i]  = new QLabel(tr("Channel %1 Raw").arg(i + 1),ui->scrollArea);
             ChnRawLabel[i]  -> setAlignment(Qt::AlignCenter);
-            ChnRawLabel[i]  -> setFont(Font1);
             ChnRawLabel[i]  -> setStyleSheet("font-family: Arial; background-color: rgb(10, 10, 10); color: rgb(255, 255, 255);");
             ChnRawLabel[i]  -> setMinimumSize(RealLabelW, RealLabelH);
+            ChnRawLabel[i]  -> setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Preferred);
+            ChnRawLabel[i]  -> setFont(Font1);
 
             ChnLCDRaw[i]    -> display(QString("%1000").arg(i+1));
             ChnLCDRaw[i]    -> setSegmentStyle(QLCDNumber::Flat);
@@ -225,12 +233,14 @@ DLCalMenu::DLCalMenu(QWidget *parent) :
             ChnLCDRaw[i]    -> setSmallDecimalPoint(true);
             ChnLCDRaw[i]    -> setStyleSheet("background-color: rgb(0, 0, 0); color: rgb(255, 10, 0)");
             ChnLCDRaw[i]    -> setMinimumSize(RealLabelW, RealLCDH);
+            ChnLCDRaw[i]    -> setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
 
             ChnRealLabel[i] = new QLabel(tr("Channel %1 Real").arg(i + 1),ui->scrollArea);
             ChnRealLabel[i] -> setAlignment(Qt::AlignCenter);
             ChnRealLabel[i] -> setFont(Font1);
             ChnRealLabel[i] -> setStyleSheet("font-family: Arial; background-color: rgb(10, 10, 10); color: rgb(255, 255, 255)");
             ChnRealLabel[i] -> setMinimumSize(RealLabelW, RealLabelH);
+            ChnRealLabel[i] -> setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Preferred);
 
             ChnLCDReal[i]   -> display(QString("%1000").arg(i+1));
             ChnLCDReal[i]   -> setSegmentStyle(QLCDNumber::Flat);
@@ -238,6 +248,7 @@ DLCalMenu::DLCalMenu(QWidget *parent) :
             ChnLCDReal[i]   -> setSmallDecimalPoint(true);
             ChnLCDReal[i]   -> setStyleSheet("background-color: rgb(0, 0, 0); color: rgb(50, 255, 0)");
             ChnLCDReal[i]   -> setMinimumSize(RealLabelW, RealLCDH);
+            ChnLCDReal[i]   -> setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
 
             boxLayout       -> addWidget(ChnRawLabel[i]  , j   , i);
             boxLayout       -> addWidget(ChnLCDRaw[i]    , j+1 , i);
@@ -264,9 +275,9 @@ DLCalMenu::DLCalMenu(QWidget *parent) :
         ui->scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
         dataBox     -> setLayout(boxLayout);
         boxLayout   -> setContentsMargins(0,0,0,0);
-        dataBox -> setMaximumHeight(CalibScrollH);
-        ui->scrollArea->setMinimumHeight(CalibScrollH);
-        ui->scrollArea->setMaximumHeight(CalibScrollH);
+        dataBox -> setMaximumHeight(CalibScrollH*1.2);
+        ui->scrollArea->setMinimumHeight(CalibScrollH+SideMargin);
+        ui->scrollArea->setMaximumHeight((CalibScrollH+SideMargin)*1.2);
 
 // cal points :
     for (int i = 0; i < MaxCalPoint; ++i) {
