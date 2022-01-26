@@ -127,6 +127,23 @@ public :
     bool password_correct;
     bool plot_run;
 
+    // layout :
+
+    int SideMargin;
+    int RealLabelH;
+    int RealLabelW;
+    int RealLCDH;
+    int RawLCDH;
+    int CalPointH;
+    int CalPointW;
+    int ToolH;
+    int CalibScrollH;
+    int MainScrollW;
+    int TabBarH;
+    int TabBarW;
+    int AppW;
+    int AppH;
+
     QLabel *label;
     QString KeyedData;
     QString currentFile;

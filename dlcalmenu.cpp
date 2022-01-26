@@ -46,43 +46,86 @@ DLCalMenu::DLCalMenu(QWidget *parent) :
         Fontsize = 13;
         FontsizeTab = 13;
         Font1.setPointSize(Fontsize);
+        SideMargin = hr*10/i;
+        RealLabelH = vr*30/i;
+        RealLabelW = hr*180/i;
+        RealLCDH = vr*40/i;
+        RawLCDH  = vr*50/i;
+        CalPointH = vr*38/i;
+        CalPointW = vr*86/i;
+        ToolH = vr*60/i;
+        CalibScrollH = RealLCDH*2+RealLabelH*2+SideMargin*3;
+        MainScrollW = RealLabelW;
+        TabBarH = hr*135/i;
+        TabBarW = hr*100/i;
+        AppW = hr*1260/i;
+        AppH = vr*795/i;
         qDebug()<<"Screen Width <= 1920 :?"<<ScreenWidth;
     }
     else if (ScreenWidth > 1920){
         Fontsize = 13;
         FontsizeTab = 13;
         Font1.setPointSize(Fontsize);
+        SideMargin = hr*10/i;
+        RealLabelH = vr*30/i;
+        RealLabelW = hr*180/i;
+        RealLCDH = vr*40/i;
+        RawLCDH  = vr*50/i;
+        CalPointH = vr*38/i;
+        CalPointW = vr*86/i;
+        ToolH = vr*60/i;
+        CalibScrollH = RealLCDH*2+RealLabelH*2+SideMargin*3;
+        MainScrollW = RealLabelW;
+        TabBarH = hr*135/i;
+        TabBarW = hr*100/i;
+        AppW = hr*1260/i;
+        AppH = vr*795/i;
         qDebug()<<"Screen Width > 1920 :?"<<ScreenWidth;
     }
     else if  (ScreenWidth == 3840){
         i = i/2;
-        Fontsize =14;
-        FontsizeTab = 16;
+        Fontsize =18;
+        FontsizeTab = 20;
         Font1.setPointSize(Fontsize);
+        SideMargin = hr*10/i;
+        RealLabelH = vr*20/i;
+        RealLabelW = hr*130/i;
+        RealLCDH = vr*30/i;
+        RawLCDH  = vr*20/i;
+        CalPointH = vr*25/i;
+        CalPointW = vr*60/i;
+        ToolH = vr*40/i;
+        CalibScrollH = RealLCDH*2+RealLabelH*2+SideMargin*3;
+        MainScrollW = RealLabelW;
+        TabBarH = hr*100/i;
+        TabBarW = hr*70/i;
+        AppW = hr*1260/i;
+        AppH = vr*795/i;
         qDebug()<<"Screen Width == 3840 :?"<<ScreenWidth;
     }
     if  (ScreenHeight <= 960){        //dlcalmenu org
         i = 1500;
-        Fontsize = 11;
+        Fontsize = 10;
         FontsizeTab = 9;
+        Font1.setPointSize(Fontsize);
+        SideMargin = hr*10/i;
+        RealLabelH = vr*30/i;
+        RealLabelW = hr*180/i;
+        RealLCDH = vr*45/i;
+        CalPointH = vr*38/i;
+        CalPointW = vr*86/i;
+        ToolH = vr*60/i;
+        CalibScrollH = RealLCDH*2+RealLabelH*2+SideMargin*3;
+        MainScrollW = RealLabelW;
+        TabBarH = hr*135/i;
+        TabBarW = hr*100/i;
+        AppW = hr*1260/i;
+        AppH = vr*795/i;
         qDebug()<<"Screen Width :?"<<ScreenWidth;
         qDebug()<<"Screen Height <= 960 :?"<<ScreenHeight;
     }
     qDebug()<<"i"<<i;
 
-    int SideMargin = hr*10/i;
-    int RealLabelH = vr*30/i;
-    int RealLabelW = hr*180/i;
-    int RealLCDH = vr*40/i;
-    int CalPointH = vr*38/i;
-    int CalPointW = vr*86/i;
-    int ToolH = vr*60/i;
-    int CalibScrollH = RealLCDH*2+RealLabelH*2+SideMargin*3;
-    int MainScrollW = RealLabelW;
-    int TabBarH = hr*135/i;
-    int TabBarW = hr*100/i;
-    int AppW = hr*1260/i;
-    int AppH = vr*795/i;
     qDebug()<<"hr = "<<hr;
     qDebug()<<"vr = "<<vr;
     qDebug()<<"SideMargin"<<SideMargin;
@@ -240,7 +283,7 @@ DLCalMenu::DLCalMenu(QWidget *parent) :
             ChnLCDRaw[i]    -> setDigitCount(RawDigitCount);
             ChnLCDRaw[i]    -> setSmallDecimalPoint(true);
             ChnLCDRaw[i]    -> setStyleSheet("background-color: rgb(0, 0, 0); color: rgb(255, 10, 0)");
-            ChnLCDRaw[i]    -> setMinimumSize(RealLabelW, RealLCDH);
+            ChnLCDRaw[i]    -> setMinimumSize(RealLabelW, RawLCDH);
             ChnLCDRaw[i]    -> setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
 
             ChnRealLabel[i] = new QLabel(tr("Channel %1 Real").arg(i + 1),ui->scrollArea);
@@ -255,7 +298,7 @@ DLCalMenu::DLCalMenu(QWidget *parent) :
             ChnLCDReal[i]   -> setDigitCount(RealDigitCount);
             ChnLCDReal[i]   -> setSmallDecimalPoint(true);
             ChnLCDReal[i]   -> setStyleSheet("background-color: rgb(0, 0, 0); color: rgb(50, 255, 0)");
-            ChnLCDReal[i]   -> setMinimumSize(RealLabelW, RealLCDH);
+            ChnLCDReal[i]   -> setMinimumSize(RealLabelW, RawLCDH);
             ChnLCDReal[i]   -> setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
 
             boxLayout       -> addWidget(ChnRawLabel[i]  , j   , i);
