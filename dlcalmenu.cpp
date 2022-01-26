@@ -41,7 +41,7 @@ DLCalMenu::DLCalMenu(QWidget *parent) :
 
     if (ScreenWidth <=1920){
         i = 1000;
-        Fontsize = 12;
+        Fontsize = 13;
         Font1.setPointSize(Fontsize);
     }
     else if (ScreenWidth > 1920){
@@ -96,9 +96,9 @@ DLCalMenu::DLCalMenu(QWidget *parent) :
     QLabel  *logo = new QLabel;
     spacer  -> setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
     ui      -> toolBar->addWidget(spacer);
-    logo    -> setSizeIncrement(350, ToolH);
-    logo    -> setPixmap(QPixmap(":/icon/logo.png"));
-    logo    -> setContentsMargins(0,0,0,0);
+//    logo    -> setSizeIncrement(350, ToolH);
+//    logo    -> setPixmap(QPixmap(":/icon/logo.png"));
+//    logo    -> setContentsMargins(0,0,0,0);
     //ui->toolBar -> addWidget(logo);       // OPEN
     ui->toolBar -> setMaximumHeight(ToolH);
     ui->toolBar -> setIconSize(QSize(ToolH, ToolH));
@@ -282,9 +282,9 @@ DLCalMenu::DLCalMenu(QWidget *parent) :
         UserCalLabel[i]     ->  setAlignment(Qt::AlignRight | Qt::AlignVCenter);
         UserCalLabel[i]     ->  setFont(Font1);
         UserCalLabel[i]     ->  setStyleSheet("font-family: Arial; background-color: rgb(123, 168, 246); border: 1px solid rgb(83,128,206); margin-right: 5px;  padding: 1px; ");
-        UserCalLabel[i]     ->  setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
+        //UserCalLabel[i]     ->  setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
         UserCalLabel[i]     ->  setMinimumSize(CalPointW,CalPointH);
-        UserCalLabel[i]     ->  setMinimumSize(65,CalPointH);
+        UserCalLabel[i]     ->  setMaximumHeight(CalPointW);
         ChnCalArray[0][8 + i] = QString::number((i)*200*10);
 
         ChnRawData[i]       =   new QLabel(QString::number(00).arg(i+1));
@@ -292,9 +292,9 @@ DLCalMenu::DLCalMenu(QWidget *parent) :
         ChnRawData[i]       ->  setAlignment(Qt::AlignRight | Qt::AlignVCenter);
         ChnRawData[i]       ->  setFont(Font1);
         ChnRawData[i]       ->  setStyleSheet("font-family: Arial; border: 1px solid gray; margin-right: 5px ; padding: 1px; background-color: rgb(255,255,255);");
-        ChnRawData[i]       ->  setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
+      //  ChnRawData[i]       ->  setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
         ChnRawData[i]       ->  setMinimumSize(CalPointW,CalPointH);
-        ChnRawData[i]       ->  setMinimumSize(65,CalPointH);
+        ChnRawData[i]       ->  setMaximumHeight(CalPointW);
         ChnCalArray[0][8 + 16 + i] = QString::number((i+1)*2000);
 
         CalStepCheckBox[i]  =   new QCheckBox;

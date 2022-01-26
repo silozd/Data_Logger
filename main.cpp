@@ -12,6 +12,7 @@ int main(int argc, char *argv[])
 
     QString styleSheet = QLatin1String(file.readAll());
     w.setStyleSheet(styleSheet);
+    w.setWindowIcon(QPixmap(":/icon/icon-logo.png"));
     w.show();
 
     return a.exec();
