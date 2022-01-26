@@ -334,7 +334,7 @@ DLCalMenu::DLCalMenu(QWidget *parent) :
     connect(scroll_bar, SIGNAL(sliderReleased()),   this,   SLOT(slider_Released())) ;
     connect(scroll_bar, SIGNAL(sliderReleased()),   this,   SLOT(scroll_movement())) ;
 
-    ui->radioBtn_dispGraph->hide();
+    ui->btn_stopGraph->hide();
     setup_combobox();
     setup_customPlot();
 
