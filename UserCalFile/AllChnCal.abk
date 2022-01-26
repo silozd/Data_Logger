@@ -1,0 +1,39 @@
+Channel No   : Channel 1
+Data Format  : 0 #####
+Input Type   : 0 LoadCell 1-2mV/V
+Sample Rate  : 2 8
+Filter Type  : 0 None
+User Gain    : 
+Cal Value  0 : ZERO
+Cal Value  1 : 2000
+Cal Value  2 : 4000
+Cal Value  3 : 6000
+Cal Value  4 : 8000
+Cal Value  5 : 10000
+Cal Value  6 : 12000
+Cal Value  7 : 14000
+Cal Value  8 : 16000
+Cal Value  9 : 18000
+Cal Value 10 : 20000
+Cal Value 11 : 22000
+Cal Value 12 : 24000
+Cal Value 13 : 26000
+Cal Value 14 : 28000
+Cal Value 15 : 30000
+Raw Value  0 : 2000
+Raw Value  1 : 4000
+Raw Value  2 : 6000
+Raw Value  3 : 8000
+Raw Value  4 : 10000
+Raw Value  5 : 12000
+Raw Value  6 : 14000
+Raw Value  7 : 16000
+Raw Value  8 : 18000
+Raw Value  9 : 20000
+Raw Value 10 : 22000
+Raw Value 11 : 24000
+Raw Value 12 : 26000
+Raw Value 13 : 28000
+Raw Value 14 : 30000
+Raw Value 15 : 32000
+....................

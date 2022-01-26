@@ -120,8 +120,8 @@ DLCalMenu::DLCalMenu(QWidget *parent) :
     ui->toolBar -> setMovable(false);
     clear      = ui->toolBar -> addAction(QIcon(":/icon/clear.png") ,"Clear"       ,this, SLOT(ClearKey()));
     exportfile = ui->toolBar -> addAction(QIcon(":/icon/export.png"),"Export File");
-    savefile   = ui->toolBar -> addAction(QIcon(":/icon/save.png")  ,"Save File"   );//,this, SLOT(save()));
-    openfile   = ui->toolBar -> addAction(QIcon(":/icon/open.png")  ,"Open File"   );//,this, SLOT(open()));
+    savefile   = ui->toolBar -> addAction(QIcon(":/icon/save.png")  ,"Save File"   ,this, SLOT(save()));
+    openfile   = ui->toolBar -> addAction(QIcon(":/icon/open.png")  ,"Open File"   ,this, SLOT(open()));
     ui->toolBar -> addSeparator();
     help = ui->toolBar-> addAction(QIcon(":/icon/info.png"), "Open Document");
     ui->toolBar -> addSeparator();
@@ -370,6 +370,7 @@ void DLCalMenu::setup_GUI()
 
     connect(this->KeyTimer         , SIGNAL(timeout())        , this, SLOT(update_time()));
     connect(this->btn_startStop    , SIGNAL(clicked())        , this, SLOT(timer_startStop()));
+    connect(this->ScrollBarGain    , SIGNAL(valueChanged(int)), this, SLOT(ScrollBarGain_valueChange(int)));
     connect(ui->CoBoxInputType     , SIGNAL(activated(int))   , this, SLOT(InputType_Warning(int)));
     connect(ui->CoBoxDataFormat    , SIGNAL(activated(int))   , this, SLOT(DataFormat_Changed()));
     connect(ui->CoBoxChannel       , SIGNAL(currentIndexChanged(int)), this, SLOT(Channel_itemChanged()));
@@ -737,6 +738,305 @@ void DLCalMenu::ClearKey()
     ChecKutuNo = 0;
     ///CalStepCheckBox[j]->setDisabled(false)
 }
+void DLCalMenu::save()
+{
+    QString fileName;
+       /// int i = 0;
+       /// if (i== 0) i = 1;
+        if (currentFile.isEmpty()) {
+            fileName = QFileDialog::getSaveFileName(this,
+                                                    tr("Save"), "",
+                                                    tr(".abk (*.abk);; All Files (*.*)"));;
+            currentFile = fileName;
+        }
+        else{
+            fileName = currentFile;
+        }
+        QFile file(fileName);
+        if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+            QMessageBox::warning(this, "Warning", "Cannot save file: " + file.errorString());
+            return;
+        }
+        setWindowTitle(fileName);
+        QTextStream out(&file);
+        QString CalValStr, RawValStr;
+        int j = ui->CoBoxChannel->currentIndex();
+        QString ChnNoStr = "Channel No   : " + ui->CoBoxChannel->currentText() + "\n";    // Save
+       /// UserFileArray[j][8+0] = ChnNoStr;//Ayca_8+0, 8+2 ... lardan 8 leri kaldirdim.
+        UserFileArray[j][0] = ChnNoStr;
+        QString DpLocStr = "Data Format  : " + QString::number(ui->CoBoxDataFormat->currentIndex())+" " + ui->CoBoxDataFormat->currentText() + "\n"; // Save Dp Location
+       /// UserFileArray[j][8+2] = DpLocStr;
+        UserFileArray[j][2] = DpLocStr;
+        QString InTypStr = "Input Type   : " + QString::number(ui->CoBoxInputType->currentIndex())+" " + ui->CoBoxInputType->currentText() + "\n";  // Save Input(Sensor/Source) Type
+      ///  UserFileArray[j][8+3] = InTypStr;
+        UserFileArray[j][3] = InTypStr;
+        QString SamplStr = "Sample Rate  : " + QString::number(ui->CoBoxSampeRate->currentIndex())+" " + ui->CoBoxSampeRate->currentText() + "\n";  // Save Sample Rate
+       /// UserFileArray[j][8+4] = SamplStr;
+        UserFileArray[j][4] = SamplStr;
+        QString FiltStr  = "Filter Type  : " + QString::number(ui->CoBoxFilterType->currentIndex())+" " + ui->CoBoxFilterType->currentText() + "\n"; // Save Filter Type
+       /// UserFileArray[j][8+5] = FiltStr ;
+        UserFileArray[j][5] = FiltStr ;
+        QString GaintStr = "User Gain    : " + LblScrollBarGain->text() + "\n";     // Save User Gain
+       /// UserFileArray[j][8+6] = GaintStr;
+        UserFileArray[j][6] = GaintStr;
+        /// Kayitlarin onune text koymamin nedeni kayitlarin text olarak acik olmasini saglamak, daha sonra sadelestirilebilir 'TODO'
+        /// ikiye ayirmamin nedeni; i'nin hem tek haneli hem de cift haneli olmasi nedeni ile kayittaki gorunus bozuklugunu onlemek
+        for (int i=0; i<MaxCalPoint; i++){
+            if  (i==15){
+                UserFileArray[j][9+MaxCalPoint+i]="....................\n";
+            }
+            if  (i<10){
+                CalValStr += "Cal Value  " + QString::number(i) + " : " + UserCalLabel[i]->text() + "\n";
+                RawValStr += "Raw Value  " + QString::number(i) + " : " + ChnRawData[i]->text() + "\n";
+                UserFileArray[j][8+i]="Cal Value  " + QString::number(i) + " : " + UserCalLabel[i]->text() + "\n";
+                UserFileArray[j][8+MaxCalPoint+i]="Raw Value  " + QString::number(i) + " : " + ChnRawData[i]->text() + "\n";
+            }
+            else{
+                CalValStr += "Cal Value " + QString::number(i) + " : " + UserCalLabel[i]->text() + "\n";
+                RawValStr += "Raw Value " + QString::number(i) + " : " + ChnRawData[i]->text() + "\n";
+                UserFileArray[j][8+i]="Cal Value " + QString::number(i) + " : " + UserCalLabel[i]->text() + "\n";
+                UserFileArray[j][8+MaxCalPoint+i]="Raw Value " + QString::number(i) + " : " + ChnRawData[i]->text() + "\n";
+              }
+        }    ///out << ChnNoStr << DpLocStr << InTypStr << SamplStr << FiltStr << GaintStr << CalValStr << RawValStr;
+        for (j = 0; j < 4; j++ ) {
+            for (int i=0; i<49; i++){
+                out << UserFileArray[j][i];
+                if  (UserFileArray[j][i] == "........") i = 50;
+            }
+        }
+        file.close();
+}
+void DLCalMenu::saveAs()
+{
+    ///VF10
+    SendData = "ZERO C" + QString::number(ui->CoBoxChannel->currentIndex()) + " \r\n";
+    ComSendType = "RawZ";
+}
+void DLCalMenu::opening_val()   // to run app with saved data
+{
+    mouseevent = false;   // will be used
+    //mouseevent = true;      // will be removed
+
+    QString fileName = "/home/sila/Desktop/DL_grid/UserCalFile/AllChnCal.abk";  // baslangicta acilan dosya path'i yazilacak TODO
+    setWindowTitle(fileName);
+
+    QFile file;
+    file.setFileName("/home/sila/Desktop/DL_grid/UserCalFile/AllChnCal.abk"); // baslangicta acilan dosya path'i yazilacak TODO
+    file.open(QIODevice::ReadOnly | QIODevice::Text);
+
+    QTextStream in(&file);
+    QString text;
+    QString chnno,formt;
+    int k = 0;
+    for (int j = 0; j < 4 ; j++ ) {
+        chnno = in.readLine();
+        k = 0;
+        UserFileArray[j][k] = chnno +"\n";
+        chnno = chnno.mid(15,10);
+        formt = ui->CoBoxChannel -> currentText(); /// test channel file nane with selected channel name
+        if  (chnno == formt){
+            formt = in.readLine();
+            k = 2;
+            UserFileArray[j][k] = formt +"\n"; k++;
+            ui->CoBoxDataFormat -> setCurrentIndex(formt.midRef(15,1).toInt());
+            formt = in.readLine();
+            UserFileArray[j][k] = formt +"\n"; k++;
+            ui->CoBoxInputType -> setCurrentIndex(formt.midRef(15,1).toInt());
+            formt = in.readLine();
+            UserFileArray[j][k] = formt +"\n"; k++;
+            ui->CoBoxSampeRate -> setCurrentIndex(formt.midRef(15,1).toInt());
+            formt = in.readLine();
+            UserFileArray[j][k] = formt +"\n"; k++;
+            ui->CoBoxFilterType -> setCurrentIndex(formt.midRef(15,1).toInt());
+            formt = in.readLine();
+            UserFileArray[j][k] = formt +"\n"; k++;
+            k = 8;
+            for (int i=0; i<MaxCalPoint; i++){
+                text = in.readLine();
+                UserFileArray[j][k] = text +"\n"; k++;
+                UserCalLabel[i]-> setText(text.mid(15,10));
+            }
+            for (int i=0; i<MaxCalPoint; i++){
+                text = in.readLine();
+                UserFileArray[j][k] = text +"\n"; k++;
+                ChnRawData[i] -> setText(text.mid(15,10));
+
+            }
+            int i = ui->CoBoxChannel -> currentIndex();
+            DLCalMenu::SaveCalPartoArray(i);
+            PreChnNo = i;
+        }
+        else {      // TODO 16ch yap
+            if (j == 0) formt = "Channel 1";
+            else if (j == 1) formt = "Channel 2";
+            else if (j == 2) formt = "Channel 3";
+            else if (j == 3) formt = "Channel 4";
+          ///  k = 0;
+            if  (chnno == formt){
+                ///Valid Chn Header Channel No   : Channel X
+                formt = in.readLine();
+                k = 2;
+                UserFileArray[j][k] = formt+"\n"; k++;
+                ChnCalArray[j][2] = formt.mid(15,1); /// Get Dp Location
+                formt = in.readLine();
+                UserFileArray[j][k] = formt+"\n"; k++;
+                ChnCalArray[j][3] = formt.mid(15,1); /// Get input type
+                formt = in.readLine();
+                UserFileArray[j][k] = formt+"\n"; k++;
+                ChnCalArray[j][4] = formt.mid(15,1); /// Get Sample rate
+                formt = in.readLine();
+                UserFileArray[j][k] = formt+"\n"; k++;
+                ChnCalArray[j][5] = formt.mid(15,1); /// Get Filter type
+                formt = in.readLine();
+                UserFileArray[j][k] = formt+"\n"; k++;
+                ChnCalArray[j][6] = formt.mid(15,1); /// Get User Gain
+                k = 8;
+                for (int i=0; i<MaxCalPoint; i++){
+                    text = in.readLine();   /// Usel Calibration step Keyed Value
+                    UserFileArray[j][k] = text+"\n"; k++;
+                    ChnCalArray[j][8 + i] = text.mid(15,10);
+                }
+                for (int i=0; i<MaxCalPoint; i++){
+                    text = in.readLine();   /// Get Calibration step rawdadata
+                    UserFileArray[j][k] = text+"\n"; k++;
+                    ChnCalArray[j][8 + MaxCalPoint + i] = text.mid(15,10);
+                }
+            }
+        }
+        /// pass line ...............................................
+        text = in.readLine();
+        UserFileArray[j][k] ="....................\n";// k++;
+    }
+    file.close();
+}
+void DLCalMenu::open()
+{
+    mouseevent = false;
+
+    resetTimer();
+
+    QString fileName;
+    QString filters("ABK files (*.abk);; All files (*.*)");
+    QString defaultFilter("ABK files (*.abk)");
+    fileName = QFileDialog::getOpenFileName(this, tr("Open Calibration Data file"),QCoreApplication::applicationDirPath(),
+                                            filters, &defaultFilter);
+    ///fileName = QFileDialog::getOpenFileName(this, tr("Open the file"), "/UserCalFile", tr("Text Files (*.ABK)"));
+    ///fileName = "AllChnCal.ABK";
+    QFile file(fileName);
+    currentFile = fileName;
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        QMessageBox::warning(this, "Warning", "Cannot open file: " + file.errorString());
+        return;
+    }
+    setWindowTitle(fileName);
+    QTextStream in(&file);
+    QString text;
+    QString chnno,formt;
+    int k = 0;
+    for (int j = 0; j < 4 ; j++ ) {
+        chnno = in.readLine();
+        k = 0;
+        UserFileArray[j][k] = chnno +"\n";
+        chnno = chnno.mid(15,10);
+        formt = ui->CoBoxChannel -> currentText(); /// test channel file nane with selected channel name
+        if  (chnno == formt){
+            formt = in.readLine();
+            k = 2;
+            UserFileArray[j][k] = formt +"\n"; k++;
+            ui->CoBoxDataFormat -> setCurrentIndex(formt.midRef(15,1).toInt());
+            formt = in.readLine();
+            UserFileArray[j][k] = formt +"\n"; k++;
+            ui->CoBoxInputType -> setCurrentIndex(formt.midRef(15,1).toInt());
+            formt = in.readLine();
+            UserFileArray[j][k] = formt +"\n"; k++;
+            ui->CoBoxSampeRate -> setCurrentIndex(formt.midRef(15,1).toInt());
+            formt = in.readLine();
+            UserFileArray[j][k] = formt +"\n"; k++;
+            ui->CoBoxFilterType -> setCurrentIndex(formt.midRef(15,1).toInt());
+            formt = in.readLine();
+            UserFileArray[j][k] = formt +"\n"; k++;
+            k = 8;
+            for (int i=0; i<MaxCalPoint; i++){
+                text = in.readLine();
+                UserFileArray[j][k] = text +"\n"; k++;
+                UserCalLabel[i]-> setText(text.mid(15,10));
+            }
+            for (int i=0; i<MaxCalPoint; i++){
+                text = in.readLine();
+                UserFileArray[j][k] = text +"\n"; k++;
+                ChnRawData[i] -> setText(text.mid(15,10));
+
+            }
+            int i = ui->CoBoxChannel -> currentIndex();
+            DLCalMenu::SaveCalPartoArray(i);
+            PreChnNo = i;
+        }
+        else {
+            if (j == 0) formt = "Channel 1";
+            else if (j == 1) formt = "Channel 2";
+            else if (j == 2) formt = "Channel 3";
+            else if (j == 3) formt = "Channel 4";
+          //  k = 0;
+            if  (chnno == formt){
+                ///Valid Chn Header Channel No   : Channel X
+                formt = in.readLine();
+                k = 2;
+                UserFileArray[j][k] = formt+"\n"; k++;
+                ChnCalArray[j][2] = formt.mid(15,1); /// Get Dp Location
+                formt = in.readLine();
+                UserFileArray[j][k] = formt+"\n"; k++;
+                ChnCalArray[j][3] = formt.mid(15,1); /// Get input type
+                formt = in.readLine();
+                UserFileArray[j][k] = formt+"\n"; k++;
+                ChnCalArray[j][4] = formt.mid(15,1); /// Get Sample rate
+                formt = in.readLine();
+                UserFileArray[j][k] = formt+"\n"; k++;
+                ChnCalArray[j][5] = formt.mid(15,1); /// Get Filter type
+                formt = in.readLine();
+                UserFileArray[j][k] = formt+"\n"; k++;
+                ChnCalArray[j][6] = formt.mid(15,1); /// Get User Gain
+                k = 8;
+                for (int i=0; i<MaxCalPoint; i++){
+                    text = in.readLine();   /// Usel Calibration step Keyed Value
+                    UserFileArray[j][k] = text+"\n"; k++;
+                    ChnCalArray[j][8 + i] = text.mid(15,10);
+                }
+                for (int i=0; i<MaxCalPoint; i++){
+                    text = in.readLine();   /// Get Calibration step rawdadata
+                    UserFileArray[j][k] = text+"\n"; k++;
+                    ChnCalArray[j][8 + MaxCalPoint + i] = text.mid(15,10);
+                }
+            }
+        }
+        /// pass line ...............................................
+        text = in.readLine();
+        UserFileArray[j][k] ="....................\n";// k++;
+    }
+    file.close();
+
+///    LblScrollBarGain->setText(gan);
+///    int LabelScrollW= 40;//fixed
+///    int LabelScrollObjH =40;//fixed
+///    int y = 250;
+///    int xx = gan.toInt();
+///    int CalScrollBarW = 400;
+///    int lblscrolx = CalScrollBarW-68; //toplam width - "<" + ">" cikar kayma uzunluÄŸu
+///    int x = 254 +((lblscrolx-LabelScrollW)*xx/7); //254 lbl baslama noktasÄ± + (toplamdan kalan deger (lblscrolx) - lbl width (LabelScrollW) ) *7 x=scrol uzerinde mesafe artis sayisi(tikladica gidilen mesafe)
+///    LblScrollBarGain->setGeometry(x,y,LabelScrollW,LabelScrollObjH);
+///    ScrollBarGain->setValue(xx);
+}
+void DLCalMenu::ScrollBarGain_valueChange(int value)
+{
+    LblScrollBarGain->setText(QString::number(value));
+    int LabelScrollW= 40;///fixed
+    int LabelScrollObjH =40;///fixed
+    int y = 490;
+    int CalScrollBarW = 400;
+    int lblscrolx = CalScrollBarW-68; ///toplam width - "<" + ">" cÄ±kar kayma uzunluÄŸu
+    int x = 254 +((lblscrolx-LabelScrollW)*value/7); ///254 lbl baslama noktasÄ± + (toplamdan kalan deger (lblscrolx) - lbl width (LabelScrollW) ) *7 x=scrol uzerinde mesafe artis sayisi(tikladica gidilen mesafe)
+    ///LblScrollBarGain->setGeometry(x,y,LabelScrollW,LabelScrollObjH);
+    ///scrolbar width ne kadar olursa hesaplayip lblscrolx artma ve azalma noktasina otomatik donuyor
+}
 // ekleniyör
 void DLCalMenu::size_tracker()      // TODO
 {
@@ -781,6 +1081,95 @@ int DLCalMenu::GetScreenVRes(int s){
     int i = (1000*py)/ly;
     if (py >= ly) i = (1000*ly)/py;;
     return (i) ;
+}
+void DLCalMenu::mousePressEvent(QMouseEvent *event)
+{
+    int i = 0;
+    QFont Font1 ("Arial", Fontsize, QFont::Normal);
+//    UserCalLabel[i]->setFont(Fontsize);       // open asap
+
+    if(mouseevent){ //|| !openfile->isChecked()){
+        //qDebug()<<"mouse event = enable";
+        psw_widget = childAt(event->pos());
+        ui->m_SetSerialPortButton -> setEnabled(true);
+        ui->btnSendParData        -> setEnabled(true);
+        ui->CoBoxChannel          -> setEnabled(true);
+        ui->CoBoxDataFormat       -> setEnabled(true);
+        ui->CoBoxFilterType       -> setEnabled(true);
+        ui->CoBoxInputType        -> setEnabled(true);
+        ui->CoBoxSampeRate        -> setEnabled(true);
+        for (i = 0; i<MaxCalPoint; i++){
+            if  (psw_widget == UserCalLabel[i]){
+                if (UserCalLabelActive == false){
+                UserCalLabelIndex = i;
+                UserCalLabelActive = true;
+                ///UserCalLabel[i]->setText("BASILAN " + QString::number(i+1));
+                UserCalLabel[i]->setStyleSheet("background-color: rgb(255, 255, 255); border:1px solid black; margin-right: 5px; padding: 1px;");
+                UserCalLabel[i]->setFocus();
+                break;
+                }
+            }
+        }
+        if  ((UserCalLabelActive == true) && (i == MaxCalPoint)){
+            /// mouse preseed at the outside of user calibration keyed area
+            UserCalLabelActive = false;
+            i=UserCalLabelIndex;
+            UserCalLabel[i]->setStyleSheet("background-color: rgb(123, 168, 246); margin-right: 5px; padding: 1px; border: 1px solid rgb(83,128,186)");
+        }
+    }
+     if(!mouseevent){ //&& openfile->isChecked()){
+        psw_widget != childAt(event->pos());
+        ui->m_SetSerialPortButton -> setDisabled(true);
+        ui->btnSendParData        -> setDisabled(true);
+        ui->CoBoxChannel          -> setDisabled(true);
+        ui->CoBoxDataFormat       -> setDisabled(true);
+        ui->CoBoxFilterType       -> setDisabled(true);
+        ui->CoBoxInputType        -> setDisabled(true);
+        ui->CoBoxSampeRate        -> setDisabled(true);
+        //qDebug()<<"mouse event = disable";
+        QMessageBox message;
+        message.setText("Unable to authorize.\nGo 'Settings' to enter valid password!");
+        message.setIconPixmap(QPixmap(":/icon/window_warning.png"));
+        message.exec();
+        return;
+    }
+    ///updateInterface(AddingMode);
+}
+void DLCalMenu::keyPressEvent(QKeyEvent *testevent)
+{
+    if  (KeyPressWait == true) {
+        KeyStateCounter = 0;
+        /// New Key Pressed
+        /// Burdan hangi tusa basilinca kontrollerini yapabilirsin
+        int i;
+        QFont ComboFont("Arial", 12, QFont::Normal);
+        if  (testevent->key() == Qt::Key_Return){
+            KeyValue = testevent->key();
+            UserCalLabelActive = false;
+            i=UserCalLabelIndex;
+            UserCalLabel[i]->setStyleSheet("background-color: rgb(123, 168, 246); margin-right: 5px; padding: 1px; border: 1px solid rgb(103,148,226)");
+            UserCalLabel[i]->setFont(ComboFont);
+        }
+        else if  ((testevent->key() >= Qt::Key_0) && (testevent->key() <= Qt::Key_9)) {
+            ///Textedit->setText("You pressed NumericKey 0 - 9");
+            KeyValue = testevent->key();
+            KeyPressWait = false;
+            KeyPressedOk = true;
+        }
+        else if (testevent->key() == Qt::Key_Backspace) {
+             KeyValue = testevent->key();
+             KeyPressWait = false;
+             KeyPressedOk = true;
+        }
+    }
+}
+void DLCalMenu::keyReleaseEvent(QKeyEvent *event)
+{
+    if  (KeyPressWait == false) {
+        if  (event->key() >= Qt::Key_Escape){
+            KeyReleasedOk = true;
+        }
+    }
 }
 DLCalMenu::~DLCalMenu()
 {

@@ -73,9 +73,9 @@ private:
     stopwatch *watch;                           // for serial port connection time count
 
 protected:
-//    void mousePressEvent(QMouseEvent *);
-//    void keyPressEvent(QKeyEvent *);
-//    void keyReleaseEvent(QKeyEvent *);
+    void mousePressEvent(QMouseEvent *);
+    void keyPressEvent(QKeyEvent *);
+    void keyReleaseEvent(QKeyEvent *);
 
 public :
     enum { MaxCalPoint = 16 };
@@ -141,6 +141,7 @@ public :
     QString rawdata;
     ///QByteArray SendData;///VF10
     QRect PriScrenRect;
+    QWidget *psw_widget;                        // for mouse event permission
 
     // toolbar actions :
     QAction *clear ;                            // clear button
@@ -324,6 +325,10 @@ private slots:
     void Channel_itemChanged();
     void SendCalDataToVTK();
     void UpdateFlash();
+    void open();
+    void save();
+    void saveAs();
+    void opening_val();
 
     void on_tabWidget_currentChanged(int index);
     void on_m_SetSerialPortButton_clicked();
@@ -331,6 +336,7 @@ private slots:
 public slots:
     int GetScreenHRes(int s);
     int GetScreenVRes(int s);
+    void ScrollBarGain_valueChange(int value);
     void timer_startStop();
     void resetTimer();
     void update_time();
