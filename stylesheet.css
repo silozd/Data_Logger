@@ -1,10 +1,20 @@
 QTabWidget{
 
 }
-
+QPushButton{
+}
 
 /* ALARM */
 QTabBar#tabBar_alarm::tab{
     height : 40px;
 
 }
+
+/* CALIB */
+QPushButton#m_SetSerialPortButton{
+    color: rgb(30,255,0);
+    font-weight:bold;
+    background-color: qlineargradient(spread:reflect, x1:0, y1:0, x2:0, y2:0.516727,
+                    stop:0 rgba(202, 202, 202, 255), stop:0.658416 rgba(0, 0, 0, 255));
+}
+

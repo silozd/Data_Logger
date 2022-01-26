@@ -32,6 +32,7 @@
 #include <QtSerialPort/QSerialPort>
 #include <QVector>
 #include "qcustomplot.h"
+#include "stopwatch.h"
 
 typedef unsigned char u8;
 
@@ -69,7 +70,7 @@ public:
 
 private:
     Ui::DLCalMenu *ui;
-    //stopwatch *watch;                           // for serial port connection time count
+    stopwatch *watch;                           // for serial port connection time count
 
 protected:
 //    void mousePressEvent(QMouseEvent *);
@@ -264,11 +265,12 @@ public :
     int     totalTime  = 0;
     QTime   time;
     QDateTime mStartTime;
-    QLabel  *daysText;
-    QLabel  *hundredthsText;
-    QLabel  *secondsText;
-    QLabel  *minutesText;
+
+    // hidden objects :
     QPushButton *btn_startStop;
+    QScrollBar *ScrollBarGain;
+    QLabel *Gain;
+    QLabel *LblScrollBarGain;
 
     // graph :
     QCPPlottableLegendItem *plItem;
@@ -309,18 +311,30 @@ public :
     QTimer *resizer;
 
 private slots:
+    void setup_GUI();
+
     void scroll_movement(); // Added Scroll Movement
     void slider_Pressed();  // Get Position of scroll_bar when pressed
     void slider_Released(); // Get Position of scroll_bar when released
 
+    void SaveCalPartoArray(int chnno);  //VF1
+    void DisplayCalPar(int chnno);  //VF10
+    void DataFormat_Changed();
+
     void on_tabWidget_currentChanged(int index);
+    void on_m_SetSerialPortButton_clicked();
 
 public slots:
     int GetScreenHRes(int s);
     int GetScreenVRes(int s);
+    void timer_startStop();
+    void resetTimer();
+    void update_time();
 
     void setup_combobox();
     void setup_customPlot();
+
+    void get_password();
 
     void size_tracker();
 };

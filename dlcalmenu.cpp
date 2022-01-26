@@ -28,6 +28,8 @@
 
 DLCalMenu::DLCalMenu(QWidget *parent) :
     QMainWindow(parent),
+    m_serial(new QSerialPort(this)),
+    watch(new stopwatch()),
     wdgReals(new QWidget),
     dataBox(new QWidget),
     CalPointsFrame(new QFrame),
@@ -81,9 +83,6 @@ DLCalMenu::DLCalMenu(QWidget *parent) :
     int TabBarW = hr*100/i;
     int AppW = hr*1260/i;
     int AppH = vr*795/i;
-
-    resize(AppW,AppH);
-
     qDebug()<<"hr = "<<hr;
     qDebug()<<"vr = "<<vr;
     qDebug()<<"SideMargin"<<SideMargin;
@@ -94,9 +93,15 @@ DLCalMenu::DLCalMenu(QWidget *parent) :
     qDebug()<<"MainScrollW"<<MainScrollW;
     qDebug()<<"TabBarW"<<TabBarW;
 
+    resize(AppW,AppH);
+    ui->tabWidget->setCurrentIndex(0);
+    ui->btn_stopGraph->hide();
+
+    setup_GUI();
+
     tabBar = ui->tabWidget->tabBar();
     ui->tabWidget->setStyleSheet(QString("QTabBar::tab { width: %1px; height: %2px; font-size: %3pt}").arg(TabBarW).arg(TabBarH).arg(FontsizeTab)
-                                 + QString("QLabel{font-family: Times New Roman; font-size: %1pt;} QComboBox,QPushButton,QRadioButton,QPushButton{font-family: Arial; font-size: %1pt;}").arg(Fontsize));
+                                 + QString("QLabel{font-family: Times New Roman; font-size: %1pt;} QComboBox,QPushButton,QRadioButton,QPushButton{font-family: Arial; font-size: %1pt; }").arg(Fontsize));
     tabBar   ->setStyle(new CustomTabStyle);
     tabBar_alarm = ui->tabWidget_alarm->tabBar();
 
@@ -106,9 +111,9 @@ DLCalMenu::DLCalMenu(QWidget *parent) :
     QLabel  *logo = new QLabel;
     spacer  -> setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
     ui      -> toolBar->addWidget(spacer);
-//    logo    -> setSizeIncrement(350, ToolH);
-//    logo    -> setPixmap(QPixmap(":/icon/logo.png"));
-//    logo    -> setContentsMargins(0,0,0,0);
+    logo    -> setSizeIncrement(350, ToolH);
+    logo    -> setPixmap(QPixmap(":/icon/logo.png"));
+    logo    -> setContentsMargins(0,0,0,0);
     //ui->toolBar -> addWidget(logo);       // OPEN
     ui->toolBar -> setMaximumHeight(ToolH);
     ui->toolBar -> setIconSize(QSize(ToolH, ToolH));
@@ -347,50 +352,32 @@ DLCalMenu::DLCalMenu(QWidget *parent) :
     connect(scroll_bar, SIGNAL(sliderPressed()),    this,   SLOT(slider_Pressed()))  ;
     connect(scroll_bar, SIGNAL(sliderReleased()),   this,   SLOT(slider_Released())) ;
     connect(scroll_bar, SIGNAL(sliderReleased()),   this,   SLOT(scroll_movement())) ;
-
-    ui->btn_stopGraph->hide();
+}
+void DLCalMenu::setup_GUI()
+{
     setup_combobox();
     setup_customPlot();
+    get_password();
 
+    KeyTimer = new QTimer(this);
+    btn_startStop   = new QPushButton(ui->wdgHidden);
+    ScrollBarGain   = new QScrollBar(Qt::Horizontal,(ui->wdgHidden));
+    Gain            = new QLabel("Gain",ui->wdgHidden);
+    LblScrollBarGain= new QLabel(ui->wdgHidden);
+
+    ScrollBarGain   -> hide();
+    LblScrollBarGain-> hide();
+    Gain            -> hide();
+    btn_startStop   -> hide();
+
+    connect(this->KeyTimer         , SIGNAL(timeout())        , this, SLOT(update_time()));
+    connect(ui->CoBoxDataFormat    , SIGNAL(currentIndexChanged(int)), this, SLOT(DataFormat_Changed()));
+    connect(this->btn_startStop    , SIGNAL(clicked())        , this, SLOT(timer_startStop()));
+
+    // del
     resizer =  new QTimer;
     resizer->start(10);
     connect(resizer,SIGNAL(timeout()),this,SLOT(size_tracker()));
-}
-void DLCalMenu::size_tracker()      // TODO
-{
-    int w = ui->tabWidget->width();
-  //  qDebug()<<Fontsize;
-    if (w<3840){
-        for(w=w ; w<3840 ; w++){
-            w=w;
-            Fontsize++;
-            //qDebug()<<Fontsize;
-        }
-    }
-}
-
-void DLCalMenu::on_tabWidget_currentChanged(int index)
-{
-    switch (index) {
-    case 0:
-        current_page = SCR_MAIN;
-        break;
-    case 1:
-        current_page = SCR_CALIB;
-        break;
-    case 2:
-        current_page = SCR_GRAPH;
-        break;
-    case 3:
-        current_page = SCR_SET;
-        break;
-    case 4:
-        current_page = SCR_PORTSET;
-        break;
-    case 5:
-        current_page = SCR_ALERTS;
-        break;
-    }
 }
 void DLCalMenu::setup_combobox()
 {
@@ -461,6 +448,166 @@ void DLCalMenu::setup_combobox()
     ui->CoBoxChannel        -> setCurrentText("Channel 1");
     ui->CoBoxChannel        -> setCurrentIndex(0);
 }
+void DLCalMenu::timer_startStop()
+{
+    qDebug()<<"Seriport button clicked : timer";
+    if(watch->isRunning()) {
+        watch->pause();
+    }
+    else {
+        watch->start();
+    }
+}
+void DLCalMenu::resetTimer()
+{
+    ui->hundredthsText  -> setText("00");
+    ui->secondsText     -> setText("00");
+    ui->minutesText     -> setText("00");
+    watch           -> reset();
+}
+void DLCalMenu::update_time()
+{
+    if(watch->isRunning()){
+        qint64 time = watch->getTime();
+        int d ;//= time / 1000 / 60;                         // day      //TODO
+        int h = time / 1000 / 60 / 60;                       // hour
+        int m = (time / 1000 / 60) - (h * 60);               // min
+        int s = (time / 1000) - (m * 60);                    // sec
+        int ms = time - ( s + ( m + ( h * 60)) * 60) * 1000; // for miliseconds
+        int ms_dis = ms / 10;
+        /* if(d < 10) {
+             daysText->setText(QString("0%1").arg(d));
+         }
+         else {
+             daysText->setText(QString("%1").arg(d));
+          ui->daysText->setText("00");*/
+        if(h < 10) {
+            ui->hundredthsText->setText(QString("0%1").arg(h));
+        }
+        else {
+            ui->hundredthsText->setText(QString("%1").arg(h));
+        }
+        if(m < 10) {
+            ui->minutesText ->setText(QString("0%1").arg(m));
+        }
+        else {
+            ui->minutesText ->setText(QString("%1").arg(m));
+        }
+        if(s < 10) {
+            ui->secondsText ->setText(QString("0%1").arg(s));
+        }
+        else {
+            ui->secondsText ->setText(QString("%1").arg(s));
+        }
+    }
+}
+void DLCalMenu::on_m_SetSerialPortButton_clicked()
+{
+    QString PortName;
+    PortName = ui->m_serialPortComboBox->currentText();
+    ///serial->setPortName("com6");
+    ///serial->setPortName(m_serialPortComboBox->currentText());
+    m_serial->setPortName(PortName);
+    ///
+    m_serial->setBaudRate   (QSerialPort::Baud115200);
+    m_serial->setDataBits   (QSerialPort::Data8);
+    m_serial->setParity     (QSerialPort::NoParity);
+    m_serial->setStopBits   (QSerialPort::OneStop);
+    m_serial->setFlowControl(QSerialPort::NoFlowControl);
+    if  (m_serial->open     (QIODevice::ReadWrite)){
+        ui->m_SetSerialPortButton->setText("CLOSE PORT");
+        ui->m_SetSerialPortButton->setStyleSheet("color: rgb(255,40,0); font-weight: bold;"
+                                             "background-color: qlineargradient(spread:reflect, x1:0, y1:0, x2:0, y2:0.516727, stop:0 rgba(202, 202, 202, 255), stop:0.658416 rgba(0, 0, 0, 255));");
+        ///m_RequestLineEdit->setFocus();
+        btn_startStop   -> clicked(); // del*
+        KeyTimer        -> start(100);
+        openfile        -> setDisabled(true);
+    }
+    else{
+        m_serial -> close();
+        ui->m_SetSerialPortButton->setText("OPEN PORT");
+        ui->m_SetSerialPortButton->setStyleSheet("color: yellow; font-weight: bold;"
+                                             "background-color: qlineargradient(spread:reflect, x1:0, y1:0, x2:0, y2:0.516727, stop:0 rgba(202, 202, 202, 255), stop:0.658416 rgba(0, 0, 0, 255));");
+        btn_startStop       -> clicked(); // del*
+        KeyTimer            -> stop();
+        openfile            -> setDisabled(false);
+    }
+}
+void DLCalMenu::SaveCalPartoArray(int chnno)   ///VF10
+{
+    ChnCalArray[chnno][0] = QString::number(chnno);                              /// Sa/Channel no
+    ChnCalArray[chnno][2] = QString::number(ui->CoBoxDataFormat -> currentIndex());  /// Save Dp Location
+    ChnCalArray[chnno][3] = QString::number(ui->CoBoxInputType  -> currentIndex());  /// Save Input Type
+    ChnCalArray[chnno][4] = QString::number(ui->CoBoxSampeRate  -> currentIndex());  /// Save sample Rate
+    ChnCalArray[chnno][5] = QString::number(ui->CoBoxFilterType -> currentIndex());  /// Save Filter Type
+    ChnCalArray[chnno][6] = QString::number(ScrollBarGain -> value());         /// Save Optional Gain
+    int i,j;
+    QString dd = "00000";
+    ///qDebug() << "Ayrilan Data : " << str <<  UserCalLabel[1]->text() << '\n';
+    for (i = 0 ; i < MaxCalPoint ; i++ ) {
+        if  (i > 0) {
+            dd = UserCalLabel[i]->text();
+            if  ((dd !="") && (PreDpLoc > 0)){
+                j = dd.size() - 1;
+                dd = dd.left(j - (PreDpLoc)) + dd.right(PreDpLoc);
+            }
+        }
+        ChnCalArray[chnno][8 + i] = dd;                  ///Store Cal Previous Channel Keyed Value
+        dd = ChnRawData[i] -> text();
+        ChnCalArray[chnno][8 + MaxCalPoint + i] = dd;    ///Store Cal Previous Channel Raw Value
+    }
+}
+void DLCalMenu::DisplayCalPar(int chnno)    ///VF10
+{
+    int i,j;
+    ui->CoBoxChannel    ->  setCurrentIndex(chnno);
+    ui->CoBoxDataFormat ->  setCurrentIndex(ChnCalArray[chnno][2].toInt());
+    ui->CoBoxInputType  ->  setCurrentIndex(ChnCalArray[chnno][3].toInt());
+    ui->CoBoxSampeRate  ->  setCurrentIndex(ChnCalArray[chnno][4].toInt());
+    ui->CoBoxFilterType ->  setCurrentIndex(ChnCalArray[chnno][5].toInt());
+    ScrollBarGain   ->  setValue(ChnCalArray[chnno][6].toInt());
+    int DpLoc = ui->CoBoxDataFormat->currentIndex();
+    QString dd;
+    for (i = 0; i < MaxCalPoint; i++ ) {
+        dd = ChnCalArray[chnno][8 + i];      /// Get User Cal Value
+        if  ((dd !="") && (DpLoc > 0)){      /// If text not empty and dp location = 0  no decimal
+            j = dd.size();
+            ///dd = dd.left(j - (DpLoc)) + "." + dd.right(DpLoc);
+            dd = dd.left(j - (DpLoc)) + dd.right(DpLoc);
+        }
+        UserCalLabel[i]->setText(dd);
+        dd = ChnCalArray[chnno][8 + MaxCalPoint + i];      ///Get Cal Raw Value
+        ChnRawData[i] ->setText(dd); ///VF10
+    }
+    UserCalLabel[0]->setText("ZERO");
+    ///i = ChnCalArray[chnno][1].toInt();
+}
+void DLCalMenu::DataFormat_Changed()    ///VF10
+{
+    QMessageBox message;
+    message.setText("Your Calibration Data will be formated again");
+    message.setIconPixmap(QPixmap(":/icon/okay.png"));
+    message.setWindowTitle("Warning!");
+    if  (message.exec() == QMessageBox::Ok){
+        int chnno = ui->CoBoxChannel->currentIndex();
+        PreDpLoc  = ui->CoBoxDataFormat->currentIndex();
+        ChnCalArray[chnno][2] = QString::number(PreDpLoc); /// Save Dp Location
+        DisplayCalPar(chnno);
+    }
+}
+// ekleniyör
+void DLCalMenu::size_tracker()      // TODO
+{
+    int w = ui->tabWidget->width();
+  //  qDebug()<<Fontsize;
+    if (w<3840){
+        for(w=w ; w<3840 ; w++){
+            w=w;
+            Fontsize++;
+            //qDebug()<<Fontsize;
+        }
+    }
+}
 int DLCalMenu::GetScreenHRes(int s){
     auto screens = QGuiApplication::screens();
     qDebug() << "Ekran Listesi " << screens.count();
@@ -497,5 +644,7 @@ DLCalMenu::~DLCalMenu()
 {
     delete ui;
 }
+
+
 
 

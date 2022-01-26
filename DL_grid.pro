@@ -31,12 +31,14 @@ SOURCES += \
         dlcalmenu.cpp \
     qcustomplot.cpp \
     plotting.cpp \
-    process.cpp
+    process.cpp \
+    stopwatch.cpp
 
 HEADERS += \
         dlcalmenu.h \
     customtabstyle.h \
-    qcustomplot.h
+    qcustomplot.h \
+    stopwatch.h
 
 FORMS += \
         dlcalmenu.ui
