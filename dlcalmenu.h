@@ -320,6 +320,10 @@ private slots:
     void SaveCalPartoArray(int chnno);  //VF1
     void DisplayCalPar(int chnno);  //VF10
     void DataFormat_Changed();
+    void InputType_Warning(int);
+    void Channel_itemChanged();
+    void SendCalDataToVTK();
+    void UpdateFlash();
 
     void on_tabWidget_currentChanged(int index);
     void on_m_SetSerialPortButton_clicked();
@@ -330,6 +334,7 @@ public slots:
     void timer_startStop();
     void resetTimer();
     void update_time();
+    void ClearKey();
 
     void setup_combobox();
     void setup_customPlot();

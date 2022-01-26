@@ -11,6 +11,19 @@ QTabBar#tabBar_alarm::tab{
 }
 
 /* CALIB */
+QPushButton#btnSendParData, QPushButton#btnSendAllData{
+    background-color : none;
+    color: rgb(220,0,0);
+}
+QPushButton#btnSendCalData{
+    background-color : none;
+    color: rgb(210,120,120);
+}
+QPushButton#btnWriteParDataToFlash{
+    color: rgb(210,40,0);
+    font-weight:bold;
+    background-color: qlineargradient(spread:reflect, x1:0, y1:0.5, x2:0, y2:1, stop:0.618812 rgba(90, 90, 90, 255), stop:1 rgba(159, 159, 159, 255));
+}
 QPushButton#m_SetSerialPortButton{
     color: rgb(30,255,0);
     font-weight:bold;

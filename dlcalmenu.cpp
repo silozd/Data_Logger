@@ -118,7 +118,7 @@ DLCalMenu::DLCalMenu(QWidget *parent) :
     ui->toolBar -> setMaximumHeight(ToolH);
     ui->toolBar -> setIconSize(QSize(ToolH, ToolH));
     ui->toolBar -> setMovable(false);
-    clear      = ui->toolBar -> addAction(QIcon(":/icon/clear.png") ,"Clear"       );//,this, SLOT(ClearKey()));
+    clear      = ui->toolBar -> addAction(QIcon(":/icon/clear.png") ,"Clear"       ,this, SLOT(ClearKey()));
     exportfile = ui->toolBar -> addAction(QIcon(":/icon/export.png"),"Export File");
     savefile   = ui->toolBar -> addAction(QIcon(":/icon/save.png")  ,"Save File"   );//,this, SLOT(save()));
     openfile   = ui->toolBar -> addAction(QIcon(":/icon/open.png")  ,"Open File"   );//,this, SLOT(open()));
@@ -301,9 +301,8 @@ DLCalMenu::DLCalMenu(QWidget *parent) :
         UserCalLabel[i]     ->  setAlignment(Qt::AlignRight | Qt::AlignVCenter);
         UserCalLabel[i]     ->  setFont(Font1);
         UserCalLabel[i]     ->  setStyleSheet("font-family: Arial; background-color: rgb(123, 168, 246); border: 1px solid rgb(83,128,206); margin-right: 5px;  padding: 1px; ");
-        //UserCalLabel[i]     ->  setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
         UserCalLabel[i]     ->  setMinimumSize(CalPointW,CalPointH);
-        UserCalLabel[i]     ->  setMaximumHeight(CalPointW);
+        UserCalLabel[i]     ->  setMaximumHeight(CalPointW);        // TODO
         ChnCalArray[0][8 + i] = QString::number((i)*200*10);
 
         ChnRawData[i]       =   new QLabel(QString::number(00).arg(i+1));
@@ -311,9 +310,8 @@ DLCalMenu::DLCalMenu(QWidget *parent) :
         ChnRawData[i]       ->  setAlignment(Qt::AlignRight | Qt::AlignVCenter);
         ChnRawData[i]       ->  setFont(Font1);
         ChnRawData[i]       ->  setStyleSheet("font-family: Arial; border: 1px solid gray; margin-right: 5px ; padding: 1px; background-color: rgb(255,255,255);");
-      //  ChnRawData[i]       ->  setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
         ChnRawData[i]       ->  setMinimumSize(CalPointW,CalPointH);
-        ChnRawData[i]       ->  setMaximumHeight(CalPointW);
+        ChnRawData[i]       ->  setMaximumHeight(CalPointW);        // TODO
         ChnCalArray[0][8 + 16 + i] = QString::number((i+1)*2000);
 
         CalStepCheckBox[i]  =   new QCheckBox;
@@ -371,8 +369,12 @@ void DLCalMenu::setup_GUI()
     btn_startStop   -> hide();
 
     connect(this->KeyTimer         , SIGNAL(timeout())        , this, SLOT(update_time()));
-    connect(ui->CoBoxDataFormat    , SIGNAL(currentIndexChanged(int)), this, SLOT(DataFormat_Changed()));
     connect(this->btn_startStop    , SIGNAL(clicked())        , this, SLOT(timer_startStop()));
+    connect(ui->CoBoxInputType     , SIGNAL(activated(int))   , this, SLOT(InputType_Warning(int)));
+    connect(ui->CoBoxDataFormat    , SIGNAL(activated(int))   , this, SLOT(DataFormat_Changed()));
+    connect(ui->CoBoxChannel       , SIGNAL(currentIndexChanged(int)), this, SLOT(Channel_itemChanged()));
+    connect(ui->btnSendCalData     , SIGNAL(clicked())        , this, SLOT(SendCalDataToVTK()));
+    connect(ui->btnWriteParDataToFlash, SIGNAL(clicked())   , this, SLOT(UpdateFlash())); // btnWriteParData slot
 
     // del
     resizer =  new QTimer;
@@ -594,6 +596,146 @@ void DLCalMenu::DataFormat_Changed()    ///VF10
         ChnCalArray[chnno][2] = QString::number(PreDpLoc); /// Save Dp Location
         DisplayCalPar(chnno);
     }
+}
+void DLCalMenu::InputType_Warning(int)
+{
+    QMessageBox message;
+    if  (ui->CoBoxInputType->currentIndex() > 6){
+        message.setText("Your device choice does not include this option.");
+        message.setIconPixmap(QPixmap(":/icon/warning.png"));
+        if  (message.exec() == QMessageBox::Ok){
+            ui->CoBoxInputType->setCurrentIndex(0);
+        }
+    }
+}
+void DLCalMenu::Channel_itemChanged()
+{
+    int chnno = ui->CoBoxChannel -> currentIndex();
+    if  (PreChnNo != chnno){
+        ///Save Previous Channel Parameters
+        SaveCalPartoArray(PreChnNo);
+        PreChnNo = chnno;
+        DisplayCalPar(PreChnNo);  ///VF10
+    }
+//    for (int i=0; i<MaxCalPoint; i++){        // open asap
+//       CalStepCheckBox[i]-> setDisabled(true);
+//       CalStepCheckBox[i]-> setChecked(false);
+//    }
+//    CalStepCheckBox[0]->setDisabled(false);
+    ChecKutuNo = 0;
+    ui->btnSendParData  -> setEnabled(true);
+    ui->btnSendParData  -> setStyleSheet("background-color : none; ; color: rgb(220,0,0); ");
+    ui->btnSendCalData  -> setDisabled(true);
+    ui->btnSendCalData  -> setStyleSheet("background-color : none; ; color: rgb(210,120,120);");
+    ui->btnWriteParDataToFlash  -> setDisabled(true);
+    ui->btnWriteParDataToFlash  -> setStyleSheet("color: rgb(210,40,0); font-weight:bold; background-color: "
+                                             "qlineargradient(spread:reflect, x1:0, y1:0.5, x2:0, y2:1, stop:0.618812 rgba(90, 90, 90, 255), stop:1 rgba(159, 159, 159, 255));");
+}
+void DLCalMenu::SendCalDataToVTK()
+{
+    QMessageBox message;
+    message.setText("Calibration Data will be send to VTK845!");
+    message.setIconPixmap(QPixmap(":/icon/okay.png"));
+    message.exec();
+    int chnno;
+    char caldevicechn,caldeviceaddr;
+    SendData = "SCAL D";
+    chnno = ui->CoBoxChannel-> currentIndex();
+    caldeviceaddr = 48 + (chnno/4);
+    caldevicechn = 48 + (chnno % 4);
+
+    DLCalMenu::SaveCalPartoArray(chnno);
+    ///Send Channel Parameters such as ADCchannel, dp, input type, sample rate, filter type
+    if(chnno>=4){
+        SendData += caldeviceaddr;///"1";; // Select Slave Device 1
+        SendData += caldevicechn;///ChnCalArray[chnno][0]; // ADC No = Channel No
+    }
+    else{
+        SendData += caldevicechn;///ChnCalArray[chnno][0]; // ADC No = Channel No
+        SendData += caldeviceaddr;///"1";; // Select Slave Device 1
+    }
+    SendData += ChnCalArray[chnno][2];  /// Dp Loaction
+    if  (ChnCalArray[chnno][3].size() == 1)
+        SendData += "0";
+    SendData += ChnCalArray[chnno][3]; /// Input Type
+    SendData += ChnCalArray[chnno][4]; /// Sample Rate
+    SendData += ChnCalArray[chnno][5]; /// Filter Type
+    SendData += "0";                   /// Filter Parameter
+    SendData += ChnCalArray[chnno][6]; /// Optional Gain
+    SendData += "K";
+    ///Send Cal Keyed Entry
+    QString Ar;
+    for (int i = 0; i < MaxCalPoint; i++){
+        Ar = ChnCalArray[chnno][8 + i];
+        if  (Ar =="") i = MaxCalPoint;
+        else {
+            SendData += Ar;
+            SendData += ":"; ///Place serator between user cal values
+        }
+    }
+    ///Send Raw data
+    SendData += "R";
+    for (int i = 0; i < MaxCalPoint; i++){
+        ///SendData += ChnCalArray[chnno][8 + MaxCalPoint + i];
+        ///SendData += " ";
+        Ar = ChnCalArray[chnno][8 + MaxCalPoint + i];
+        if  (Ar =="") i = MaxCalPoint;
+        else {
+            SendData += Ar;
+            SendData += ":";   ///Place serator between raw values
+        }
+    }
+    SendData += "\r\n";
+    ComSendType = "CAL";
+    ui->btnSendCalData         -> setDisabled(true);
+    ui->btnSendCalData         -> setStyleSheet("background-color : none; ; color: rgb(210,120,120); ");
+    ui->btnWriteParDataToFlash -> setEnabled(true);
+    ui->btnWriteParDataToFlash -> setStyleSheet("color: rgb(255,40,0); font-weight:bold; "
+                                          "background-color: qlineargradient(spread:reflect, x1:0, y1:0, x2:0, y2:0.516727, stop:0 rgba(202, 202, 202, 255), stop:0.658416 rgba(0, 0, 0, 255));");
+}
+void DLCalMenu::UpdateFlash()
+{
+    QMessageBox message;
+    message.setText("Selected Channell Calibration Data will be saved to VTK845 internal memory!");
+    message.setIconPixmap(QPixmap(":/icon/saved.png"));
+    message.exec();
+    int chnno;
+    static char caldevicechn,caldeviceaddr;
+    SendData = "SCAL U";
+    chnno = ui->CoBoxChannel-> currentIndex();
+    caldeviceaddr = 48 + (chnno/4);
+    caldevicechn = 48 + (chnno % 4);
+
+    SendData += caldevicechn;//ChnCalArray[chnno][0]; // ADC No = Channel No
+    SendData += caldeviceaddr;//"1";; // Select Slave Device 1
+    SendData += "\r\n";
+    ComSendType = "CAL";
+    //SendData = "SCAL D";
+
+    ui->btnSendParData -> setEnabled(true);
+    ui->btnSendParData -> setStyleSheet("background-color : none; ; color: rgb(220,0,0);");
+    ui->btnWriteParDataToFlash -> setDisabled(true);
+    ui->btnWriteParDataToFlash->setStyleSheet("color: rgb(210,40,0); font-weight: bold; background-color: qlineargradient(spread:reflect, x1:0, y1:0.5, x2:0, y2:1, stop:0.618812 rgba(90, 90, 90, 255), stop:1 rgba(159, 159, 159, 255));");
+}
+void DLCalMenu::ClearKey()
+{
+    mouseevent = true;
+
+    int chnno = ui->CoBoxChannel -> currentIndex();
+    for (int i=1; i<MaxCalPoint; i++){
+           UserCalLabel[i]->clear();
+    }
+    for (int i=0; i<MaxCalPoint; i++){
+           ChnRawData[i]->clear();
+           ChnCalArray[chnno][8 + i] = "";
+           ChnCalArray[chnno][8 + MaxCalPoint + i] = "";
+           CalStepCheckBox[i]-> setDisabled(true);
+           CalStepCheckBox[i]-> setChecked(false);
+           ///CalStepCheckBox[i]-> setEnabled()   clearMask() ;
+    }      ///CalStepCheckBox[i]->setDisabled(true);
+    CalStepCheckBox[0]->setDisabled(false);
+    ChecKutuNo = 0;
+    ///CalStepCheckBox[j]->setDisabled(false)
 }
 // ekleniyör
 void DLCalMenu::size_tracker()      // TODO
