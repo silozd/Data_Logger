@@ -128,7 +128,9 @@ public :
     bool plot_run;
 
     // layout :
-
+    int hr;
+    int vr;
+    int pr;
     int SideMargin;
     int RealLabelH;
     int RealLabelW;

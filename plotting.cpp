@@ -323,8 +323,8 @@ void DLCalMenu::contextMenuRequest(QPoint pos)
                 }
             }
         }
-//        if(!customPlot_main -> legend -> visible())
-//            showlegend = menu -> addAction("Show legend" , this, SLOT(showLegend()));
+        if(!customPlot_main -> legend -> visible())
+            showlegend = menu -> addAction("Show legend" , this, SLOT(showLegend()));
 //        if (customPlot_main -> selectedGraphs().size() > 0)
 //            menu -> addAction("Hide graph"  , this, SLOT(hideGraphPlot()));
 //        if(customPlot_main -> selectedGraphs().size() > 0  && !customPlot_main  -> selectedGraphs().first() -> visible())

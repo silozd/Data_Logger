@@ -29,103 +29,103 @@
 DLCalMenu::DLCalMenu(QWidget *parent) :
     QMainWindow(parent),
     m_serial(new QSerialPort(this)),
-    watch(new stopwatch()),
+    watch   (new stopwatch()),
     wdgReals(new QWidget),
-    dataBox(new QWidget),
+    dataBox (new QWidget),
     CalPointsFrame(new QFrame),
     ui(new Ui::DLCalMenu)
 {
     ui->setupUi(this);
-    int hr = DLCalMenu::GetScreenHRes(0);
-    int vr = DLCalMenu::GetScreenVRes(0);
-    int i = 1000;
+    hr = DLCalMenu::GetScreenHRes(0);
+    vr = DLCalMenu::GetScreenVRes(0);
+    pr = 1000;
     QFont Font1 ("Arial", Fontsize, QFont::Normal);
 
     if (ScreenWidth <=1920){
-        i = 1000;
+        pr = 1000;
         Fontsize = 13;
         FontsizeTab = 13;
         Font1.setPointSize(Fontsize);
-        SideMargin = hr*10/i;
-        RealLabelH = vr*30/i;
-        RealLabelW = hr*180/i;
-        RealLCDH = vr*50/i;
-        RawLabelW= hr*180/i;
-        RawLCDH  = vr*25/i;
-        CalPointH = vr*38/i;
-        CalPointW = vr*86/i;
-        ToolH = vr*60/i;
+        SideMargin = hr*10/pr;
+        RealLabelH = vr*30/pr;
+        RealLabelW = hr*180/pr;
+        RealLCDH = vr*50/pr;
+        RawLabelW= hr*180/pr;
+        RawLCDH  = vr*25/pr;
+        CalPointH = vr*38/pr;
+        CalPointW = vr*86/pr;
+        ToolH = vr*60/pr;
         CalibScrollH = RealLCDH*2+RealLabelH*2+SideMargin*3;
         MainScrollW = RealLabelW;
-        TabBarH = hr*135/i;
-        TabBarW = hr*100/i;
+        TabBarH = hr*135/pr;
+        TabBarW = hr*100/pr;
         qDebug()<<"Screen Width <= 1920 :?"<<ScreenWidth;
     }
     else if (ScreenWidth > 1920){
         Fontsize = 13;
         FontsizeTab = 13;
         Font1.setPointSize(Fontsize);
-        SideMargin = hr*10/i;
-        RealLabelH = vr*30/i;
-        RealLabelW = hr*180/i;
-        RealLCDH = vr*45/i;
-        RawLabelW= hr*180/i;
-        RawLCDH  = vr*30/i;
-        CalPointH = vr*38/i;
-        CalPointW = vr*86/i;
-        ToolH = vr*60/i;
+        SideMargin = hr*10/pr;
+        RealLabelH = vr*30/pr;
+        RealLabelW = hr*180/pr;
+        RealLCDH = vr*45/pr;
+        RawLabelW= hr*180/pr;
+        RawLCDH  = vr*30/pr;
+        CalPointH = vr*38/pr;
+        CalPointW = vr*86/pr;
+        ToolH = vr*60/pr;
         CalibScrollH = RealLCDH*2+RealLabelH*2+SideMargin*3;
         MainScrollW = RealLabelW;
-        TabBarH = hr*135/i;
-        TabBarW = hr*100/i;
+        TabBarH = hr*135/pr;
+        TabBarW = hr*100/pr;
         qDebug()<<"Screen Width > 1920 :?"<<ScreenWidth;
     }
     else if  (ScreenWidth == 3840){
-        i = i/2;
+        pr = pr/2;
         Fontsize =18;
         FontsizeTab = 19;
         Font1.setPointSize(Fontsize);
-        SideMargin = hr*10/i;
-        RealLabelH = vr*20/i;
-        RealLabelW = hr*85/i;
-        RealLCDH = vr*30/i;
-        RawLabelW= hr*140/i;
-        RawLCDH  = vr*25/i;
-        CalPointH = vr*25/i;
-        CalPointW = vr*60/i;
-        ToolH = vr*40/i;
+        SideMargin = hr*10/pr;
+        RealLabelH = vr*20/pr;
+        RealLabelW = hr*85/pr;
+        RealLCDH = vr*30/pr;
+        RawLabelW= hr*140/pr;
+        RawLCDH  = vr*25/pr;
+        CalPointH = vr*25/pr;
+        CalPointW = vr*60/pr;
+        ToolH = vr*40/pr;
         CalibScrollH = RawLCDH*2+RealLabelH*2+SideMargin*2;
         MainScrollW = RealLabelW;
-        TabBarH = hr*90/i;
-        TabBarW = hr*60/i;
+        TabBarH = hr*90/pr;
+        TabBarW = hr*60/pr;
         qDebug()<<"Screen Width == 3840 :?"<<ScreenWidth;
     }
     if  (ScreenHeight <= 960){        //dlcalmenu org
-        i = 1500;
+        pr = 1500;
         Fontsize = 10;
         FontsizeTab = 9;
         Font1.setPointSize(Fontsize);
-        SideMargin = hr*10/i;
-        RealLabelH = vr*30/i;
-        RealLabelW = hr*180/i;
-        RealLCDH = vr*45/i;
-        RawLabelW= hr*130/i;
-        RawLCDH  = vr*20/i;
-        CalPointH = vr*38/i;
-        CalPointW = vr*86/i;
-        ToolH = vr*60/i;
+        SideMargin = hr*10/pr;
+        RealLabelH = vr*30/pr;
+        RealLabelW = hr*180/pr;
+        RealLCDH = vr*45/pr;
+        RawLabelW= hr*130/pr;
+        RawLCDH  = vr*20/pr;
+        CalPointH = vr*38/pr;
+        CalPointW = vr*86/pr;
+        ToolH = vr*60/pr;
         CalibScrollH = RealLCDH*2+RealLabelH*2+SideMargin*3;
         MainScrollW = RealLabelW;
-        TabBarH = hr*135/i;
-        TabBarW = hr*100/i;
+        TabBarH = hr*135/pr;
+        TabBarW = hr*100/pr;
         qDebug()<<"Screen Width :?"<<ScreenWidth;
         qDebug()<<"Screen Height <= 960 :?"<<ScreenHeight;
     }
-    AppW = hr*1260/i;
-    AppH = vr*795/i;
-    DialogH = hr*300/i;
-    DialogW = hr*500/i;
-    qDebug()<<"i"<<i;
+    AppW = hr*1260/pr;
+    AppH = vr*795/pr;
+    DialogH = hr*300/pr;
+    DialogW = hr*500/pr;
+    qDebug()<<"pr"<<pr;
 
     qDebug()<<"hr = "<<hr;
     qDebug()<<"vr = "<<vr;
@@ -138,10 +138,11 @@ DLCalMenu::DLCalMenu(QWidget *parent) :
     qDebug()<<"TabBarW"<<TabBarW;
 
     resize(AppW,AppH);
+    ComSendType = "";
+    KeyTimer    = new QTimer(this);
+
+// tab widget :
     ui->tabWidget->setCurrentIndex(0);
-
-    setup_GUI();
-
     tabBar = ui->tabWidget->tabBar();
     ui->tabWidget->setStyleSheet(QString("QTabBar::tab { width: %1px; height: %2px; font-size: %3pt}").arg(TabBarW).arg(TabBarH).arg(FontsizeTab)
                                  + QString("QLabel{font-family: Times New Roman; font-size: %1pt;} QComboBox,QPushButton,QRadioButton,QPushButton{font-family: Arial; font-size: %1pt; }").arg(Fontsize));
@@ -154,6 +155,7 @@ DLCalMenu::DLCalMenu(QWidget *parent) :
     QLabel  *logo = new QLabel;
     spacer  -> setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
     ui      -> toolBar->addWidget(spacer);
+    // logow-tools = ywni bir boş tool width TODO
     logo    -> setSizeIncrement(350, ToolH);
     logo    -> setPixmap(QPixmap(":/icon/logo.png"));
     logo    -> setContentsMargins(0,0,0,0);
@@ -172,12 +174,11 @@ DLCalMenu::DLCalMenu(QWidget *parent) :
     connect (quit, &QAction::triggered, qApp, &QApplication::quit);
 //    connect (exportfile, SIGNAL(triggered()), this, SLOT(exportCsv()));       // OPEN
 
-    grid_reals  = new QGridLayout(wdgReals);
-    boxLayout   = new QGridLayout(dataBox);
-    CalGridLayout = new QGridLayout(CalPointsFrame);
-    ui->scrollReals->setWidget(wdgReals);
-    ui->scrollReals->setWidgetResizable(1);
-    ui->scrollReals->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+    timer_main  = new QTimer;
+    btn_startStop   = new QPushButton(ui->wdgHidden);
+    ScrollBarGain   = new QScrollBar(Qt::Horizontal,(ui->wdgHidden));
+    Gain            = new QLabel("Gain",ui->wdgHidden);
+    LblScrollBarGain= new QLabel(ui->wdgHidden);
 
 // serial port:
     const auto infos = QSerialPortInfo::availablePorts();
@@ -185,6 +186,20 @@ DLCalMenu::DLCalMenu(QWidget *parent) :
         ui->m_serialPortComboBox->addItem(info.portName());
         ui->currentPort->setText(ui->m_serialPortComboBox->currentText());
     }
+// scrollbar - main :
+    grid_reals  = new QGridLayout(wdgReals);
+    boxLayout   = new QGridLayout(dataBox);
+    CalGridLayout = new QGridLayout(CalPointsFrame);
+    ui->scrollReals->setWidget(wdgReals);
+    ui->scrollReals->setWidgetResizable(1);
+    ui->scrollReals->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+    scroll_main = new QScrollBar;
+    scroll_main = ui->scrollReals -> verticalScrollBar();
+    scroll_main -> setTracking(true);
+    scroll_main -> setSingleStep(RealLCDH+RealLabelH+SideMargin/1.5);
+    connect(scroll_main, SIGNAL(sliderPressed()),    this,   SLOT(slider_Pressed()));
+    connect(scroll_main, SIGNAL(sliderReleased()),   this,   SLOT(slider_Released()));
+    connect(scroll_main, SIGNAL(sliderReleased()),   this,   SLOT(scroll_movement()));
 
     for (int i=0; i<MaxChnCounts; i++){
         ChnLCDRaw.append(new QLCDNumber(CalPointsFrame));
@@ -193,16 +208,6 @@ DLCalMenu::DLCalMenu(QWidget *parent) :
         ChnLCDReal.append(new QLCDNumber(CalPointsFrame));
         ChnLCDReal_Main.append(new QLCDNumber(wdgReals));
     }
-
-// scrollbar - main :
-        scroll_main = new QScrollBar;
-        scroll_main = ui->scrollReals -> verticalScrollBar();
-        scroll_main -> setTracking(true);
-        scroll_main -> setSingleStep(RealLCDH+RealLabelH+SideMargin/1.5);
-        connect(scroll_main, SIGNAL(sliderPressed()),    this,   SLOT(slider_Pressed()));
-        connect(scroll_main, SIGNAL(sliderReleased()),   this,   SLOT(slider_Released()));
-        connect(scroll_main, SIGNAL(sliderReleased()),   this,   SLOT(scroll_movement()));
-
 // real data - main page :
     for (int i = 0; i < MaxChnCounts; ++i) {            // real- raw array loop
         ChnRealLabel[i]     = new QLabel(tr("Channel %1 Real").arg(i + 1), wdgReals);
@@ -225,7 +230,6 @@ DLCalMenu::DLCalMenu(QWidget *parent) :
         grid_reals          -> addWidget(ChnRealLabel[i]   , i*2   , 0);
         grid_reals          -> addWidget(ChnLCDReal_Main[i], i*2+1 , 0);
         ui->scrollReals     -> setMaximumWidth(RealLabelW*2);
-
 // real raw data - calibration page :
         if(int j = 1){
             ChnRawLabel[i]  = new QLabel(tr("Channel %1 Raw").arg(i + 1),ui->scrollArea);
@@ -265,7 +269,6 @@ DLCalMenu::DLCalMenu(QWidget *parent) :
             boxLayout       -> setVerticalSpacing(SideMargin/4);
             boxLayout       -> setHorizontalSpacing(SideMargin/1.5);
         }
-
 // combobox channel items :
             ui->combo_axis1     -> addItem(QString(tr("Channel %1").arg(i+1)),i);
             ui->combo_axis2     -> addItem(QString(tr("Channel %1").arg(i+1)),i);
@@ -274,19 +277,27 @@ DLCalMenu::DLCalMenu(QWidget *parent) :
             ui->CoBoxChannel    -> addItem(QString(tr("Channel %1").arg(i+1)),i);
             ui->combo_channels  -> addItem(QString(tr("Channel %1").arg(i+1)),i);
             ui->activeChannels  -> setText(ui->CoBoxChannel->currentText());
-        }
-        ui->combo_axisX ->  addItem("Time",MaxChnCounts+1);
-        ui->combo_axis1 ->  addItem("Time",MaxChnCounts+1);
-        ui->combo_axis1 ->  setCurrentIndex(MaxChnCounts);
-        ui->combo_axisX ->  setCurrentIndex(MaxChnCounts);
-        ui->scrollArea->setWidget(dataBox);
-        ui->scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
-        dataBox     -> setLayout(boxLayout);
-        boxLayout   -> setContentsMargins(0,0,0,0);
-        dataBox -> setMaximumHeight(CalibScrollH*1.2);
-        ui->scrollArea->setMinimumHeight(CalibScrollH+SideMargin);
-        ui->scrollArea->setMaximumHeight((CalibScrollH+SideMargin)*1.2);
+    }
+    ui->combo_axisX ->  addItem("Time",MaxChnCounts+1);
+    ui->combo_axis1 ->  addItem("Time",MaxChnCounts+1);
+    ui->combo_axis1 ->  setCurrentIndex(MaxChnCounts);
+    ui->combo_axisX ->  setCurrentIndex(MaxChnCounts);
+    ui->scrollArea->setWidget(dataBox);
+    ui->scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+    dataBox     -> setLayout(boxLayout);
+    boxLayout   -> setContentsMargins(0,0,0,0);
+    dataBox -> setMaximumHeight(CalibScrollH*1.2);
+    ui->scrollArea->setMinimumHeight(CalibScrollH+SideMargin);
+    ui->scrollArea->setMaximumHeight((CalibScrollH+SideMargin)*1.2);
 
+    // scrollbar - calib:
+    scroll_bar  = new QScrollBar;
+    scroll_bar  = ui->scrollArea  -> horizontalScrollBar();
+    scroll_bar  -> setTracking(true);
+    scroll_bar  -> setSingleStep(RawLabelW+SideMargin/1.5);
+    connect(scroll_bar, SIGNAL(sliderPressed()),    this,   SLOT(slider_Pressed()))  ;
+    connect(scroll_bar, SIGNAL(sliderReleased()),   this,   SLOT(slider_Released())) ;
+    connect(scroll_bar, SIGNAL(sliderReleased()),   this,   SLOT(scroll_movement())) ;
 // cal points :
     for (int i = 0; i < MaxCalPoint; ++i) {
         CalStep[i]          =   new QLabel(tr("%1").arg(i + 1));
@@ -342,34 +353,12 @@ DLCalMenu::DLCalMenu(QWidget *parent) :
     CalGridLayout   ->  addWidget(useless3 , 0, 2);
     CalGridLayout   ->  setHorizontalSpacing(SideMargin/SideMargin);
 
-// scrollbar - calib:
-    scroll_bar  = new QScrollBar;
-    scroll_bar  = ui->scrollArea  -> horizontalScrollBar();
-    scroll_bar  -> setTracking(true);
-    scroll_bar  -> setSingleStep(RawLabelW+SideMargin/1.5);
-    connect(scroll_bar, SIGNAL(sliderPressed()),    this,   SLOT(slider_Pressed()))  ;
-    connect(scroll_bar, SIGNAL(sliderReleased()),   this,   SLOT(slider_Released())) ;
-    connect(scroll_bar, SIGNAL(sliderReleased()),   this,   SLOT(scroll_movement())) ;
+    password_correct = false;
+    DisplayCalPar(0);       // OPEN asap
+    setup_GUI();
 }
 void DLCalMenu::setup_GUI()
 {
-    setup_combobox();
-    setup_customPlot();
-    get_password();
-
-    KeyTimer = new QTimer(this);
-    timer_main = new QTimer;
-
-    btn_startStop   = new QPushButton(ui->wdgHidden);
-    ScrollBarGain   = new QScrollBar(Qt::Horizontal,(ui->wdgHidden));
-    Gain            = new QLabel("Gain",ui->wdgHidden);
-    LblScrollBarGain= new QLabel(ui->wdgHidden);
-
-    ScrollBarGain   -> hide();
-    LblScrollBarGain-> hide();
-    Gain            -> hide();
-    btn_startStop   -> hide();
-
     connect(this->KeyTimer         , SIGNAL(timeout())        , this, SLOT(update_time()));
     connect(this->KeyTimer         , SIGNAL(timeout())        , this, SLOT(KeyTimerTimeOut()));
     connect(this->btn_startStop    , SIGNAL(clicked())        , this, SLOT(timer_startStop()));
@@ -382,6 +371,34 @@ void DLCalMenu::setup_GUI()
     connect(ui->combo_axis1        , SIGNAL(currentIndexChanged(int)), this, SLOT(combo_axis1_indexChanged(int)));
     connect(ui->combo_axis2        , SIGNAL(currentIndexChanged(int)), this, SLOT(combo_axis2_indexChanged(int)));
 
+    setup_combobox();
+    setup_customPlot();
+    get_password();
+    opening_val();          // open with saved values
+
+    ScrollBarGain   -> hide();
+    LblScrollBarGain-> hide();
+    Gain            -> hide();
+    btn_startStop   -> hide();
+    ui->wdgGraph    -> show();
+//    tview_real              -> hide();
+//    tview_raw               -> hide();
+//    tview_file              -> hide();
+    exportfile -> setDisabled(true);
+    ui->btnSendCalData      -> setDisabled(true);
+    ui->btnWriteParDataToFlash  -> setDisabled(true);
+    ui->combo_channels      -> setDisabled(true);
+    ui->combo_rawreal       -> setDisabled(true);
+    ui->COMport             -> setDisabled(true);
+    ui->adres               -> setDisabled(true);
+    ui->timeout             -> setDisabled(true);
+    ui->IP                  -> setDisabled(true);
+    ui->channelName         -> setDisabled(true);
+    ui->btn_saveChn         -> setDisabled(true);
+    ui->radioBtn_csv        -> setChecked(true);
+    ui->radioBtn_csv        -> setDisabled(true);
+    ui->radioBtn_pdf        -> setDisabled(true);
+    ui->btn_newPassword     -> setDisabled(true);
     // del
     resizer =  new QTimer;
     resizer->start(10);
@@ -623,11 +640,11 @@ void DLCalMenu::Channel_itemChanged()
         PreChnNo = chnno;
         DisplayCalPar(PreChnNo);  ///VF10
     }
-//    for (int i=0; i<MaxCalPoint; i++){        // open asap
-//       CalStepCheckBox[i]-> setDisabled(true);
-//       CalStepCheckBox[i]-> setChecked(false);
-//    }
-//    CalStepCheckBox[0]->setDisabled(false);
+    for (int i=0; i<MaxCalPoint; i++){
+       CalStepCheckBox[i]-> setDisabled(true);
+       CalStepCheckBox[i]-> setChecked(false);
+    }
+    CalStepCheckBox[0]  -> setDisabled(false);
     ChecKutuNo = 0;
     ui->btnSendParData  -> setEnabled(true);
     ui->btnSendParData  -> setStyleSheet("background-color : none; ; color: rgb(220,0,0); ");
@@ -819,8 +836,8 @@ void DLCalMenu::saveAs()
 }
 void DLCalMenu::opening_val()   // to run app with saved data
 {
-    mouseevent = false;   // will be used
-    //mouseevent = true;      // will be removed
+    //mouseevent = false;   // will be used
+    mouseevent = true;      // will be removed
 
     QString fileName = "/home/sila/Desktop/DL_grid/UserCalFile/AllChnCal.abk";  // baslangicta acilan dosya path'i yazilacak TODO
     setWindowTitle(fileName);
@@ -1090,9 +1107,7 @@ int DLCalMenu::GetScreenVRes(int s){
 void DLCalMenu::mousePressEvent(QMouseEvent *event)
 {
     int i = 0;
-    QFont Font1 ("Arial", Fontsize, QFont::Normal);
 //    UserCalLabel[i]->setFont(Fontsize);       // open asap
-
     if(mouseevent){ //|| !openfile->isChecked()){
         //qDebug()<<"mouse event = enable";
         psw_widget = childAt(event->pos());
@@ -1109,7 +1124,7 @@ void DLCalMenu::mousePressEvent(QMouseEvent *event)
                 UserCalLabelIndex = i;
                 UserCalLabelActive = true;
                 ///UserCalLabel[i]->setText("BASILAN " + QString::number(i+1));
-                UserCalLabel[i]->setStyleSheet("background-color: rgb(255, 255, 255); border:1px solid black; margin-right: 5px; padding: 1px;");
+                UserCalLabel[i]->setStyleSheet("font-family: Arial; background-color: rgb(255, 255, 255); border:1px solid black; margin-right: 5px; padding: 1px;");
                 UserCalLabel[i]->setFocus();
                 break;
                 }
@@ -1119,7 +1134,7 @@ void DLCalMenu::mousePressEvent(QMouseEvent *event)
             /// mouse preseed at the outside of user calibration keyed area
             UserCalLabelActive = false;
             i=UserCalLabelIndex;
-            UserCalLabel[i]->setStyleSheet("background-color: rgb(123, 168, 246); margin-right: 5px; padding: 1px; border: 1px solid rgb(83,128,186)");
+            UserCalLabel[i]->setStyleSheet("font-family: Arial; background-color: rgb(123, 168, 246); margin-right: 5px; padding: 1px; border: 1px solid rgb(83,128,186)");
         }
     }
      if(!mouseevent){ //&& openfile->isChecked()){
@@ -1142,6 +1157,7 @@ void DLCalMenu::mousePressEvent(QMouseEvent *event)
 }
 void DLCalMenu::keyPressEvent(QKeyEvent *testevent)
 {
+    QFont Font1 ("Arial", Fontsize, QFont::Normal);
     if  (KeyPressWait == true) {
         KeyStateCounter = 0;
         /// New Key Pressed
@@ -1152,8 +1168,8 @@ void DLCalMenu::keyPressEvent(QKeyEvent *testevent)
             KeyValue = testevent->key();
             UserCalLabelActive = false;
             i=UserCalLabelIndex;
-            UserCalLabel[i]->setStyleSheet("background-color: rgb(123, 168, 246); margin-right: 5px; padding: 1px; border: 1px solid rgb(103,148,226)");
-            UserCalLabel[i]->setFont(ComboFont);
+            UserCalLabel[i]->setStyleSheet("font-family: Arial; background-color: rgb(123, 168, 246); margin-right: 5px; padding: 1px; border: 1px solid rgb(103,148,226)");
+            UserCalLabel[i]->setFont(Font1);
         }
         else if  ((testevent->key() >= Qt::Key_0) && (testevent->key() <= Qt::Key_9)) {
             ///Textedit->setText("You pressed NumericKey 0 - 9");
@@ -1362,7 +1378,7 @@ void DLCalMenu::KeyTimerTimeOut()
         }
         else if (CalStepCheckBox[i]->isChecked()){
             CalStepCheckBox[i]->setDisabled(true);      ///isaretlenen disable
-            ChnRawData[i]->setStyleSheet("color: rgb(120,120,120); border: 1px solid rgb(150,150,150); margin-right: 5px ; padding: 1px ;background-color: rgb(255,255,255)");
+            ChnRawData[i]->setStyleSheet("font-family: Arial; color: rgb(120,120,120); border: 1px solid rgb(150,150,150); margin-right: 5px ; padding: 1px ;background-color: rgb(255,255,255)");
             if  (chndataok == true){
                 chndataok = false;
             }
