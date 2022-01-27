@@ -1607,9 +1607,12 @@ void DLCalMenu::alarm_initialize()
         spinBox_alarmH[i] = new QSpinBox;
         lbl_alarmL[i]     -> setAlignment(Qt::AlignRight | Qt::AlignVCenter);
         lbl_alarmH[i]     -> setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+        spinBox_alarmH[i] -> setMinimumWidth(DialogH/2);
+        spinBox_alarmL[i] -> setMinimumWidth(DialogH/2);
         spinBox_alarmL[i] -> setRange(-99999,99999);
         spinBox_alarmH[i] -> setRange(-99999,99999);
-        spinBox_alarmH[i] -> setMinimumWidth(spinBox_alarmL[i]->width());
+        comboBox_alarm[i] -> setCursor(Qt::PointingHandCursor);
+        checkBox_alarm[i] -> setCursor(Qt::PointingHandCursor);
         comboBox_alarm[i] -> setStyleSheet("background-color : none;");
         checkBox_alarm[i] -> setStyleSheet(QString("QCheckBox::indicator {height: %1px; width: %1px;}"
                                                               "QCheckBox::indicator:checked{ border-image: url(:/icon/check.png); height: %1px; width: %1px;};").arg(30));
@@ -1619,22 +1622,20 @@ void DLCalMenu::alarm_initialize()
         checkBox_alarm[i] -> setText(QString("%1.").arg(i+1));       //to show index. will be removed
         connect(checkBox_alarm[i], SIGNAL(clicked()), this, SLOT(checkbox_alert_onClicked()));
     }
-    lbl_al1         = new QLabel("Channel :");
-    lbl_al2         = new QLabel("Value :");
     btn_setAlarm    = new QPushButton("Set");
     btn_removeAlarm = new QPushButton("Remove");
     btn_addAlarm    = new QPushButton(QIcon(":/icon/plus.png"),"Add new alarm");
 
-    ui->scrollAlerts    -> setWidget(wdgAlert);
-    wdgAlert    -> setLayout(grid_alert);
-   // grid_alert      -> addWidget(lbl_al1, 0, 1);
-   // grid_alert      -> addWidget(lbl_al2, 0, 2);
-    grid_alert      -> addWidget(btn_addAlarm, 2, 1);
-   // grid_alert      -> addWidget(btn_setAlarm, 2, 3);
-   // grid_alert      -> addWidget(btn_removeAlarm, 2, 4);
-
-    lbl_al1         -> setStyleSheet("text-decoration: underline;");
-    lbl_al2         -> setStyleSheet("text-decoration: underline;");
+    ui->scrollAlerts -> setWidget(wdgAlert);
+    wdgAlert   -> setLayout(grid_alert);
+    grid_alert -> addWidget(btn_addAlarm, 2, 0);
+    grid_alert -> setHorizontalSpacing(SideMargin);
+    grid_alert -> setColumnStretch(0,0);
+    grid_alert -> setColumnStretch(1,1);
+    grid_alert -> setColumnStretch(2,1);
+    grid_alert -> setColumnStretch(3,1);
+    grid_alert -> setColumnStretch(4,1);
+    grid_alert -> setColumnStretch(5,1);
     ui->AlertsPage  -> setStyleSheet("background-color : rgb(210,210,210);");   // todo - move to stylesheet
     wdgAlert        -> setStyleSheet("background-color: rgb(240,240,240);");    // todo - move to stylesheet
     ui->scrollAlerts-> setStyleSheet("background-color: rgb(240,240,240);");
@@ -1642,8 +1643,10 @@ void DLCalMenu::alarm_initialize()
     btn_removeAlarm -> setStyleSheet("background-color : rgb(220,150,150); color:rgb(255,255,255); ");
     btn_setAlarm    -> setStyleSheet("background-color : rgb(0,130,0); color:rgb(255,255,255); ");
     btn_addAlarm    -> setCursor(Qt::PointingHandCursor);
-
+    btn_setAlarm    -> setCursor(Qt::PointingHandCursor);
+    btn_removeAlarm -> setCursor(Qt::PointingHandCursor);
     btn_removeAlarm -> setDisabled(true);
+
     connect(btn_addAlarm      , SIGNAL(clicked()), this, SLOT(btn_addAlert_onClicked()));
     connect(btn_setAlarm      , SIGNAL(clicked()), this, SLOT(btn_setAlert_onClicked()));
     connect(btn_removeAlarm   , SIGNAL(clicked()), this, SLOT(btn_removeAlert_onClicked()));

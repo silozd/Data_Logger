@@ -203,8 +203,6 @@ public :
     enum {AlarmCount = 20};
     QGridLayout *grid_alert;            //alarm : initilized at dlcalmenu.cpp
     QScrollArea *scrollAlerts;          //alarm : initilized at dlcalmenu.cpp
-    QLabel  *lbl_al1;
-    QLabel  *lbl_al2;
     QLabel      *lbl_alarmL[AlarmCount];
     QLabel      *lbl_alarmH[AlarmCount];
     QCheckBox   *checkBox_alarm[AlarmCount];

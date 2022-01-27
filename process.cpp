@@ -532,7 +532,7 @@ void DLCalMenu::btn_addAlert_onClicked()
         grid_alert  -> addWidget(lbl_alarmH[j-1],j,4);
         grid_alert  -> addWidget(spinBox_alarmH[j-1],j,5);
         grid_alert  -> addWidget(btn_addAlarm,j+1,1);
-        grid_alert  -> addWidget(btn_setAlarm,j+1,4);
+        grid_alert  -> addWidget(btn_setAlarm,j+1,3);
         grid_alert  -> addWidget(btn_removeAlarm,j+1,5);
         h = h + RealLCDH;
         wdgAlert    -> setMinimumHeight(h);
