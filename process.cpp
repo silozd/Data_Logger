@@ -347,38 +347,113 @@ void DLCalMenu::combo_device_indexChanged(int index)        // Setting device co
         break;
     }
 }
-void DLCalMenu::btn_passwordOK_clicked()
+void DLCalMenu::on_btn_password_clicked()
 {
-   /* QKeyEvent *event;
-    if (event->key() == Qt::Key_Return || event->key() == Qt::Key_Enter) {
-            event->ignore();
-            return;
-    }*/
-    get_password();
-    if(ui->password->text() == str) {
-        mouseevent = true;
-        ui->combo_channels  -> setDisabled(false);
-        ui->btn_saveChn     -> setDisabled(false);
-        ui->channelName     -> setDisabled(false);
-        ui->radioBtn_csv    -> setDisabled(false);
-      //  radioBtn_pdf    -> setDisabled(false);
-        ui->btn_newPassword -> setDisabled(false);
-        ui->btn_newPassword -> setStyleSheet("background-color : none; border: none; text-decoration: underline; color:rgb(30,60,190); text-align: right");
+    /* QKeyEvent *event;
+     if (event->key() == Qt::Key_Return || event->key() == Qt::Key_Enter) {
+             event->ignore();
+             return;
+     }*/
+     get_password();
+     if(ui->password->text() == str) {
+         mouseevent = true;
+         ui->combo_channels  -> setDisabled(false);
+         ui->btn_saveChn     -> setDisabled(false);
+         ui->channelName     -> setDisabled(false);
+         ui->radioBtn_csv    -> setDisabled(false);
+         //ui->radioBtn_pdf    -> setDisabled(false);        // TODO : pdf secenegi yok
+         ui->btn_newPassword -> setDisabled(false);
+         ui->btn_newPassword -> setStyleSheet("background-color : none; border: none; text-decoration: underline; color:rgb(30,60,190); text-align: right");
 
+         QMessageBox message;
+         QPixmap unlock(":/icon/unlock.png");
+         message.setIconPixmap(QPixmap(unlock));
+         message.setText("You are able to authorize");
+         message.exec();
+     }
+     else if(ui->password->text() != "****") {
+         mouseevent = false;
+         QMessageBox message;
+         QPixmap lock(":/icon/lock.png");
+         message.setIconPixmap(QPixmap(lock));
+         message.setText("Invalid password. Try again!");
+         message.exec();
+     }
+}
+void DLCalMenu::on_btn_newPassword_clicked()
+{
+    QGridLayout *grid_dialogPsw = new QGridLayout;
+    dialog_newPswd  =  new QDialog;
+    ui->password    =  new QLineEdit;
+    ui->password    -> setEchoMode(QLineEdit::Password);
+    ui->password    -> setPlaceholderText("Type password");
+    ui->password    -> setClearButtonEnabled(true);
+    ui->password    -> setMaxLength(4);
+    wdg_dialogPsw   =  new QWidget;
+    newPswd         =  new QLineEdit ;
+    oldPswd         =  new QLineEdit;
+    btn_saveNewPswd =  new QPushButton("Apply");
+    btn_cancelNewPswd   =  new QPushButton("Cancel");
+    keyicon         =  new QLabel(wdg_dialogPsw);
+    connect(this->btn_saveNewPswd , SIGNAL(clicked()), this, SLOT(btn_saveNewPswd_onClicked()));
+
+    oldPswd -> setMaxLength(4);
+    oldPswd -> setValidator(validator);
+    newPswd -> setValidator(validator);
+
+    keyicon -> setPixmap(QPixmap(":/icon/key.png"));
+    keyicon -> setAlignment(Qt::AlignCenter);
+    oldPswd -> setEchoMode(QLineEdit::PasswordEchoOnEdit);
+    newPswd -> setEchoMode(QLineEdit::PasswordEchoOnEdit);
+    oldPswd -> setClearButtonEnabled(true);
+    newPswd -> setClearButtonEnabled(true);
+    oldPswd -> setPlaceholderText("Enter old password");
+    newPswd -> setPlaceholderText("Enter new password");
+
+    grid_dialogPsw -> addWidget(keyicon,0,0);
+    grid_dialogPsw -> addWidget(oldPswd,1,0);
+    grid_dialogPsw -> addWidget(newPswd,2,0);
+    grid_dialogPsw -> addWidget(btn_saveNewPswd,3,0);
+    grid_dialogPsw -> addWidget(btn_cancelNewPswd,4,0);
+    wdg_dialogPsw  -> setParent(dialog_newPswd);
+    dialog_newPswd -> setLayout(grid_dialogPsw);
+    dialog_newPswd -> resize(DialogW,DialogH);
+    dialog_newPswd -> setWindowTitle("New Password");
+    dialog_newPswd -> exec();
+}
+void DLCalMenu::btn_saveNewPswd_onClicked()
+{
+    if (oldPswd->text() == ui->password->text()){ // çalışıyo
+        if (newPswd->validator() == validator && newPswd->text() != oldPswd->text()){
+            str.clear();
+            if(file.open(QIODevice::WriteOnly | QIODevice::Text)){
+                str.append(QString(newPswd->text()));
+                in << str;
+                file.close();
+            }
+            QMessageBox message;
+            message.setIconPixmap(QPixmap(":/icon/okay.png"));
+            message.setText("Password changed successfully.");
+            message.exec();
+            dialog_newPswd->close();
+        }
+        else if(newPswd->text() == oldPswd->text()){ // || newPswd->text() = " "){      // TODO : bos sifre kabul edilmesin
+            QMessageBox message;
+            message.setIconPixmap(QPixmap(":/icon/warning.png"));
+            message.setText("Please enter a valid password!");
+            message.exec();
+        }
+//        qDebug()<<"yeni şifre :"<<str;
+//        qDebug()<<"yeni şifre :"<<newPswd->text();
+    }
+    else if(oldPswd->text() != "****"){ // çalışıyo
         QMessageBox message;
-        QPixmap unlock(":/icon/unlock.png");
-        message.setIconPixmap(QPixmap(unlock));
-        message.setText("You are able to authorize");
+        message.setIconPixmap(QPixmap(":/icon/warning.png"));
+        message.setText("Old password is incorrect.\nTry again!");
         message.exec();
     }
-    else if(ui->password->text() != "****") {
-        mouseevent = false;
-        QMessageBox message;
-        QPixmap lock(":/icon/lock.png");
-        message.setIconPixmap(QPixmap(lock));
-        message.setText("Invalid password. Try again!");
-        message.exec();
-    }
+    oldPswd -> clear();
+    newPswd -> clear();
 }
 void DLCalMenu::on_btn_plotGraph_clicked()
 {
@@ -443,48 +518,56 @@ void DLCalMenu::on_btn_graphDialog_clicked()
     dialog_setDevice -> resize(DialogW,DialogH);
     dialog_setDevice -> exec();
 }
-
-void DLCalMenu::on_btn_newPassword_clicked()
+void DLCalMenu::btn_addAlert_onClicked()
 {
-    QGridLayout *grid_dialogPsw = new QGridLayout;
-    dialog_newPswd  =  new QDialog;
-    ui->password    =  new QLineEdit;
-    ui->password    -> setEchoMode(QLineEdit::Password);
-    ui->password    -> setPlaceholderText("Type password");
-    ui->password    -> setClearButtonEnabled(true);
-    ui->password    -> setMaxLength(4);
-    wdg_dialogPsw   =  new QWidget;
-    newPswd         =  new QLineEdit ;
-    oldPswd         =  new QLineEdit;
-    btn_saveNewPswd =  new QPushButton("Apply");
-    btn_cancelNewPswd   =  new QPushButton("Cancel");
-    keyicon         =  new QLabel(wdg_dialogPsw);
-
-    oldPswd -> setMaxLength(4);
-    oldPswd -> setValidator(validator);
-    newPswd -> setValidator(validator);
-
-    keyicon -> setPixmap(QPixmap(":/icon/key.png"));
-    keyicon -> setAlignment(Qt::AlignCenter);
-    oldPswd -> setEchoMode(QLineEdit::PasswordEchoOnEdit);
-    newPswd -> setEchoMode(QLineEdit::PasswordEchoOnEdit);
-    oldPswd -> setClearButtonEnabled(true);
-    newPswd -> setClearButtonEnabled(true);
-    oldPswd -> setPlaceholderText("Enter old password");
-    newPswd -> setPlaceholderText("Enter new password");
-
-    grid_dialogPsw -> addWidget(keyicon,0,0);
-    grid_dialogPsw -> addWidget(oldPswd,1,0);
-    grid_dialogPsw -> addWidget(newPswd,2,0);
-    grid_dialogPsw -> addWidget(btn_saveNewPswd,3,0);
-    grid_dialogPsw -> addWidget(btn_cancelNewPswd,4,0);
-    wdg_dialogPsw  -> setParent(dialog_newPswd);
-    dialog_newPswd -> setLayout(grid_dialogPsw);
-    dialog_newPswd -> resize(DialogW,DialogH);
-    dialog_newPswd -> setWindowTitle("New Password");
-    dialog_newPswd -> exec();
+    //qDebug()<<"Added alarm";
+    add_alarm++;
+    int j = add_alarm;
+    int h = RealLCDH;
+    for(int i=0; i<j; i++){
+        grid_alert  -> addWidget(checkBox_alarm[j-1],j,0);
+        grid_alert  -> addWidget(comboBox_alarm[j-1],j,1);
+        grid_alert  -> addWidget(lbl_alarmL[j-1],j,2);
+        grid_alert  -> addWidget(spinBox_alarmL[j-1],j,3);
+        grid_alert  -> addWidget(lbl_alarmH[j-1],j,4);
+        grid_alert  -> addWidget(spinBox_alarmH[j-1],j,5);
+        grid_alert  -> addWidget(btn_addAlarm,j+1,1);
+        grid_alert  -> addWidget(btn_setAlarm,j+1,4);
+        grid_alert  -> addWidget(btn_removeAlarm,j+1,5);
+        h = h + RealLCDH;
+        wdgAlert    -> setMinimumHeight(h);
+        if(j>=AlarmCount){
+            btn_addAlarm -> setDisabled(true);
+            btn_addAlarm -> setStyleSheet("background-color : none; border: none; color:rgb(150,150,150); text-align: left;");
+        }
+    }
+    //qDebug()<<"j"<<j;
 }
+void DLCalMenu::btn_setAlert_onClicked()
+{
+    qDebug()<<"Alarm set at %1 : Channel %1";
 
+    // messageBox oluştur
+}
+void DLCalMenu::btn_removeAlert_onClicked()
+{
+
+}
+void DLCalMenu::checkbox_alert_onClicked()
+{
+   /* for(int i=0; i<AlarmCount; i++){
+        if(checkBox_alarm[i]->isChecked()){
+            btn_removeAlarm -> setEnabled(true);
+            btn_removeAlarm -> setStyleSheet("background-color : rgb(170,0,0); color:rgb(255,255,255); ");
+        }
+        else if(!checkBox_alarm[i]->isChecked()){
+            btn_removeAlarm -> setDisabled(true);
+            btn_removeAlarm -> setStyleSheet("background-color : rgb(220,150,150); color:rgb(255,255,255); ");
+        }
+    }*/
+
+    // messageBox oluştur
+}
 void DLCalMenu::slider_Pressed()                    // Scroll Movement
 {
     int pos;

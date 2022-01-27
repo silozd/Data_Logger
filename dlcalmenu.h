@@ -202,7 +202,6 @@ public :
     int add_alarm = 0;
     enum {AlarmCount = 20};
     QGridLayout *grid_alert;            //alarm : initilized at dlcalmenu.cpp
-    QWidget *wdgAlert;                  //alarm : initilized at dlcalmenu.cpp
     QScrollArea *scrollAlerts;          //alarm : initilized at dlcalmenu.cpp
     QLabel  *lbl_al1;
     QLabel  *lbl_al2;
@@ -216,17 +215,12 @@ public :
     QPushButton *btn_removeAlarm;
     QPushButton *btn_addAlarm;
     ////////////////////////  new alarm
-    QTabWidget *tabWidget_alarm;
-    QTabBar *tabBar2;
+    QWidget *wdgAlert;
     QRadioButton *radioBtn_alarmScreen;
     QRadioButton *radioBtn_alarmMail;
     QPushButton *btn_editAlarm;
     QSpinBox *spinBox_alarmDelay;
     QTableWidget *table_alarm;
-    QWidget *AlarmModes;
-    QWidget *AlarmControl;
-    QWidget *AlarmDelay;
-    QWidget *AlarmActive;
     QStandardItemModel *model_alert;
     /// ///////////////////
 
@@ -341,6 +335,7 @@ private slots:
     void saveAs();
     void opening_val();
 
+
 public slots:
     int GetScreenHRes(int s);
     int GetScreenVRes(int s);
@@ -368,7 +363,15 @@ public slots:
     void combo_channels_indexChanged(int index);
     void combo_rawreal_indexChanged(int index);
     void combo_device_indexChanged(int index);
-    void btn_passwordOK_clicked();
+    void on_btn_password_clicked();
+    void btn_saveNewPswd_onClicked();
+
+    // alarm :
+    void alarm_initialize();
+    void btn_addAlert_onClicked();
+    void btn_setAlert_onClicked();
+    void btn_removeAlert_onClicked();
+    void checkbox_alert_onClicked();
 
     // plot:
     void setup_customPlot();

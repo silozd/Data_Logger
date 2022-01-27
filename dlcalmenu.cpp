@@ -146,7 +146,6 @@ DLCalMenu::DLCalMenu(QWidget *parent) :
     ui->tabWidget->setStyleSheet(QString("QTabBar::tab { width: %1px; height: %2px; font-size: %3pt}").arg(TabBarW).arg(TabBarH).arg(FontsizeTab)
                                  + QString("QLabel{font-family: Times New Roman; font-size: %1pt;} QComboBox,QPushButton,QRadioButton,QPushButton{font-family: Arial; font-size: %1pt; }").arg(Fontsize));
     tabBar   ->setStyle(new CustomTabStyle);
-    tabBar_alarm = ui->tabWidget_alarm->tabBar();
 
 // toolbar :
     ui->toolBar -> toggleViewAction()->setVisible(false);
@@ -307,7 +306,8 @@ DLCalMenu::DLCalMenu(QWidget *parent) :
         UserCalLabel[i]     ->  setText(QString::number((i)*200*10));
         UserCalLabel[i]     ->  setAlignment(Qt::AlignRight | Qt::AlignVCenter);
         UserCalLabel[i]     ->  setFont(Font1);
-        UserCalLabel[i]     ->  setStyleSheet("font-family: Arial; background-color: rgb(123, 168, 246); border: 1px solid rgb(83,128,206); margin-right: 5px;  padding: 1px; ");
+        UserCalLabel[i]     ->  setStyleSheet("font-family: Arial; background-color: rgb(123, 168, 246); border: 1px solid rgb(83,128,206); margin-right: 5px;  padding: 1px;");
+        UserCalLabel[i]     ->  setCursor(Qt::IBeamCursor);
         UserCalLabel[i]     ->  setMinimumSize(CalPointW,CalPointH);
         UserCalLabel[i]     ->  setMaximumHeight(CalPointW);        // TODO
         ChnCalArray[0][8 + i] = QString::number((i)*200*10);
@@ -322,9 +322,10 @@ DLCalMenu::DLCalMenu(QWidget *parent) :
         ChnCalArray[0][8 + 16 + i] = QString::number((i+1)*2000);
 
         CalStepCheckBox[i]  =   new QCheckBox;
+        CalStepCheckBox[i]  ->  setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Expanding);
+        CalStepCheckBox[i]  ->  setCursor(Qt::PointingHandCursor);
         CalStepCheckBox[i]  ->  setStyleSheet(QString("QCheckBox::indicator {height: %1px; width: %1px;}"
                                                       "QCheckBox::indicator:checked{ border-image: url(:/icon/check.png); height: %1px; width: %1px;};").arg(CalPointH));
-        CalStepCheckBox[i]  ->  setSizePolicy(QSizePolicy::Fixed,QSizePolicy::Expanding);
         if  (i > 0){
             CalStepCheckBox[i]->setDisabled(true);
         }
@@ -357,6 +358,7 @@ void DLCalMenu::setup_GUI()
 {
     setup_customPlot();
     setup_combobox();
+    alarm_initialize();
     get_password();
     opening_val();          // open with saved values
 
@@ -369,7 +371,6 @@ void DLCalMenu::setup_GUI()
     connect(ui->CoBoxChannel       , SIGNAL(currentIndexChanged(int)), this, SLOT(Channel_itemChanged()));
     connect(ui->btnSendCalData     , SIGNAL(clicked())        , this, SLOT(SendCalDataToVTK()));
     connect(ui->btnWriteParDataToFlash, SIGNAL(clicked())     , this, SLOT(UpdateFlash())); // btnWriteParData slot
-    connect(ui->btn_password       , SIGNAL(clicked()), this, SLOT(btn_passwordOK_clicked()));
     connect(ui->combo_axis1        , SIGNAL(currentIndexChanged(int)), this, SLOT(combo_axis1_indexChanged(int)));
     connect(ui->combo_axis2        , SIGNAL(currentIndexChanged(int)), this, SLOT(combo_axis2_indexChanged(int)));
     connect(ui->combo_portType     , SIGNAL(currentIndexChanged(int)), this, SLOT(combo_portType_indexChanged(int)));
@@ -1588,6 +1589,66 @@ void DLCalMenu::KeyTimerTimeOut()
         ScrollBarGain->setVisible(false);
     }
 }
+void DLCalMenu::alarm_initialize()
+{
+    QTabBar *tabBar2;
+    tabBar2 =  ui->tabWidget_alarm -> tabBar();
+    tabBar2 -> setStyleSheet(QString("QTabBar {background-color: none;}"
+                                     "QTabBar::tab { height: %1px; width: 150px; }").arg(RealLCDH));
+    grid_alert = new QGridLayout;
+    wdgAlert   = new QWidget;
+
+    for(int i=0; i<AlarmCount; i++){
+        checkBox_alarm[i] = new QCheckBox;
+        comboBox_alarm[i] = new QComboBox;
+        lbl_alarmL[i]     = new QLabel("Low Alarm:");
+        lbl_alarmH[i]     = new QLabel("High Alarm:");
+        spinBox_alarmL[i] = new QSpinBox;
+        spinBox_alarmH[i] = new QSpinBox;
+        lbl_alarmL[i]     -> setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+        lbl_alarmH[i]     -> setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+        spinBox_alarmL[i] -> setRange(-99999,99999);
+        spinBox_alarmH[i] -> setRange(-99999,99999);
+        spinBox_alarmH[i] -> setMinimumWidth(spinBox_alarmL[i]->width());
+        comboBox_alarm[i] -> setStyleSheet("background-color : none;");
+        checkBox_alarm[i] -> setStyleSheet(QString("QCheckBox::indicator {height: %1px; width: %1px;}"
+                                                              "QCheckBox::indicator:checked{ border-image: url(:/icon/check.png); height: %1px; width: %1px;};").arg(30));
+        for (int j = 0; j < MaxChnCounts; ++j){
+            comboBox_alarm[i] -> addItem(QString(tr("Channel %1").arg(j+1)),j);}
+
+        checkBox_alarm[i] -> setText(QString("%1.").arg(i+1));       //to show index. will be removed
+        connect(checkBox_alarm[i], SIGNAL(clicked()), this, SLOT(checkbox_alert_onClicked()));
+    }
+    lbl_al1         = new QLabel("Channel :");
+    lbl_al2         = new QLabel("Value :");
+    btn_setAlarm    = new QPushButton("Set");
+    btn_removeAlarm = new QPushButton("Remove");
+    btn_addAlarm    = new QPushButton(QIcon(":/icon/plus.png"),"Add new alarm");
+
+    ui->scrollAlerts    -> setWidget(wdgAlert);
+    wdgAlert    -> setLayout(grid_alert);
+   // grid_alert      -> addWidget(lbl_al1, 0, 1);
+   // grid_alert      -> addWidget(lbl_al2, 0, 2);
+    grid_alert      -> addWidget(btn_addAlarm, 2, 1);
+   // grid_alert      -> addWidget(btn_setAlarm, 2, 3);
+   // grid_alert      -> addWidget(btn_removeAlarm, 2, 4);
+
+    lbl_al1         -> setStyleSheet("text-decoration: underline;");
+    lbl_al2         -> setStyleSheet("text-decoration: underline;");
+    ui->AlertsPage  -> setStyleSheet("background-color : rgb(210,210,210);");   // todo - move to stylesheet
+    wdgAlert        -> setStyleSheet("background-color: rgb(240,240,240);");    // todo - move to stylesheet
+    ui->scrollAlerts-> setStyleSheet("background-color: rgb(240,240,240);");
+    btn_addAlarm    -> setStyleSheet("background-color : none; border: none; color:rgb(30,60,190); text-align: left");
+    btn_removeAlarm -> setStyleSheet("background-color : rgb(220,150,150); color:rgb(255,255,255); ");
+    btn_setAlarm    -> setStyleSheet("background-color : rgb(0,130,0); color:rgb(255,255,255); ");
+    btn_addAlarm    -> setCursor(Qt::PointingHandCursor);
+
+    btn_removeAlarm -> setDisabled(true);
+    connect(btn_addAlarm      , SIGNAL(clicked()), this, SLOT(btn_addAlert_onClicked()));
+    connect(btn_setAlarm      , SIGNAL(clicked()), this, SLOT(btn_setAlert_onClicked()));
+    connect(btn_removeAlarm   , SIGNAL(clicked()), this, SLOT(btn_removeAlert_onClicked()));
+}
+
 DLCalMenu::~DLCalMenu()
 {
     delete ui;
