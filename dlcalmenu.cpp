@@ -41,7 +41,7 @@ DLCalMenu::DLCalMenu(QWidget *parent) :
     pr = 1000;
     QFont Font1 ("Arial", Fontsize, QFont::Normal);
 
-    if (ScreenWidth <=1920){
+    if (ScreenWidth <= 1920){
         pr = 1000;
         Fontsize = 13;
         FontsizeTab = 13;
@@ -68,7 +68,7 @@ DLCalMenu::DLCalMenu(QWidget *parent) :
         SideMargin = hr*10/pr;
         RealLabelH = vr*30/pr;
         RealLabelW = hr*180/pr;
-        RealLCDH = vr*45/pr;
+        RealLCDH = vr*50/pr;
         RawLabelW= hr*180/pr;
         RawLCDH  = vr*30/pr;
         CalPointH = vr*38/pr;
@@ -80,18 +80,18 @@ DLCalMenu::DLCalMenu(QWidget *parent) :
         TabBarW = hr*100/pr;
         qDebug()<<"Screen Width > 1920 :?"<<ScreenWidth;
     }
-    else if  (ScreenWidth == 3840){
+    else if  (ScreenWidth >= 2040){
         pr = pr/2;
-        Fontsize =18;
+        Fontsize =17;
         FontsizeTab = 19;
         Font1.setPointSize(Fontsize);
         SideMargin = hr*10/pr;
         RealLabelH = vr*20/pr;
-        RealLabelW = hr*85/pr;
+        RealLabelW = hr*75/pr;
         RealLCDH = vr*30/pr;
-        RawLabelW= hr*140/pr;
-        RawLCDH  = vr*25/pr;
-        CalPointH = vr*25/pr;
+        RawLabelW= hr*120/pr;
+        RawLCDH  = vr*20/pr;
+        CalPointH = vr*20/pr;
         CalPointW = vr*60/pr;
         ToolH = vr*40/pr;
         CalibScrollH = RawLCDH*2+RealLabelH*2+SideMargin*2;
@@ -100,7 +100,28 @@ DLCalMenu::DLCalMenu(QWidget *parent) :
         TabBarW = hr*60/pr;
         qDebug()<<"Screen Width == 3840 :?"<<ScreenWidth;
     }
-    if  (ScreenHeight <= 960){        //dlcalmenu org
+    if  (ScreenHeight <= 720){        //dlcalmenu org
+        pr = 1500;
+        Fontsize = 10;
+        FontsizeTab = 9;
+        Font1.setPointSize(Fontsize);
+        SideMargin = hr*10/pr;
+        RealLabelH = vr*30/pr;
+        RealLabelW = hr*180/pr;
+        RealLCDH = vr*45/pr;
+        RawLabelW= hr*130/pr;
+        RawLCDH  = vr*20/pr;
+        CalPointH = vr*38/pr;
+        CalPointW = vr*86/pr;
+        ToolH = vr*60/pr;
+        CalibScrollH = RealLCDH*2+RealLabelH*2+SideMargin*3;
+        MainScrollW = RealLabelW;
+        TabBarH = hr*135/pr;
+        TabBarW = hr*100/pr;
+        qDebug()<<"Screen Width :?"<<ScreenWidth;
+        qDebug()<<"Screen Height <= 960 :?"<<ScreenHeight;
+    }
+    else if  (ScreenWidth <= 960){        //dlcalmenu org
         pr = 1500;
         Fontsize = 10;
         FontsizeTab = 9;
