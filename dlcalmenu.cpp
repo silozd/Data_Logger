@@ -63,7 +63,7 @@ DLCalMenu::DLCalMenu(QWidget *parent) :
     }
     else if (ScreenWidth > 1920){
         Fontsize = 13;
-        FontsizeTab = 13;
+        FontsizeTab = 14;
         Font1.setPointSize(Fontsize);
         SideMargin = hr*10/pr;
         RealLabelH = vr*30/pr;
@@ -355,6 +355,11 @@ DLCalMenu::DLCalMenu(QWidget *parent) :
 }
 void DLCalMenu::setup_GUI()
 {
+    setup_customPlot();
+    setup_combobox();
+    get_password();
+    opening_val();          // open with saved values
+
     connect(this->KeyTimer         , SIGNAL(timeout())        , this, SLOT(update_time()));
     connect(this->KeyTimer         , SIGNAL(timeout())        , this, SLOT(KeyTimerTimeOut()));
     connect(this->btn_startStop    , SIGNAL(clicked())        , this, SLOT(timer_startStop()));
@@ -366,11 +371,11 @@ void DLCalMenu::setup_GUI()
     connect(ui->btnWriteParDataToFlash, SIGNAL(clicked())     , this, SLOT(UpdateFlash())); // btnWriteParData slot
     connect(ui->combo_axis1        , SIGNAL(currentIndexChanged(int)), this, SLOT(combo_axis1_indexChanged(int)));
     connect(ui->combo_axis2        , SIGNAL(currentIndexChanged(int)), this, SLOT(combo_axis2_indexChanged(int)));
-
-    setup_combobox();
-    setup_customPlot();
-    get_password();
-    opening_val();          // open with saved values
+    connect(ui->combo_portType     , SIGNAL(currentIndexChanged(int)), this, SLOT(combo_portType_indexChanged(int)));
+    connect(ui->CoBoxSampeRate     , SIGNAL(currentIndexChanged(int)), this, SLOT(combo_sampeRate_indexChanged(int)));
+    connect(ui->CoBoxFilterType    , SIGNAL(currentIndexChanged(int)), this, SLOT(combo_filterType_indexChanged(int)));
+    connect(ui->CoBoxInputType     , SIGNAL(currentIndexChanged(int)), this, SLOT(combo_inputType_indexChanged(int)));
+    connect(this->combo_diaMain    , SIGNAL(currentIndexChanged(int)), this, SLOT(combo_diaCh_indexChanged(int)));
 
     ScrollBarGain   -> hide();
     LblScrollBarGain-> hide();

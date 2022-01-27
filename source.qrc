@@ -31,5 +31,12 @@
         <file>icon/bell.png</file>
         <file>icon/alarm.png</file>
         <file>stylesheet.css</file>
+        <file>Akim_Transducer.png</file>
+        <file>LoadCell.png</file>
+        <file>LVDT_Diff.png</file>
+        <file>LVDT_Single.png</file>
+        <file>StrainGaugeDual.png</file>
+        <file>StrainGauge_Single.png</file>
+        <file>Voltaj_Transducer.png</file>
     </qresource>
 </RCC>

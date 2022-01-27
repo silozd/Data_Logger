@@ -343,15 +343,6 @@ private slots:
     void saveAs();
     void opening_val();
 
-    void on_tabWidget_currentChanged(int index);
-    void on_m_SetSerialPortButton_clicked();
-    void combo_axis1_indexChanged(int index);
-    void combo_axis2_indexChanged(int index);
-    void on_btn_newPassword_clicked();
-    void on_btn_graphDialog_clicked();
-    void on_btn_plotGraph_clicked();
-
-
 public slots:
     int GetScreenHRes(int s);
     int GetScreenVRes(int s);
@@ -361,10 +352,21 @@ public slots:
     void update_time();
     void ClearKey();
     void KeyTimerTimeOut();
+    void get_password();
 
     void setup_combobox();
-
-    void get_password();
+    void on_tabWidget_currentChanged(int index);
+    void on_m_SetSerialPortButton_clicked();
+    void combo_axis1_indexChanged(int index);
+    void combo_axis2_indexChanged(int index);
+    void on_btn_newPassword_clicked();
+    void on_btn_graphDialog_clicked();
+    void on_btn_plotGraph_clicked();
+    void combo_diaCh_indexChanged(int index);
+    void combo_portType_indexChanged(int index);
+    void combo_sampeRate_indexChanged(int index);
+    void combo_filterType_indexChanged(int index);
+    void combo_inputType_indexChanged(int index);
 
     // plot:
     void setup_customPlot();
