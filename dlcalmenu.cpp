@@ -139,7 +139,6 @@ DLCalMenu::DLCalMenu(QWidget *parent) :
 
     resize(AppW,AppH);
     ComSendType = "";
-    KeyTimer    = new QTimer(this);
 
 // tab widget :
     ui->tabWidget->setCurrentIndex(0);
@@ -174,7 +173,8 @@ DLCalMenu::DLCalMenu(QWidget *parent) :
     connect (quit, &QAction::triggered, qApp, &QApplication::quit);
 //    connect (exportfile, SIGNAL(triggered()), this, SLOT(exportCsv()));       // OPEN
 
-    timer_main  = new QTimer;
+    KeyTimer        = new QTimer(this);
+    timer_main      = new QTimer;
     btn_startStop   = new QPushButton(ui->wdgHidden);
     ScrollBarGain   = new QScrollBar(Qt::Horizontal,(ui->wdgHidden));
     Gain            = new QLabel("Gain",ui->wdgHidden);
@@ -272,16 +272,12 @@ DLCalMenu::DLCalMenu(QWidget *parent) :
 // combobox channel items :
             ui->combo_axis1     -> addItem(QString(tr("Channel %1").arg(i+1)),i);
             ui->combo_axis2     -> addItem(QString(tr("Channel %1").arg(i+1)),i);
-            ui->combo_axisX     -> addItem(QString(tr("Channel %1").arg(i+1)),i);
-            ui->combo_axisY     -> addItem(QString(tr("Channel %1").arg(i+1)),i);
             ui->CoBoxChannel    -> addItem(QString(tr("Channel %1").arg(i+1)),i);
             ui->combo_channels  -> addItem(QString(tr("Channel %1").arg(i+1)),i);
             ui->activeChannels  -> setText(ui->CoBoxChannel->currentText());
     }
-    ui->combo_axisX ->  addItem("Time",MaxChnCounts+1);
     ui->combo_axis1 ->  addItem("Time",MaxChnCounts+1);
     ui->combo_axis1 ->  setCurrentIndex(MaxChnCounts);
-    ui->combo_axisX ->  setCurrentIndex(MaxChnCounts);
     ui->scrollArea->setWidget(dataBox);
     ui->scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
     dataBox     -> setLayout(boxLayout);
@@ -399,19 +395,15 @@ void DLCalMenu::setup_GUI()
     ui->radioBtn_csv        -> setDisabled(true);
     ui->radioBtn_pdf        -> setDisabled(true);
     ui->btn_newPassword     -> setDisabled(true);
-    // del
-    resizer =  new QTimer;
-    resizer->start(10);
-    connect(resizer,SIGNAL(timeout()),this,SLOT(size_tracker()));
 }
 void DLCalMenu::setup_combobox()
 {
-    // Ports tab :
+// Ports tab :
     ui->combo_portType      -> addItem("Choose port",0);
     ui->combo_portType      -> addItem("USB",1);
     ui->combo_portType      -> addItem("Ethernet",2);
     ui->combo_portType      -> addItem("RTU",3);
-    // Main tab :
+// Main tab :
     ui->CoBoxInputType      -> insertItem(0, QObject::tr("LoadCell 1-2mV/V"));
     ui->CoBoxInputType      -> insertItem(1, QObject::tr("LoadCell 3mV/V"));
     ui->CoBoxInputType      -> insertItem(2, QObject::tr("0-100mV Transducer"));
@@ -447,10 +439,10 @@ void DLCalMenu::setup_combobox()
     ui->CoBoxDataFormat     -> setCurrentText("#####");
     ui->CoBoxDataFormat     -> setCurrentIndex(0);
     ui->CoBoxSampeRate      -> setCurrentText("8");
-    ui->CoBoxFilterType     -> addItem("None"       ,0);
-    ui->CoBoxFilterType     -> addItem("Average"    ,1);
+    ui->CoBoxFilterType     -> addItem("None",0);
+    ui->CoBoxFilterType     -> addItem("Average",1);
     ui->CoBoxFilterType     -> addItem("Moving Average",2);
-    ui->CoBoxFilterType     -> addItem("EMA"        ,3);
+    ui->CoBoxFilterType     -> addItem("EMA",3);
     ui->CoBoxFilterType     -> addItem("Butterworth",4);
     ui->CoBoxFilterType     -> setCurrentText("None");
     ui->CoBoxFilterType     -> setCurrentIndex(0);
@@ -466,10 +458,6 @@ void DLCalMenu::setup_combobox()
     ui->combo_recPeriod     -> addItem("300000" ,6);    //10dk
     ui->combo_recPeriod     -> addItem("900000" ,7);    //30dk
     ui->combo_recPeriod     -> setCurrentIndex(1);
-//    combo_device        -> addItem("Current device",0);     // DIALOG TOO
-//    combo_device        -> addItem("External",1);
-//    combo_device        -> addItem("SD Card",2);
-//    combo_device        -> setCurrentIndex(0);
     ui->CoBoxChannel        -> setCurrentText("Channel 1");
     ui->CoBoxChannel        -> setCurrentIndex(0);
 }
@@ -1058,19 +1046,6 @@ void DLCalMenu::ScrollBarGain_valueChange(int value)
     int x = 254 +((lblscrolx-LabelScrollW)*value/7); ///254 lbl baslama noktasÄ± + (toplamdan kalan deger (lblscrolx) - lbl width (LabelScrollW) ) *7 x=scrol uzerinde mesafe artis sayisi(tikladica gidilen mesafe)
     ///LblScrollBarGain->setGeometry(x,y,LabelScrollW,LabelScrollObjH);
     ///scrolbar width ne kadar olursa hesaplayip lblscrolx artma ve azalma noktasina otomatik donuyor
-}
-// ekleniyör
-void DLCalMenu::size_tracker()      // TODO
-{
-    int w = ui->tabWidget->width();
-  //  qDebug()<<Fontsize;
-    if (w<3840){
-        for(w=w ; w<3840 ; w++){
-            w=w;
-            Fontsize++;
-            //qDebug()<<Fontsize;
-        }
-    }
 }
 int DLCalMenu::GetScreenHRes(int s){
     auto screens = QGuiApplication::screens();

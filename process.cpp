@@ -52,15 +52,12 @@ void DLCalMenu::on_tabWidget_currentChanged(int index)
         current_page = SCR_CALIB;
         break;
     case 2:
-        current_page = SCR_GRAPH;
-        break;
-    case 3:
         current_page = SCR_SET;
         break;
-    case 4:
+    case 3:
         current_page = SCR_PORTSET;
         break;
-    case 5:
+    case 4:
         current_page = SCR_ALERTS;
         break;
     }
@@ -137,6 +134,7 @@ void DLCalMenu::on_btn_graphDialog_clicked()
     combo_device-> addItem("Current device",0);
     combo_device-> addItem("External",1);
     combo_device-> addItem("SD Card",2);
+    combo_device-> setCurrentIndex(0);
     dateEdit_1  -> setDateRange(QDate(2021,9,1),QDate::currentDate());
     dateEdit_2  -> setDateRange(QDate(2021,9,1),QDate(2030,01,01));
     dateEdit_1  -> setDisabled(true);
@@ -163,18 +161,18 @@ void DLCalMenu::on_btn_graphDialog_clicked()
 void DLCalMenu::on_btn_newPassword_clicked()
 {
     QGridLayout *grid_dialogPsw = new QGridLayout;
-    dialog_newPswd          =  new QDialog;
-    password                =  new QLineEdit;
-    password                -> setEchoMode(QLineEdit::Password);
-    password                -> setPlaceholderText("Type password");
-    password                -> setClearButtonEnabled(true);
-    password                -> setMaxLength(4);
-    wdg_dialogPsw           =  new QWidget;
-    newPswd                 =  new QLineEdit ;
-    oldPswd                 =  new QLineEdit;
-    btn_saveNewPswd         =  new QPushButton("Apply");
-    btn_cancelNewPswd       =  new QPushButton("Cancel");
-    keyicon                 =  new QLabel(wdg_dialogPsw);
+    dialog_newPswd  =  new QDialog;
+    password        =  new QLineEdit;
+    password        -> setEchoMode(QLineEdit::Password);
+    password        -> setPlaceholderText("Type password");
+    password        -> setClearButtonEnabled(true);
+    password        -> setMaxLength(4);
+    wdg_dialogPsw   =  new QWidget;
+    newPswd         =  new QLineEdit ;
+    oldPswd         =  new QLineEdit;
+    btn_saveNewPswd =  new QPushButton("Apply");
+    btn_cancelNewPswd   =  new QPushButton("Cancel");
+    keyicon         =  new QLabel(wdg_dialogPsw);
 
     oldPswd -> setMaxLength(4);
     oldPswd -> setValidator(validator);

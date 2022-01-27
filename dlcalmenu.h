@@ -38,10 +38,9 @@ typedef unsigned char u8;
 
 #define SCR_MAIN            0
 #define SCR_CALIB           1
-#define SCR_GRAPH           2
-#define SCR_SET             3
-#define SCR_PORTSET         4
-#define SCR_ALERTS          5
+#define SCR_SET             2
+#define SCR_PORTSET         3
+#define SCR_ALERTS          4
 
 namespace Ui {
 class DLCalMenu;
@@ -324,7 +323,6 @@ public :
 
     int Fontsize;
     int FontsizeTab;
-    QTimer *resizer;
 
 private slots:
     void setup_GUI();
@@ -387,8 +385,6 @@ public slots:
     void graphClicked(QCPAbstractPlottable *plottable, int dataIndex);
     void axisLabelDoubleClick(QCPAxis *axis, QCPAxis::SelectablePart part);
     void legendDoubleClick(QCPLegend *legend, QCPAbstractLegendItem *item);
-
-    void size_tracker();
 };
 
 #endif // DLCALMENU_H
