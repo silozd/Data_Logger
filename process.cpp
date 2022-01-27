@@ -293,6 +293,60 @@ void DLCalMenu::combo_inputType_indexChanged(int index)
         break;
     }
 }
+void DLCalMenu::combo_channels_indexChanged(int index)
+{
+    if(PreChnNo != index){
+        PreChnNo = index;
+        ui->channelName->clear();
+    }
+}
+void DLCalMenu::combo_rawreal_indexChanged(int index)       // Data type selection combo
+{
+    index = ui->combo_rawreal->currentIndex();
+    if(ui->btn_dispList){
+        switch (index) {
+        case 0:
+            tview_real -> show();
+            tview_raw  -> hide();
+            tview_file  ->hide();
+            break;
+        case 1:
+            tview_raw  -> show();
+            tview_real -> hide();
+            tview_file -> hide();
+            break;
+        }
+    }
+}
+void DLCalMenu::combo_device_indexChanged(int index)        // Setting device combo
+{
+    switch (index) {
+    case 0 :
+        dateEdit_1->setDisabled(true);
+        dateEdit_2->setDisabled(true);
+        timeEdit_1->setDisabled(true);
+        timeEdit_2->setDisabled(true);
+        break;
+    case 1 : {
+        QString fileName;
+        QString filters("CSV files (*.csv);; All files (*.*)");
+        QString defaultFilter("CSV files (*.csv)");
+        fileName = QFileDialog::getOpenFileName(this, tr("Choose external tool"),QCoreApplication::applicationDirPath(),
+                                                filters, &defaultFilter);
+        QFile *externalFile = new QFile(fileName);
+        dateEdit_1->setDisabled(false);
+        dateEdit_2->setDisabled(false);
+        timeEdit_1->setDisabled(false);
+        timeEdit_2->setDisabled(false);
+    }    break;
+    case 2 :
+        dateEdit_1->setDisabled(false);
+        dateEdit_2->setDisabled(false);
+        timeEdit_1->setDisabled(false);
+        timeEdit_2->setDisabled(false);
+        break;
+    }
+}
 void DLCalMenu::on_btn_plotGraph_clicked()
 {
     static int click = 1;
@@ -316,18 +370,19 @@ void DLCalMenu::on_btn_plotGraph_clicked()
 void DLCalMenu::on_btn_graphDialog_clicked()
 {
     QGridLayout *grid_dialogGraph = new QGridLayout;
-    dialog_setDevice    = new QDialog;
-    wdg_dialogSetDev    = new QWidget;
-    combo_device        = new QComboBox;
-    btn_okDialog        = new QPushButton("OK");
-    btn_cancelDialog    = new QPushButton("CANCEL");
-    lbl_startDate       = new QLabel("Start :");
+    dialog_setDevice = new QDialog;
+    wdg_dialogSetDev = new QWidget;
+    combo_device     = new QComboBox;
+    btn_okDialog     = new QPushButton("OK");
+    btn_cancelDialog = new QPushButton("CANCEL");
+    lbl_startDate    = new QLabel("Start :");
     lbl_endDate  = new QLabel("End :");
     lbl_device   = new QLabel("Device :");
     dateEdit_1   = new QDateEdit;
     dateEdit_2   = new QDateEdit;
     timeEdit_1   = new QTimeEdit;
     timeEdit_2   = new QTimeEdit;
+    connect(combo_device, SIGNAL(currentIndexChanged(int)), this, SLOT(combo_device_indexChanged(int)));
 //    dialog_setDevice->setStyleSheet(QString("QPushButton, QComboBox, QLabel {font-size: %1pt}").arg(Fontsize));
     combo_device-> addItem("Current device",0);
     combo_device-> addItem("External",1);

@@ -315,7 +315,6 @@ public :
     QStringList dateItems;
     QStringList timeItems;
 
-    QFile *externalFile;
     bool deviceSelected=true;
     bool externalSelected=false;
     bool sdSelected=false;
@@ -367,6 +366,9 @@ public slots:
     void combo_sampeRate_indexChanged(int index);
     void combo_filterType_indexChanged(int index);
     void combo_inputType_indexChanged(int index);
+    void combo_channels_indexChanged(int index);
+    void combo_rawreal_indexChanged(int index);
+    void combo_device_indexChanged(int index);
 
     // plot:
     void setup_customPlot();
