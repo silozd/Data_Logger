@@ -33,7 +33,7 @@
        <enum>QTabWidget::West</enum>
       </property>
       <property name="currentIndex">
-       <number>1</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="MainPage">
        <attribute name="title">
@@ -63,7 +63,7 @@
              <x>0</x>
              <y>0</y>
              <width>193</width>
-             <height>474</height>
+             <height>490</height>
             </rect>
            </property>
           </widget>
@@ -293,19 +293,6 @@
             </property>
             <property name="text">
              <string>Plot Graph</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QPushButton" name="btn_stopGraph">
-            <property name="minimumSize">
-             <size>
-              <width>0</width>
-              <height>25</height>
-             </size>
-            </property>
-            <property name="text">
-             <string>Pause Plotting</string>
             </property>
            </widget>
           </item>
@@ -795,9 +782,9 @@
          </widget>
         </item>
         <item row="3" column="1">
-         <widget class="QPushButton" name="pushButton_8">
+         <widget class="QPushButton" name="btn_newPassword">
           <property name="text">
-           <string>PushButton</string>
+           <string>Change password</string>
           </property>
          </widget>
         </item>

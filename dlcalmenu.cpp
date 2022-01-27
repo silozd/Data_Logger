@@ -49,9 +49,9 @@ DLCalMenu::DLCalMenu(QWidget *parent) :
         SideMargin = hr*10/i;
         RealLabelH = vr*30/i;
         RealLabelW = hr*180/i;
-        RealLCDH = vr*45/i;
+        RealLCDH = vr*50/i;
         RawLabelW= hr*180/i;
-        RawLCDH  = vr*30/i;
+        RawLCDH  = vr*25/i;
         CalPointH = vr*38/i;
         CalPointW = vr*86/i;
         ToolH = vr*60/i;
@@ -59,8 +59,6 @@ DLCalMenu::DLCalMenu(QWidget *parent) :
         MainScrollW = RealLabelW;
         TabBarH = hr*135/i;
         TabBarW = hr*100/i;
-        AppW = hr*1260/i;
-        AppH = vr*795/i;
         qDebug()<<"Screen Width <= 1920 :?"<<ScreenWidth;
     }
     else if (ScreenWidth > 1920){
@@ -80,8 +78,6 @@ DLCalMenu::DLCalMenu(QWidget *parent) :
         MainScrollW = RealLabelW;
         TabBarH = hr*135/i;
         TabBarW = hr*100/i;
-        AppW = hr*1260/i;
-        AppH = vr*795/i;
         qDebug()<<"Screen Width > 1920 :?"<<ScreenWidth;
     }
     else if  (ScreenWidth == 3840){
@@ -102,8 +98,6 @@ DLCalMenu::DLCalMenu(QWidget *parent) :
         MainScrollW = RealLabelW;
         TabBarH = hr*90/i;
         TabBarW = hr*60/i;
-        AppW = hr*1260/i;
-        AppH = vr*795/i;
         qDebug()<<"Screen Width == 3840 :?"<<ScreenWidth;
     }
     if  (ScreenHeight <= 960){        //dlcalmenu org
@@ -124,11 +118,13 @@ DLCalMenu::DLCalMenu(QWidget *parent) :
         MainScrollW = RealLabelW;
         TabBarH = hr*135/i;
         TabBarW = hr*100/i;
-        AppW = hr*1260/i;
-        AppH = vr*795/i;
         qDebug()<<"Screen Width :?"<<ScreenWidth;
         qDebug()<<"Screen Height <= 960 :?"<<ScreenHeight;
     }
+    AppW = hr*1260/i;
+    AppH = vr*795/i;
+    DialogH = hr*300/i;
+    DialogW = hr*500/i;
     qDebug()<<"i"<<i;
 
     qDebug()<<"hr = "<<hr;
@@ -143,7 +139,6 @@ DLCalMenu::DLCalMenu(QWidget *parent) :
 
     resize(AppW,AppH);
     ui->tabWidget->setCurrentIndex(0);
-    ui->btn_stopGraph->hide();
 
     setup_GUI();
 
@@ -177,49 +172,6 @@ DLCalMenu::DLCalMenu(QWidget *parent) :
     connect (quit, &QAction::triggered, qApp, &QApplication::quit);
 //    connect (exportfile, SIGNAL(triggered()), this, SLOT(exportCsv()));       // OPEN
 
-// dialog password initilize:       // OPEN DIALOG
-/*    dialog_newPswd          =  new QDialog;
-    password                -> setEchoMode(QLineEdit::Password);
-    password                -> setPlaceholderText("Type password");
-    password                -> setClearButtonEnabled(true);
-    password                -> setMaxLength(4);
-    wdg_dialogPsw           =  new QWidget;
-    newPswd                 =  new QLineEdit ;
-    oldPswd                 =  new QLineEdit;
-    btn_saveNewPswd         =  new QPushButton("Apply");
-    btn_cancelNewPswd       =  new QPushButton("Cancel");
-    keyicon                 =  new QLabel(wdg_dialogPsw);
-
-// dialog set device:
-    dialog_setDevice        = new QDialog;
-    wdg_dialogSetDev        = new QWidget;
-    combo_device            = new QComboBox;
-    btn_okDialog            = new QPushButton("OK");
-    btn_cancelDialog        = new QPushButton("CANCEL");
-    lbl_startDate           = new QLabel("Start :");
-    lbl_endDate             = new QLabel("End :");
-    lbl_device              = new QLabel("Device :");
-    dateEdit_1              = new QDateEdit;
-    dateEdit_2              = new QDateEdit;
-    timeEdit_1              = new QTimeEdit;
-    timeEdit_2              = new QTimeEdit;
-
-// dialog add graph:
-    grid_dialogAddMain      = new QGridLayout;
-    grid_dialogAddGra       = new QGridLayout;
-    dialog_addToGraph       = new QDialog;
-    dialog_addToMain        = new QDialog;
-    wdg_dialogAddGra        = new QWidget;
-    wdg_dialogAddMain       = new QWidget;
-    combo_diaMain           = new QComboBox;
-    combo_diaGraph          = new QComboBox;
-    btn_diaOKMain           = new QPushButton("Apply");
-    btn_diaOKGra            = new QPushButton("Apply");
-    btn_diaCancelMain       = new QPushButton("Cancel");
-    btn_diaCancelGra        = new QPushButton("Cancel");
-    lbl_diaAxisMain         = new QLabel("Axis Y : ");
-    lbl_diaAxisGra          = new QLabel("Axis Y : ");
-*/
     grid_reals  = new QGridLayout(wdgReals);
     boxLayout   = new QGridLayout(dataBox);
     CalGridLayout = new QGridLayout(CalPointsFrame);
@@ -406,6 +358,8 @@ void DLCalMenu::setup_GUI()
     get_password();
 
     KeyTimer = new QTimer(this);
+    timer_main = new QTimer;
+
     btn_startStop   = new QPushButton(ui->wdgHidden);
     ScrollBarGain   = new QScrollBar(Qt::Horizontal,(ui->wdgHidden));
     Gain            = new QLabel("Gain",ui->wdgHidden);
@@ -417,13 +371,16 @@ void DLCalMenu::setup_GUI()
     btn_startStop   -> hide();
 
     connect(this->KeyTimer         , SIGNAL(timeout())        , this, SLOT(update_time()));
+    connect(this->KeyTimer         , SIGNAL(timeout())        , this, SLOT(KeyTimerTimeOut()));
     connect(this->btn_startStop    , SIGNAL(clicked())        , this, SLOT(timer_startStop()));
     connect(this->ScrollBarGain    , SIGNAL(valueChanged(int)), this, SLOT(ScrollBarGain_valueChange(int)));
     connect(ui->CoBoxInputType     , SIGNAL(activated(int))   , this, SLOT(InputType_Warning(int)));
     connect(ui->CoBoxDataFormat    , SIGNAL(activated(int))   , this, SLOT(DataFormat_Changed()));
     connect(ui->CoBoxChannel       , SIGNAL(currentIndexChanged(int)), this, SLOT(Channel_itemChanged()));
     connect(ui->btnSendCalData     , SIGNAL(clicked())        , this, SLOT(SendCalDataToVTK()));
-    connect(ui->btnWriteParDataToFlash, SIGNAL(clicked())   , this, SLOT(UpdateFlash())); // btnWriteParData slot
+    connect(ui->btnWriteParDataToFlash, SIGNAL(clicked())     , this, SLOT(UpdateFlash())); // btnWriteParData slot
+    connect(ui->combo_axis1        , SIGNAL(currentIndexChanged(int)), this, SLOT(combo_axis1_indexChanged(int)));
+    connect(ui->combo_axis2        , SIGNAL(currentIndexChanged(int)), this, SLOT(combo_axis2_indexChanged(int)));
 
     // del
     resizer =  new QTimer;
@@ -1219,11 +1176,423 @@ void DLCalMenu::keyReleaseEvent(QKeyEvent *event)
         }
     }
 }
+void DLCalMenu::KeyTimerTimeOut()
+{
+    int i,j,chn,blz = 1, OkReceived=0;
+    char m,k;
+    int n;
+    static int SeriErrCnt, RaworReal = 1;
+    static QString ChnData,vl0,vl1,vl2,vl3,vl4,vl5,vl6,vl7,vl8,vl9,vl10,vl11,vl12,vl13,vl14,vl15,TestZeroStr;
+    QString Test1;
+    const QByteArray seriportData = m_serial->readAll();
+    Test1 = seriportData;
+    if  (Test1!=""){
+            if  ((Test1[0] == "A") && (Test1[1] == "N") && (Test1[2] == "S")){
+                for (chn = 0; chn < MaxChnCounts; chn++){
+                    n = chn*11;
+                    //ChnData = "";
+                    k ='H';
+                    m = 48+chn;
+                    if(chn > 7){
+                        k= 48+ (chn/4);
+                        m= 48+ (chn%4);
+                    }
+
+                    if  (Test1[4+n] == k && Test1[5+n] == m){
+                        ChnData = "";
+                        vl0 = "";
+                        j = 0;
+                        ChnData += Test1[6+n];
+                        TestZeroStr = "";
+                        blz = 1;
+                        for (i = 7+n; i < 14+n; i++){
+                            //Getting data and blocking leading zeros
+                            if  ((Test1[i] != "0") & (Test1[i] != " ")) {
+                                ChnData += Test1[i];
+                                blz = 0;   //end of leading zero blocking operation
+                            }
+                            else if (blz == 1) ChnData += " ";
+                            else ChnData += "0";
+                            j ++;
+                            vl0 += Test1[i];
+                        }
+                        //if  (chn == 1) qDebug() << "Kanal 2 " << "REAL = " << vl0;
+                        if  ((vl0.left(RawDigitCount - 1) == "000000")){
+                            ChnData = "0"; //because input data = 0
+                        }
+                    ChnLCDRaw[chn] -> display(ChnData);
+                    ChnRawDataQString[chn] = ChnData;
+                    vl0 = ChnRawDataQString[0];
+                    vl1 = ChnRawDataQString[1];
+                    vl2 = ChnRawDataQString[2];
+                    vl3 = ChnRawDataQString[3];
+                    vl4 = ChnRawDataQString[4];
+                    vl5 = ChnRawDataQString[5];
+                    vl6 = ChnRawDataQString[6];
+                    vl7 = ChnRawDataQString[7];
+                    vl8 = ChnRawDataQString[8];
+                    vl9 = ChnRawDataQString[9];
+                    vl10 = ChnRawDataQString[10];
+                    vl11 = ChnRawDataQString[11];
+                    vl12 = ChnRawDataQString[12];
+                    vl13 = ChnRawDataQString[13];
+                    vl14 = ChnRawDataQString[14];
+                    vl15 = ChnRawDataQString[15];
+            }
+         }
+        }
+        else  if  ((Test1[0] == "R") && (Test1[1] == "C") && (Test1[2] == "L")){    ///Test For Calibrated Real Data
+            for (chn = 0; chn < MaxChnCounts; chn++){
+                n = chn*11;
+                ///ChnData = "";
+                k = 'H';
+                m = 48+chn;
+                if(chn>7){
+                    k = 48 + (chn/4);
+                    m = 48 + (chn%4);
+                }
+                if  (Test1[4+n] == k && Test1[5+n] == m){
+                    ChnData = "";
+                    j = RealDigitCount - 1;
+                    ChnData += Test1[6+n];
+                    TestZeroStr = "";
+                    blz = 1;
+                    /// adjust real display size according to decimal point
+                    if  (ChnCalArray[chn][2].toInt() >= 1) {
+                        ChnLCDReal[chn]      -> setDigitCount(RealDigitCount+1);
+                        ChnLCDReal_Main[chn] -> setDigitCount(RealDigitCount+1);
+                    }
+                    else {
+                        ChnLCDReal[chn]      -> setDigitCount(RealDigitCount); /// for no decimal point
+                        ChnLCDReal_Main[chn] -> setDigitCount(RealDigitCount); // real mainpage
+                    }
+                    ///
+                    for (i = 8+n; i < 14+n; i++){
+                        if  (ChnCalArray[chn][2].toInt() >= 1){
+                            if  (j == (ChnCalArray[chn][2].toInt())) {
+                                if  (blz == 1) {
+                                    blz = 0;
+                                    ChnData += "0";
+                                }
+                                ChnData += ".";
+                            }
+                        }
+                        ///Getting data and blocking leading zeros
+                        if  ((Test1[i] != "0") & (Test1[i] != " ")) {
+                            ChnData += Test1[i];
+                            blz = 0;   ///end of leading zero blocking operation
+                        }
+                        else if (blz == 1) ChnData += " ";
+                        else ChnData += "0";
+                        j --;
+                        TestZeroStr += Test1[i];
+                    }
+                    if (TestZeroStr.left(RealDigitCount - 1) == "000000"){
+                       ChnData = "0"; ///because input data = 0
+                    }
+                    ChnLCDReal[chn]      -> display(ChnData);
+                    ChnLCDReal_Main[chn] -> display(ChnData); // real mainpage
+                    ChnRealDataQString[chn] = ChnData;
+                    if(ChnData.length()>3){
+                        QString ChnData0 = ChnData.at(2);
+                        if(ChnData.at(0)=="+" && ChnData.at(1)==" " ){
+                            for(int i=3; i <= ChnData.length()-1;i++){
+                                QString ChnData1 = ChnData.at(i);
+                                ChnData0 = ChnData0 + ChnData1;
+                            }
+                        }
+                        realData[chn]= ChnData0.toInt();
+
+                        QString ChnData_0 = ChnData.at(2);
+                        if(ChnData.at(0)=="-" && ChnData.at(1)==" " ){
+                            for(int i=3; i <= ChnData.length()-1;i++){
+                                QString ChnData_1 = ChnData.at(i);
+                                ChnData_0 = ChnData_0 + ChnData_1;
+                            }
+                        }
+                        realData_neg[chn] = (-1)*ChnData_0.toInt();
+
+                        //qDebug()<<realData[chn] + realData_neg[chn]; //new
+                    }
+                }
+            }
+        }
+        else if ((Test1[0] == "O") && (Test1[1] == "K")) {
+            OkReceived = 1;
+        }
+    }
+    if  (ComSendType == ""){
+        if  (RaworReal == 0) {
+            RaworReal = 1;
+            m_serial->write("REAL\r\n");
+        }
+        else {
+            RaworReal = 0;
+            m_serial->write("CONV\r\n");
+        }
+    }
+    ///VF10
+    else if  (ComSendType == "WaitOk"){
+        SeriErrCnt ++;
+        if  (OkReceived == 1)
+            ComSendType = "";
+        else if (SeriErrCnt > 5){
+             ComSendType = "";
+             SeriErrCnt = 0;
+        }
+    }
+    else if  (ComSendType == "CAL") {
+        ComSendType = "WaitOk";
+        QByteArray sd = SendData.toLocal8Bit();
+        m_serial->write(sd);
+    }
+    else if  (ComSendType == "RawZ") {
+        ComSendType = "WaitOk";
+        SeriErrCnt = 0;
+        QByteArray sd = SendData.toLocal8Bit();
+        m_serial->write(sd);
+    }
+    //
+    ///static int kutuno = 0;
+    j = 0;
+    for (i=0; i < MaxCalPoint; i++){
+        j = j + 1;
+        if  (CalStepCheckBox[i]->isChecked() && ui->CoBoxChannel->currentIndex()==-1){
+            return;
+        }
+        else if (CalStepCheckBox[i]->isChecked()){
+            CalStepCheckBox[i]->setDisabled(true);      ///isaretlenen disable
+            ChnRawData[i]->setStyleSheet("color: rgb(120,120,120); border: 1px solid rgb(150,150,150); margin-right: 5px ; padding: 1px ;background-color: rgb(255,255,255)");
+            if  (chndataok == true){
+                chndataok = false;
+            }
+            if  (j > ChecKutuNo) {
+                qDebug() << "Active Olan Kutu:" << j;
+                ChecKutuNo = i + 1;
+                if  (j < MaxCalPoint){
+                    CalStepCheckBox[j]->setDisabled(false);   ///bir sonraki aktif
+                    /// Raw Data Atama
+                    if  (ui->CoBoxChannel->currentIndex() == 0){
+                        ChnRawData[i]->setText(vl0);
+                    }
+                    if  (ui->CoBoxChannel->currentIndex() == 1){
+                        ChnRawData[i]->setText(vl1);
+                    }
+                    if  (ui->CoBoxChannel->currentIndex() == 2){
+                        ChnRawData[i]->setText(vl2);
+                    }
+                    if  (ui->CoBoxChannel->currentIndex() == 3){
+                        ChnRawData[i]->setText(vl3);
+                    }
+                    if  (ui->CoBoxChannel->currentIndex() == 4){
+                        ChnRawData[i]->setText(vl4);
+                    }
+                    if  (ui->CoBoxChannel->currentIndex() == 5){
+                        ChnRawData[i]->setText(vl5);
+                    }
+                    if  (ui->CoBoxChannel->currentIndex() == 6){
+                        ChnRawData[i]->setText(vl6);
+                    }
+                    if  (ui->CoBoxChannel->currentIndex() == 7){
+                        ChnRawData[i]->setText(vl7);
+                    }
+                    if  (ui->CoBoxChannel->currentIndex() == 8){
+                        ChnRawData[i]->setText(vl8);
+                    }
+                    if  (ui->CoBoxChannel->currentIndex() == 9){
+                        ChnRawData[i]->setText(vl9);
+                    }
+                    if  (ui->CoBoxChannel->currentIndex() == 10){
+                        ChnRawData[i]->setText(vl10);
+                    }
+                    if  (ui->CoBoxChannel->currentIndex() == 11){
+                        ChnRawData[i]->setText(vl11);
+                    }
+                    if  (ui->CoBoxChannel->currentIndex() == 12){
+                        ChnRawData[i]->setText(vl12);
+                    }
+                    if  (ui->CoBoxChannel->currentIndex() == 13){
+                        ChnRawData[i]->setText(vl13);
+                    }
+                    if  (ui->CoBoxChannel->currentIndex() == 14){
+                        ChnRawData[i]->setText(vl14);
+                    }
+                    if  (ui->CoBoxChannel->currentIndex() == 15){
+                        ChnRawData[i]->setText(vl15);
+                    }
+                }
+                if  (j == MaxCalPoint){
+                    if  (ui->CoBoxChannel->currentIndex()==0){
+                        ChnRawData[i]->setText(vl0);
+                    }
+                    if  (ui->CoBoxChannel->currentIndex()==1){
+                        ChnRawData[i]->setText(vl1);
+                    }
+                    if  (ui->CoBoxChannel->currentIndex()==2){
+                        ChnRawData[i]->setText(vl2);
+                    }
+                    if  (ui->CoBoxChannel->currentIndex()==3){
+                        ChnRawData[i]->setText(vl3);
+                    }
+                    if  (ui->CoBoxChannel->currentIndex()==4){
+                        ChnRawData[i]->setText(vl4);
+                    }
+                    if  (ui->CoBoxChannel->currentIndex()==5){
+                        ChnRawData[i]->setText(vl5);
+                    }
+                    if  (ui->CoBoxChannel->currentIndex()==6){
+                        ChnRawData[i]->setText(vl6);
+                    }
+                    if  (ui->CoBoxChannel->currentIndex()==7){
+                        ChnRawData[i]->setText(vl7);
+                    }
+                    if  (ui->CoBoxChannel->currentIndex() == 8){
+                        ChnRawData[i]->setText(vl8);
+                    }
+                    if  (ui->CoBoxChannel->currentIndex() == 9){
+                        ChnRawData[i]->setText(vl9);
+                    }
+                    if  (ui->CoBoxChannel->currentIndex() == 10){
+                        ChnRawData[i]->setText(vl10);
+                    }
+                    if  (ui->CoBoxChannel->currentIndex() == 11){
+                        ChnRawData[i]->setText(vl11);
+                    }
+                    if  (ui->CoBoxChannel->currentIndex() == 12){
+                        ChnRawData[i]->setText(vl12);
+                    }
+                    if  (ui->CoBoxChannel->currentIndex() == 13){
+                        ChnRawData[i]->setText(vl13);
+                    }
+                    if  (ui->CoBoxChannel->currentIndex() == 14){
+                        ChnRawData[i]->setText(vl14);
+                    }
+                    if  (ui->CoBoxChannel->currentIndex() == 15){
+                        ChnRawData[i]->setText(vl15);
+                    }
+                }
+            }
+            else if (ChecKutuNo == 0){
+                qDebug() << "Active Olan Kutu:" << ChecKutuNo;
+                ChecKutuNo = 1;
+            }
+        }
+    }
+    static int counter = 0;
+    static int DigitCount = 0;
+    ///Bu disaridan gelecek, bu kadar digit olunca islem tamam diye bir sonuc bildirecek
+    char s[50];
+    counter ++;
+    //itoa(counter, s, 10); // sila
+    QString TestString = "Passed Time: ";
+    TestString += s;
+    ///lbltime->setText(s);
+    if  (UserCalLabelActive == false) {
+        DigitCount = 0;
+        KeyedData  = "";
+    }
+    else if  ((KeyPressWait == false) && (UserCalLabelActive == true)){
+        if  ((KeyPressedOk == true) && (KeyReleasedOk == true)){   /// bir tusa basildiktan sonraki ilk state
+            KeyPressedOk = false;
+            KeyReleasedOk = false;
+        }
+        else if  ((KeyPressedOk == true) && (KeyReleasedOk == false)){ /// bir tusa basildiktan sonraki 2. veya 3. state
+            KeyPressedOk = false;
+            KeyReleasedOk = false;
+        }
+        else if ((KeyPressedOk == false) && (KeyReleasedOk == true)){ /// bir tusa basildiktan sonraki 2. veya 3. state
+            KeyPressedOk = false;
+            KeyReleasedOk = false;
+        }
+        else if  ((KeyPressedOk == false) && (KeyReleasedOk == false)){ /// bir tusa basildiktan sonraki son state
+            KeyPressedOk    = false;
+            KeyReleasedOk   = false;
+            KeyTimerEnd     = true;
+            KeyPressWait    = true;
+            int DpLoc = ui->CoBoxDataFormat->currentIndex();
+            if  (KeyValue == Qt::Key_Backspace){
+                QString x,y;
+                if  (DigitCount > 0){
+                    DigitCount--; ///dikkat 1 ise 0 a dusecek
+                    KeyedData = KeyedData.left(DigitCount);
+                    if  (DigitCount >= DpLoc) {
+                        if  (DpLoc == 0) {
+                            y = KeyedData;
+                            UserCalLabel[UserCalLabelIndex] -> setText(y);
+                         }
+                        else{
+                            x = KeyedData.right(DpLoc);
+                            y = KeyedData.left(DigitCount-DpLoc) + "." + x;
+                            UserCalLabel[UserCalLabelIndex] -> setText(y);
+                        }
+                    }
+                    else if (DigitCount > 0){
+                        UserCalLabel[UserCalLabelIndex] ->setText(KeyedData);
+                    }
+                    else{
+                        KeyedData="";
+                        UserCalLabel[UserCalLabelIndex] ->setText(KeyedData);
+                    }
+                }
+            }
+            else {
+                ///Burada kendi tum islemlerini yapablirsin, girilenleri bir text de gosterebilirsin
+                //itoa(DigitCount, s, 10); // sila
+                TestString = s;
+                TestString += " Times and Presed Key is ";
+                //itoa(KeyValue, s, 10); // sila
+                TestString += s;
+                TestString += " ( ";
+                TestString += KeyValue;
+                TestString += " )";
+                ///Textedit -> setText(TestString);
+                QString x,y;
+                if  (DigitCount >= KeyDigitCount){
+                    KeyedData = KeyedData.right(KeyDigitCount - 1) + KeyValue;
+                }
+                else KeyedData += KeyValue;
+                if  (DigitCount == 0){
+                    if  (DpLoc > 0){
+                        y = "0." + KeyedData;
+                    }
+                    else{
+                        y = KeyedData;
+                    }
+                }
+                else if  (DigitCount >= DpLoc){
+                    if  (DpLoc > 0){
+                        x = KeyedData.right(DpLoc);
+                        if  (DigitCount >= KeyDigitCount)
+                            y = KeyedData.left(DigitCount-(DpLoc)) + "." + x;
+                        else
+                        y = KeyedData.left(DigitCount-(DpLoc - 1)) + "." + x;
+                    }
+                    else{
+                        y = KeyedData;
+                    }
+                }
+                else {
+                    y = "0." + KeyedData;
+                }
+                UserCalLabel[UserCalLabelIndex] -> setText(y);
+                if  (DigitCount < KeyDigitCount) DigitCount++;
+                qDebug() << "Girilen Data : " + KeyedData + x + y + '\n';
+            }
+        }
+    }
+    if  (ui->CoBoxInputType->currentText()=="Custom"){
+        Gain->setVisible(true);
+        LblScrollBarGain->setVisible(true);
+        ScrollBarGain->setVisible(true);
+    }
+    else {
+        Gain->setVisible(false);
+        LblScrollBarGain->setVisible(false);
+        ScrollBarGain->setVisible(false);
+    }
+}
 DLCalMenu::~DLCalMenu()
 {
     delete ui;
 }
-
-
-
 

@@ -144,6 +144,8 @@ public :
     int TabBarW;
     int AppW;
     int AppH;
+    int DialogH;
+    int DialogW;
 
     QLabel *label;
     QString KeyedData;
@@ -350,6 +352,12 @@ private slots:
 
     void on_tabWidget_currentChanged(int index);
     void on_m_SetSerialPortButton_clicked();
+    void combo_axis1_indexChanged(int index);
+    void combo_axis2_indexChanged(int index);
+    void on_btn_newPassword_clicked();
+    void on_btn_graphDialog_clicked();
+    void on_btn_plotGraph_clicked();
+
 
 public slots:
     int GetScreenHRes(int s);
@@ -359,11 +367,31 @@ public slots:
     void resetTimer();
     void update_time();
     void ClearKey();
+    void KeyTimerTimeOut();
 
     void setup_combobox();
-    void setup_customPlot();
 
     void get_password();
+
+    // plot:
+    void setup_customPlot();
+    void plot_graphMain();
+    void addNewGraph();
+    void addGraphDialog_Main();
+    void hideGraphPlot();
+    void showGraphPlot();
+    void hideLegend();
+    void showLegend();
+    void removePlot();
+    void removeAllPlot();
+    void selectionChanged();
+    void mousePress();
+    void mouseWheel();
+    void contextMenuRequest(QPoint pos);
+    void moveLegend();
+    void graphClicked(QCPAbstractPlottable *plottable, int dataIndex);
+    void axisLabelDoubleClick(QCPAxis *axis, QCPAxis::SelectablePart part);
+    void legendDoubleClick(QCPLegend *legend, QCPAbstractLegendItem *item);
 
     void size_tracker();
 };
