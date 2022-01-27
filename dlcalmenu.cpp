@@ -369,6 +369,7 @@ void DLCalMenu::setup_GUI()
     connect(ui->CoBoxChannel       , SIGNAL(currentIndexChanged(int)), this, SLOT(Channel_itemChanged()));
     connect(ui->btnSendCalData     , SIGNAL(clicked())        , this, SLOT(SendCalDataToVTK()));
     connect(ui->btnWriteParDataToFlash, SIGNAL(clicked())     , this, SLOT(UpdateFlash())); // btnWriteParData slot
+    connect(ui->btn_password       , SIGNAL(clicked()), this, SLOT(btn_passwordOK_clicked()));
     connect(ui->combo_axis1        , SIGNAL(currentIndexChanged(int)), this, SLOT(combo_axis1_indexChanged(int)));
     connect(ui->combo_axis2        , SIGNAL(currentIndexChanged(int)), this, SLOT(combo_axis2_indexChanged(int)));
     connect(ui->combo_portType     , SIGNAL(currentIndexChanged(int)), this, SLOT(combo_portType_indexChanged(int)));
@@ -829,8 +830,8 @@ void DLCalMenu::saveAs()
 }
 void DLCalMenu::opening_val()   // to run app with saved data
 {
-    //mouseevent = false;   // will be used
-    mouseevent = true;      // will be removed
+    mouseevent = false;   // will be used
+    //mouseevent = true;      // will be removed
 
     QString fileName = "/home/sila/Desktop/DL_grid/UserCalFile/AllChnCal.abk";  // baslangicta acilan dosya path'i yazilacak TODO
     setWindowTitle(fileName);

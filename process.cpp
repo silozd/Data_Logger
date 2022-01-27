@@ -347,6 +347,39 @@ void DLCalMenu::combo_device_indexChanged(int index)        // Setting device co
         break;
     }
 }
+void DLCalMenu::btn_passwordOK_clicked()
+{
+   /* QKeyEvent *event;
+    if (event->key() == Qt::Key_Return || event->key() == Qt::Key_Enter) {
+            event->ignore();
+            return;
+    }*/
+    get_password();
+    if(ui->password->text() == str) {
+        mouseevent = true;
+        ui->combo_channels  -> setDisabled(false);
+        ui->btn_saveChn     -> setDisabled(false);
+        ui->channelName     -> setDisabled(false);
+        ui->radioBtn_csv    -> setDisabled(false);
+      //  radioBtn_pdf    -> setDisabled(false);
+        ui->btn_newPassword -> setDisabled(false);
+        ui->btn_newPassword -> setStyleSheet("background-color : none; border: none; text-decoration: underline; color:rgb(30,60,190); text-align: right");
+
+        QMessageBox message;
+        QPixmap unlock(":/icon/unlock.png");
+        message.setIconPixmap(QPixmap(unlock));
+        message.setText("You are able to authorize");
+        message.exec();
+    }
+    else if(ui->password->text() != "****") {
+        mouseevent = false;
+        QMessageBox message;
+        QPixmap lock(":/icon/lock.png");
+        message.setIconPixmap(QPixmap(lock));
+        message.setText("Invalid password. Try again!");
+        message.exec();
+    }
+}
 void DLCalMenu::on_btn_plotGraph_clicked()
 {
     static int click = 1;
@@ -415,11 +448,11 @@ void DLCalMenu::on_btn_newPassword_clicked()
 {
     QGridLayout *grid_dialogPsw = new QGridLayout;
     dialog_newPswd  =  new QDialog;
-    password        =  new QLineEdit;
-    password        -> setEchoMode(QLineEdit::Password);
-    password        -> setPlaceholderText("Type password");
-    password        -> setClearButtonEnabled(true);
-    password        -> setMaxLength(4);
+    ui->password    =  new QLineEdit;
+    ui->password    -> setEchoMode(QLineEdit::Password);
+    ui->password    -> setPlaceholderText("Type password");
+    ui->password    -> setClearButtonEnabled(true);
+    ui->password    -> setMaxLength(4);
     wdg_dialogPsw   =  new QWidget;
     newPswd         =  new QLineEdit ;
     oldPswd         =  new QLineEdit;

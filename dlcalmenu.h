@@ -235,7 +235,6 @@ public :
     QWidget *wdg_dialogPsw;
     QLineEdit *newPswd;
     QLineEdit *oldPswd;
-    QLineEdit *password ;
     QPushButton *btn_saveNewPswd;
     QPushButton *btn_cancelNewPswd;
     QLabel *keyicon;
@@ -369,6 +368,7 @@ public slots:
     void combo_channels_indexChanged(int index);
     void combo_rawreal_indexChanged(int index);
     void combo_device_indexChanged(int index);
+    void btn_passwordOK_clicked();
 
     // plot:
     void setup_customPlot();
