@@ -41,27 +41,27 @@ DLCalMenu::DLCalMenu(QWidget *parent) :
     pr = 1000;
     QFont Font1 ("Arial", Fontsize, QFont::Normal);
 
-    if (ScreenWidth <= 1920){
+    if (ScreenWidth < 1920){
         pr = 1000;
-        Fontsize = 13;
+        Fontsize = 11;
         FontsizeTab = 13;
         Font1.setPointSize(Fontsize);
         SideMargin = hr*10/pr;
-        RealLabelH = vr*30/pr;
-        RealLabelW = hr*180/pr;
-        RealLCDH = vr*50/pr;
-        RawLabelW= hr*180/pr;
-        RawLCDH  = vr*25/pr;
-        CalPointH = vr*38/pr;
-        CalPointW = vr*86/pr;
-        ToolH = vr*60/pr;
+        RealLabelH = vr*20/pr;
+        RealLabelW = hr*100/pr;
+        RealLCDH = vr*35/pr;
+        RawLabelW= hr*120/pr;
+        RawLCDH  = vr*15/pr;        // todo
+        CalPointH = vr*30/pr;
+        CalPointW = vr*55/pr;
+        ToolH = vr*50/pr;
         CalibScrollH = RealLCDH*2+RealLabelH*2+SideMargin*3;
         MainScrollW = RealLabelW;
-        TabBarH = hr*135/pr;
-        TabBarW = hr*100/pr;
+        TabBarH = hr*110/pr;
+        TabBarW = hr*85/pr;
         qDebug()<<"Screen Width <= 1920 :?"<<ScreenWidth;
     }
-    else if (ScreenWidth > 1920){
+    else if (ScreenWidth >= 1920){
         Fontsize = 13;
         FontsizeTab = 14;
         Font1.setPointSize(Fontsize);
@@ -70,11 +70,11 @@ DLCalMenu::DLCalMenu(QWidget *parent) :
         RealLabelW = hr*180/pr;
         RealLCDH = vr*50/pr;
         RawLabelW= hr*180/pr;
-        RawLCDH  = vr*30/pr;
+        RawLCDH  = vr*10/pr;
         CalPointH = vr*38/pr;
         CalPointW = vr*86/pr;
         ToolH = vr*60/pr;
-        CalibScrollH = RealLCDH*2+RealLabelH*2+SideMargin*3;
+        CalibScrollH = RealLCDH*2+RealLabelH*2; // BURDA
         MainScrollW = RealLabelW;
         TabBarH = hr*135/pr;
         TabBarW = hr*100/pr;
@@ -110,7 +110,7 @@ DLCalMenu::DLCalMenu(QWidget *parent) :
         RealLabelW = hr*180/pr;
         RealLCDH = vr*45/pr;
         RawLabelW= hr*130/pr;
-        RawLCDH  = vr*20/pr;
+        RawLCDH  = vr*25/pr;
         CalPointH = vr*38/pr;
         CalPointW = vr*86/pr;
         ToolH = vr*60/pr;
@@ -119,7 +119,7 @@ DLCalMenu::DLCalMenu(QWidget *parent) :
         TabBarH = hr*135/pr;
         TabBarW = hr*100/pr;
         qDebug()<<"Screen Width :?"<<ScreenWidth;
-        qDebug()<<"Screen Height <= 960 :?"<<ScreenHeight;
+        qDebug()<<"Screen Height <= 720 :?"<<ScreenHeight;
     }
     else if  (ScreenWidth <= 960){        //dlcalmenu org
         pr = 1500;
@@ -131,7 +131,7 @@ DLCalMenu::DLCalMenu(QWidget *parent) :
         RealLabelW = hr*180/pr;
         RealLCDH = vr*45/pr;
         RawLabelW= hr*130/pr;
-        RawLCDH  = vr*20/pr;
+        RawLCDH  = vr*30/pr;
         CalPointH = vr*38/pr;
         CalPointW = vr*86/pr;
         ToolH = vr*60/pr;
@@ -139,15 +139,15 @@ DLCalMenu::DLCalMenu(QWidget *parent) :
         MainScrollW = RealLabelW;
         TabBarH = hr*135/pr;
         TabBarW = hr*100/pr;
-        qDebug()<<"Screen Width :?"<<ScreenWidth;
-        qDebug()<<"Screen Height <= 960 :?"<<ScreenHeight;
+        qDebug()<<"Screen Width <= 960 :?"<<ScreenWidth;
+        qDebug()<<"Screen Height :"<<ScreenHeight;
     }
     AppW = hr*1260/pr;
     AppH = vr*795/pr;
     DialogH = hr*300/pr;
     DialogW = hr*500/pr;
+    qDebug()<<"AppW"<<AppW<<", AppH"<<AppH;
     qDebug()<<"pr"<<pr;
-
     qDebug()<<"hr = "<<hr;
     qDebug()<<"vr = "<<vr;
     qDebug()<<"SideMargin"<<SideMargin;
