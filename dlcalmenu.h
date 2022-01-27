@@ -264,19 +264,12 @@ public :
 
     // dialog add graph:
     QGridLayout *grid_dialogAddMain;
-    QGridLayout *grid_dialogAddGra;
     QDialog     *dialog_addToMain;
-    QDialog     *dialog_addToGraph;
-    QWidget     *wdg_dialogAddGra;
     QWidget     *wdg_dialogAddMain;
     QComboBox   *combo_diaMain ;
-    QComboBox   *combo_diaGraph;
     QPushButton *btn_diaOKMain;
-    QPushButton *btn_diaOKGra;
     QPushButton *btn_diaCancelMain;
-    QPushButton *btn_diaCancelGra;
     QLabel      *lbl_diaAxisMain;
-    QLabel      *lbl_diaAxisGra;
     QStringList removed_channels;
 
     // time :

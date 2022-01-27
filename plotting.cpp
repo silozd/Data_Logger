@@ -98,25 +98,16 @@ void DLCalMenu::setup_customPlot()
     customPlot_graph->axisRect()->setupFullAxesBox();
     customPlot_graph->rescaleAxes();
     //  clickable plot area :       // open
- /*   connect(customPlot_main , SIGNAL(selectionChangedByUser()), this, SLOT(selectionChanged()));
+    connect(customPlot_main , SIGNAL(selectionChangedByUser()), this, SLOT(selectionChanged()));
     connect(customPlot_main , SIGNAL(mousePress(QMouseEvent*)), this, SLOT(mousePress()));
     connect(customPlot_main , SIGNAL(mouseWheel(QWheelEvent*)), this, SLOT(mouseWheel()));
     connect(customPlot_main , SIGNAL(axisDoubleClick(QCPAxis*,QCPAxis::SelectablePart,QMouseEvent*)), this, SLOT(axisLabelDoubleClick(QCPAxis*,QCPAxis::SelectablePart)));
     connect(customPlot_main , SIGNAL(legendDoubleClick(QCPLegend*,QCPAbstractLegendItem*,QMouseEvent*)), this, SLOT(legendDoubleClick(QCPLegend*,QCPAbstractLegendItem*)));
     connect(customPlot_main , SIGNAL(plottableClick(QCPAbstractPlottable*,int,QMouseEvent*)), this, SLOT(graphClicked(QCPAbstractPlottable*,int)));
     connect(customPlot_main , SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(contextMenuRequest(QPoint)));
-    connect(customPlot_graph, SIGNAL(selectionChangedByUser()), this, SLOT(selectionChanged()));
-    connect(customPlot_graph, SIGNAL(mousePress(QMouseEvent*)), this, SLOT(mousePress()));
-    connect(customPlot_graph, SIGNAL(mouseWheel(QWheelEvent*)), this, SLOT(mouseWheel()));
-    connect(customPlot_graph, SIGNAL(axisDoubleClick(QCPAxis*,QCPAxis::SelectablePart,QMouseEvent*)), this, SLOT(axisLabelDoubleClick(QCPAxis*,QCPAxis::SelectablePart)));
-    connect(customPlot_graph, SIGNAL(legendDoubleClick(QCPLegend*,QCPAbstractLegendItem*,QMouseEvent*)), this, SLOT(legendDoubleClick(QCPLegend*,QCPAbstractLegendItem*)));
-    connect(customPlot_graph, SIGNAL(plottableClick(QCPAbstractPlottable*,int,QMouseEvent*)), this, SLOT(graphClicked(QCPAbstractPlottable*,int)));
-    connect(customPlot_graph, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(contextMenuRequest(QPoint))); */
     //
- /*   customPlot_main->xAxis  ->setLabel(ui->combo_axis1->currentText());
+    customPlot_main->xAxis  ->setLabel(ui->combo_axis1->currentText());
     customPlot_main->yAxis  ->setLabel(ui->combo_axis2->currentText());
-    customPlot_graph->xAxis ->setLabel(ui->combo_axisX->currentText());
-    customPlot_graph->yAxis ->setLabel(ui->combo_axisY->currentText());*/
     //
     QStringList channels;
     for (int i = 0; i < MaxChnCounts; ++i){
@@ -196,6 +187,7 @@ void DLCalMenu::plot_graphMain()
 }
 void DLCalMenu::addGraphDialog_Main()
 {
+    grid_dialogAddMain = new QGridLayout;
     lbl_diaAxisMain   -> setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
     combo_diaMain     -> setStyleSheet("color: red");
     grid_dialogAddMain-> addWidget(lbl_diaAxisMain,0,0);
@@ -204,8 +196,9 @@ void DLCalMenu::addGraphDialog_Main()
     grid_dialogAddMain-> addWidget(btn_diaOKMain,1,1);
     wdg_dialogAddMain -> setParent(dialog_addToMain);
     wdg_dialogAddMain -> setGeometry(10,10,300,75);
-    dialog_addToGraph -> setLayout(grid_dialogAddMain);
+    dialog_addToMain  -> setLayout(grid_dialogAddMain);
     dialog_addToMain  -> setWindowTitle("Add Graph");
+    dialog_addToMain  -> resize(DialogW,DialogH);
     dialog_addToMain  -> exec();
 }
 void DLCalMenu::addNewGraph()
@@ -313,7 +306,7 @@ void DLCalMenu::contextMenuRequest(QPoint pos)
     QMenu *menu = new QMenu(this);
     menu->setAttribute(Qt::WA_DeleteOnClose);
 
-    if (customPlot_main->legend->selectTest(pos, false) >= 0){
+    if (customPlot_main->legend->selectTest(pos, false) >= 0 ){
         menu->addAction("Move to top left"      , this, SLOT(moveLegend()))->setData((int)(Qt::AlignTop      |Qt::AlignLeft));
         menu->addAction("Move to top right"     , this, SLOT(moveLegend()))->setData((int)(Qt::AlignTop      |Qt::AlignRight));
         menu->addAction("Move to bottom right"  , this, SLOT(moveLegend()))->setData((int)(Qt::AlignBottom   |Qt::AlignRight));
@@ -321,22 +314,21 @@ void DLCalMenu::contextMenuRequest(QPoint pos)
         hidelegend = menu->addAction("Hide"     , this, SLOT(hideLegend()));
     }
     else {
-        if (customPlot_main -> selectedGraphs().size() > 0){//&& plot_statu == 0)
-            menu -> addAction("Add graph"       , this, SLOT(addGraphDialog_Main()));
+        if(current_page == SCR_MAIN){
+            if (customPlot_main -> selectedGraphs().size() > 0){//&& plot_statu == 0)
+                menu -> addAction("Add graph"       , this, SLOT(addGraphDialog_Main()));
+                if(customPlot_main->graphCount() > 1){
+                    menu -> addAction("Clear all"   , this, SLOT(removeAllPlot()));
+                    //menu -> addAction("Remove graph", this, SLOT(removePlot()));
+                }
+            }
         }
-        if(customPlot_main->graphCount() > 1){
-            menu -> addAction("Clear all"   , this, SLOT(removeAllPlot()));
-            //menu -> addAction("Remove graph", this, SLOT(removePlot()));
-        }
-
-    /*  if(!customPlot_graph -> legend -> visible() || !customPlot_main -> legend -> visible())
-          showlegend = menu -> addAction("Show legend" , this, SLOT(showLegend()));
-      if (customPlot_main -> selectedGraphs().size() > 0 || customPlot_graph  -> selectedGraphs().size() > 0)
-          menu -> addAction("Hide graph"  , this, SLOT(hideGraphPlot()));
-      if(customPlot_main -> selectedGraphs().size() > 0  && !customPlot_main  -> selectedGraphs().first() -> visible())
-          menu -> addAction("Show graph"  , this, SLOT(showGraphPlot()));
-      if(customPlot_graph -> selectedGraphs().size() > 0 && !customPlot_graph -> selectedGraphs().first() -> visible())
-          menu -> addAction("Show graph"  , this, SLOT(showGraphPlot()));*/
+//        if(!customPlot_main -> legend -> visible())
+//            showlegend = menu -> addAction("Show legend" , this, SLOT(showLegend()));
+//        if (customPlot_main -> selectedGraphs().size() > 0)
+//            menu -> addAction("Hide graph"  , this, SLOT(hideGraphPlot()));
+//        if(customPlot_main -> selectedGraphs().size() > 0  && !customPlot_main  -> selectedGraphs().first() -> visible())
+//            menu -> addAction("Show graph"  , this, SLOT(showGraphPlot()));
     }
     menu->popup(customPlot_main -> mapToGlobal(pos));
  }
