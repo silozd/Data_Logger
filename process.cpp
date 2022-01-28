@@ -345,27 +345,39 @@ void DLCalMenu::combo_device_indexChanged(int index)        // Setting device co
         break;
     }
 }
+void DLCalMenu::on_btn_plotGraph_clicked()
+{
+    static int click = 1;
+    click++;
+    if(click%2 == 0){            // runs graph
+        plot_statu = 1;
+        dispList = 1;
+        connect(timer_main, SIGNAL(timeout()), this, SLOT(plot_graphMain()));
+        timer_main -> start();
+        ui->combo_axis1 -> setDisabled(true);
+        ui->combo_axis2 -> setDisabled(true);
+        ui->btn_plotGraph->setText("Pause");
+    }
+    else if(click%2 == 1){      // displays table widget
+        dispList = 0;
+        plot_statu = 0;
+        timer_main -> stop();
+        ui->combo_axis1 -> setDisabled(false);
+        ui->combo_axis2 -> setDisabled(false);
+        ui->btn_plotGraph->setText("Plot");
+    }
+}
 void DLCalMenu::on_btn_dispList_clicked()
 {
     static int click = 1;       // TODO asap
     click++;
     switch (click%2) {
     case 0: {
-        QGridLayout *grid_list  = new QGridLayout;
-        tview_file  -> setParent(ui->wdgGraph);
-        tview_real  -> setParent(ui->wdgGraph);
-        tview_raw   -> setParent(ui->wdgGraph);
-        ui->wdgGraph-> setLayout(grid_list);
-        grid_list   -> setContentsMargins(0,0,0,0);
-        grid_list   -> addWidget(tview_real,0,0);
-        grid_list   -> addWidget(tview_raw,0,0);
-        grid_list   -> addWidget(tview_file,0,0);
+        dispList = 1;
         tview_file  -> setGeometry(0,0,ui->wdgGraph->width(),ui->wdgGraph->height());
         tview_raw   -> setGeometry(0,0,ui->wdgGraph->width(),ui->wdgGraph->height());
         tview_real  -> setGeometry(0,0,ui->wdgGraph->width(),ui->wdgGraph->height());
         tview_real -> show();
-        tview_raw  -> hide();
-        tview_file -> hide();
         customPlot_main  -> hide();
         ui->combo_rawreal -> setEnabled(true);
         exportfile       -> setEnabled(true);
@@ -390,6 +402,7 @@ void DLCalMenu::on_btn_dispList_clicked()
     }
         break;
     case 1:
+        dispList = 0;
         ui->btn_dispList -> setText("Display Table");
         tview_real      -> hide();
         tview_raw       -> hide();
@@ -590,7 +603,6 @@ void DLCalMenu::btn_okDialog_onClicked()            // Setting device approval
         removeAllPlot();
         break;
     }
-    qDebug()<<plot_statu;
     dialog_setDevice -> close();
 }
 void DLCalMenu::btn_cancelDialog_onClicked()        // Setting device approval

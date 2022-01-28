@@ -286,6 +286,7 @@ public :
     QLabel *LblScrollBarGain;
 
     // graph :
+    QGridLayout *grid_wdgGraph;
     QCPPlottableLegendItem *plItem;
     QCustomPlot *customPlot_main;
     QCustomPlot *customPlot_graph;

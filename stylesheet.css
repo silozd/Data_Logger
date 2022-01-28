@@ -1,5 +1,5 @@
 QTabWidget{
-
+    background: rgb(230,225,225);
 }
 QPushButton{
 }
@@ -31,3 +31,21 @@ QPushButton#m_SetSerialPortButton{
                     stop:0 rgba(202, 202, 202, 255), stop:0.658416 rgba(0, 0, 0, 255));
 }
 
+/* SETTINGS */
+QLabel#lbl_version{
+    font: italic;
+    background: rgb(255,255,255);
+    margin: 5px;
+}
+
+/* PORT SET */
+QFrame#framePortCombo{
+    background: rgb(60,60,60);
+}
+QWidget#wdgPort{
+    border : 1px solid rgb(105,100,100);
+    background: rgb(230,225,225);
+}
+QLabel#lbl_portType{
+    color: rgb(255,255,255);
+}

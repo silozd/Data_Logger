@@ -168,7 +168,7 @@ DLCalMenu::DLCalMenu(QWidget *parent) :
     ui->tabWidget->setCurrentIndex(0);
     tabBar = ui->tabWidget->tabBar();
     ui->tabWidget->setStyleSheet(QString("QTabBar::tab { width: %1px; height: %2px; font-size: %3pt}").arg(TabBarW).arg(TabBarH).arg(FontsizeTab)
-                   + QString("QLabel{font-family: Times New Roman; font-size: %1pt;} QCheckbox,QComboBox,QLineEdit,QPushButton,QRadioButton,QSpinBox{font-family: Arial; font-size: %1pt; }").arg(Fontsize));
+                   + QString("QLabel{font-family: Times New Roman; font-size: %1pt;} QComboBox,QLineEdit,QSpinBoxQCheckbox,QPushButton,QRadioButton{font-family: Arial; font-size: %1pt; }").arg(Fontsize));
     tabBar   ->setStyle(new CustomTabStyle);
 
 // toolbar :
@@ -406,12 +406,20 @@ void DLCalMenu::setup_GUI()
     connect(ui->combo_rawreal      , SIGNAL(currentIndexChanged(int)), this, SLOT(combo_rawreal_indexChanged(int)));
     connect(this->combo_diaMain    , SIGNAL(currentIndexChanged(int)), this, SLOT(combo_diaCh_indexChanged(int)));
 
+    grid_wdgGraph  = new QGridLayout;
     tview_real  = new QTableView;
     tview_raw   = new QTableView;
     tview_file  = new QTableView;                 //Added External Read
     csvModel_real = new QStandardItemModel;
     csvModel_raw  = new QStandardItemModel;
     csvModel_realnew = new QStandardItemModel;    //Added External Read
+    tview_file  -> setParent(ui->wdgGraph);
+    tview_real  -> setParent(ui->wdgGraph);
+    tview_raw   -> setParent(ui->wdgGraph);
+    grid_wdgGraph -> addWidget(tview_real,0,0);
+    grid_wdgGraph -> addWidget(tview_raw,0,0);
+    grid_wdgGraph -> addWidget(tview_file,0,0);
+    grid_wdgGraph -> setContentsMargins(0,0,0,0);
 
     ui->password    -> setEchoMode(QLineEdit::Password);
     ui->password    -> setPlaceholderText("Type password");

@@ -33,7 +33,7 @@
        <enum>QTabWidget::West</enum>
       </property>
       <property name="currentIndex">
-       <number>1</number>
+       <number>2</number>
       </property>
       <widget class="QWidget" name="MainPage">
        <attribute name="title">
@@ -131,6 +131,9 @@
                <height>25</height>
               </size>
              </property>
+             <property name="cursor">
+              <cursorShape>PointingHandCursor</cursorShape>
+             </property>
             </widget>
            </item>
            <item row="0" column="4">
@@ -184,6 +187,9 @@
                <height>25</height>
               </size>
              </property>
+             <property name="cursor">
+              <cursorShape>PointingHandCursor</cursorShape>
+             </property>
             </widget>
            </item>
            <item row="0" column="3">
@@ -194,6 +200,9 @@
                <height>25</height>
               </size>
              </property>
+             <property name="cursor">
+              <cursorShape>PointingHandCursor</cursorShape>
+             </property>
             </widget>
            </item>
            <item row="1" column="3">
@@ -203,6 +212,9 @@
                <width>0</width>
                <height>25</height>
               </size>
+             </property>
+             <property name="cursor">
+              <cursorShape>PointingHandCursor</cursorShape>
              </property>
             </widget>
            </item>
@@ -233,6 +245,9 @@
                <width>0</width>
                <height>25</height>
               </size>
+             </property>
+             <property name="cursor">
+              <cursorShape>PointingHandCursor</cursorShape>
              </property>
             </widget>
            </item>
@@ -278,6 +293,9 @@
               <height>25</height>
              </size>
             </property>
+            <property name="cursor">
+             <cursorShape>PointingHandCursor</cursorShape>
+            </property>
             <property name="text">
              <string>Set Device</string>
             </property>
@@ -291,6 +309,9 @@
               <height>25</height>
              </size>
             </property>
+            <property name="cursor">
+             <cursorShape>PointingHandCursor</cursorShape>
+            </property>
             <property name="text">
              <string>Plot Graph</string>
             </property>
@@ -298,6 +319,9 @@
           </item>
           <item>
            <widget class="QPushButton" name="btn_dispList">
+            <property name="cursor">
+             <cursorShape>PointingHandCursor</cursorShape>
+            </property>
             <property name="text">
              <string>Display Table</string>
             </property>
@@ -359,11 +383,40 @@
            <item row="0" column="0">
             <widget class="QFrame" name="frameCalibSet">
              <layout class="QGridLayout" name="gridLayout_7" columnstretch="1,2,1,1,2">
+              <property name="topMargin">
+               <number>5</number>
+              </property>
+              <property name="bottomMargin">
+               <number>5</number>
+              </property>
+              <property name="verticalSpacing">
+               <number>2</number>
+              </property>
               <item row="2" column="4">
-               <widget class="QComboBox" name="CoBoxFilterType"/>
+               <widget class="QComboBox" name="CoBoxFilterType">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="cursor">
+                 <cursorShape>PointingHandCursor</cursorShape>
+                </property>
+               </widget>
               </item>
               <item row="2" column="1">
-               <widget class="QComboBox" name="CoBoxInputType"/>
+               <widget class="QComboBox" name="CoBoxInputType">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="cursor">
+                 <cursorShape>PointingHandCursor</cursorShape>
+                </property>
+               </widget>
               </item>
               <item row="0" column="3">
                <widget class="QLabel" name="SampeRate">
@@ -373,7 +426,17 @@
                </widget>
               </item>
               <item row="0" column="4">
-               <widget class="QComboBox" name="CoBoxSampeRate"/>
+               <widget class="QComboBox" name="CoBoxSampeRate">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="cursor">
+                 <cursorShape>PointingHandCursor</cursorShape>
+                </property>
+               </widget>
               </item>
               <item row="1" column="3">
                <widget class="QLabel" name="DataFormat">
@@ -383,10 +446,30 @@
                </widget>
               </item>
               <item row="1" column="4">
-               <widget class="QComboBox" name="CoBoxDataFormat"/>
+               <widget class="QComboBox" name="CoBoxDataFormat">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="cursor">
+                 <cursorShape>PointingHandCursor</cursorShape>
+                </property>
+               </widget>
               </item>
               <item row="1" column="1">
-               <widget class="QComboBox" name="CoBoxChannel"/>
+               <widget class="QComboBox" name="CoBoxChannel">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="cursor">
+                 <cursorShape>PointingHandCursor</cursorShape>
+                </property>
+               </widget>
               </item>
               <item row="2" column="3">
                <widget class="QLabel" name="FilterType">
@@ -433,6 +516,15 @@
               </property>
               <item>
                <widget class="QPushButton" name="btnSendParData">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="cursor">
+                 <cursorShape>PointingHandCursor</cursorShape>
+                </property>
                 <property name="text">
                  <string>SEND PAR</string>
                 </property>
@@ -440,6 +532,15 @@
               </item>
               <item>
                <widget class="QPushButton" name="btnSendCalData">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="cursor">
+                 <cursorShape>PointingHandCursor</cursorShape>
+                </property>
                 <property name="text">
                  <string>SEND CAL</string>
                 </property>
@@ -447,6 +548,15 @@
               </item>
               <item>
                <widget class="QPushButton" name="btnWriteParDataToFlash">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="cursor">
+                 <cursorShape>PointingHandCursor</cursorShape>
+                </property>
                 <property name="text">
                  <string>RECORD CH</string>
                 </property>
@@ -454,6 +564,15 @@
               </item>
               <item>
                <widget class="QPushButton" name="m_SetSerialPortButton">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="cursor">
+                 <cursorShape>PointingHandCursor</cursorShape>
+                </property>
                 <property name="text">
                  <string>SET PORT</string>
                 </property>
@@ -695,6 +814,9 @@ color: rgb(250, 250, 250);</string>
            </item>
            <item row="2" column="1">
             <widget class="QRadioButton" name="radioBtn_csv">
+             <property name="cursor">
+              <cursorShape>PointingHandCursor</cursorShape>
+             </property>
              <property name="text">
               <string>.csv</string>
              </property>
@@ -722,10 +844,27 @@ color: rgb(250, 250, 250);</string>
             </widget>
            </item>
            <item row="0" column="2">
-            <widget class="QLineEdit" name="channelName"/>
+            <widget class="QLineEdit" name="channelName">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+            </widget>
            </item>
            <item row="0" column="1">
-            <widget class="QComboBox" name="combo_channels"/>
+            <widget class="QComboBox" name="combo_channels">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="cursor">
+              <cursorShape>PointingHandCursor</cursorShape>
+             </property>
+            </widget>
            </item>
            <item row="3" column="0">
             <widget class="QLabel" name="label_24">
@@ -736,6 +875,15 @@ color: rgb(250, 250, 250);</string>
            </item>
            <item row="1" column="2">
             <widget class="QPushButton" name="btn_saveChn">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="cursor">
+              <cursorShape>PointingHandCursor</cursorShape>
+             </property>
              <property name="text">
               <string>Save</string>
              </property>
@@ -743,6 +891,9 @@ color: rgb(250, 250, 250);</string>
            </item>
            <item row="2" column="2">
             <widget class="QRadioButton" name="radioBtn_pdf">
+             <property name="cursor">
+              <cursorShape>PointingHandCursor</cursorShape>
+             </property>
              <property name="text">
               <string>.pdf</string>
              </property>
@@ -779,10 +930,26 @@ color: rgb(250, 250, 250);</string>
             </widget>
            </item>
            <item row="0" column="1">
-            <widget class="QLineEdit" name="password"/>
+            <widget class="QLineEdit" name="password">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+            </widget>
            </item>
            <item row="0" column="2">
             <widget class="QPushButton" name="btn_password">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="cursor">
+              <cursorShape>PointingHandCursor</cursorShape>
+             </property>
              <property name="text">
               <string>OK</string>
              </property>
@@ -790,6 +957,15 @@ color: rgb(250, 250, 250);</string>
            </item>
            <item row="1" column="1">
             <widget class="QPushButton" name="btn_newPassword">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="cursor">
+              <cursorShape>PointingHandCursor</cursorShape>
+             </property>
              <property name="text">
               <string>Change password</string>
              </property>
@@ -809,7 +985,7 @@ color: rgb(250, 250, 250);</string>
        </attribute>
        <layout class="QGridLayout" name="gridLayout_11" rowstretch="0,1,1,1" columnstretch="1,1">
         <item row="1" column="0">
-         <widget class="QWidget" name="widget_7" native="true">
+         <widget class="QWidget" name="wdgPort" native="true">
           <layout class="QGridLayout" name="gridLayout_12" columnstretch="1,1">
            <item row="0" column="0">
             <widget class="QLabel" name="lbl_COMport">
@@ -923,7 +1099,7 @@ color: rgb(250, 250, 250);</string>
          <widget class="QWidget" name="widget_8" native="true"/>
         </item>
         <item row="0" column="0">
-         <widget class="QFrame" name="frame">
+         <widget class="QFrame" name="framePortCombo">
           <property name="frameShape">
            <enum>QFrame::StyledPanel</enum>
           </property>
@@ -935,10 +1111,14 @@ color: rgb(250, 250, 250);</string>
             <number>9</number>
            </property>
            <item row="0" column="1">
-            <widget class="QComboBox" name="combo_portType"/>
+            <widget class="QComboBox" name="combo_portType">
+             <property name="cursor">
+              <cursorShape>PointingHandCursor</cursorShape>
+             </property>
+            </widget>
            </item>
            <item row="0" column="0">
-            <widget class="QLabel" name="label_34">
+            <widget class="QLabel" name="lbl_portType">
              <property name="text">
               <string>Port Type :</string>
              </property>
@@ -946,6 +1126,9 @@ color: rgb(250, 250, 250);</string>
            </item>
            <item row="0" column="2">
             <widget class="QPushButton" name="pushButton_11">
+             <property name="cursor">
+              <cursorShape>PointingHandCursor</cursorShape>
+             </property>
              <property name="text">
               <string>CONNECT</string>
              </property>

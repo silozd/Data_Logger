@@ -11,11 +11,11 @@ void DLCalMenu::setup_customPlot()
     AxisFont.setPointSize(Fontsize);
     legendFont.setPointSize(Fontsize);
     // main page :
-    QGridLayout *grid_mainPlot = new QGridLayout;
+    grid_wdgGraph = new QGridLayout;
     customPlot_main = new QCustomPlot(ui->wdgGraph);
-    ui->wdgGraph->setLayout(grid_mainPlot);
-    grid_mainPlot->setContentsMargins(0,0,0,0);
-    grid_mainPlot->addWidget(customPlot_main,0,0);
+    ui->wdgGraph->setLayout(grid_wdgGraph);
+    grid_wdgGraph->setContentsMargins(0,0,0,0);
+    grid_wdgGraph->addWidget(customPlot_main,0,0);
     customPlot_main->addGraph(0);
     customPlot_main->setGeometry(0,0,ui->wdgGraph->width(),ui->wdgGraph->height());
     customPlot_main->setContextMenuPolicy(Qt::CustomContextMenu);
@@ -73,28 +73,6 @@ void DLCalMenu::setup_customPlot()
     combo_diaMain       = new QComboBox;
     combo_diaMain       -> addItems(channels);
 
-}
-void DLCalMenu::on_btn_plotGraph_clicked()
-{
-    static int click = 1;
-    click++;
-    if(click%2 == 0){            // runs graph
-        plot_statu = 1;
-        dispList = 1;
-        connect(timer_main, SIGNAL(timeout()), this, SLOT(plot_graphMain()));
-        timer_main -> start();
-        ui->combo_axis1 -> setDisabled(true);
-        ui->combo_axis2 -> setDisabled(true);
-        ui->btn_plotGraph->setText("Pause");
-    }
-    else if(click%2 == 1){      // displays table widget
-        dispList = 0;
-        plot_statu = 0;
-        timer_main -> stop();
-        ui->combo_axis1 -> setDisabled(false);
-        ui->combo_axis2 -> setDisabled(false);
-        ui->btn_plotGraph->setText("Plot");
-    }
 }
 void DLCalMenu::plot_graphMain()
 {
