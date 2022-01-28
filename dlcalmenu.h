@@ -333,8 +333,6 @@ private slots:
     void DataFormat_Changed();
     void InputType_Warning(int);
     void Channel_itemChanged();
-    void SendCalDataToVTK();
-    void UpdateFlash();
     void open();
     void save();
     void saveAs();
@@ -344,11 +342,15 @@ public slots:
     int GetScreenHRes(int s);
     int GetScreenVRes(int s);
     void ScrollBarGain_valueChange(int value);
+    void SendCalParToVTK();
+    void SendCalDataToVTK();
+    void UpdateFlash();
+    void KeyTimerTimeOut();
     void timer_startStop();
     void resetTimer();
     void update_time();
     void ClearKey();
-    void KeyTimerTimeOut();
+
     void get_password();
 
     void setup_combobox();

@@ -391,11 +391,12 @@ void DLCalMenu::setup_GUI()
     connect(this->KeyTimer         , SIGNAL(timeout())        , this, SLOT(table_writeData()));
     connect(this->btn_startStop    , SIGNAL(clicked())        , this, SLOT(timer_startStop()));
     connect(this->ScrollBarGain    , SIGNAL(valueChanged(int)), this, SLOT(ScrollBarGain_valueChange(int)));
+    connect(ui->btnSendParData     , SIGNAL(clicked())        , this, SLOT(SendCalParToVTK()));
+    connect(ui->btnSendCalData     , SIGNAL(clicked())        , this, SLOT(SendCalDataToVTK()));
+    connect(ui->btnWriteParDataToFlash, SIGNAL(clicked())     , this, SLOT(UpdateFlash())); // btnWriteParData slot
     connect(ui->CoBoxInputType     , SIGNAL(activated(int))   , this, SLOT(InputType_Warning(int)));
     connect(ui->CoBoxDataFormat    , SIGNAL(activated(int))   , this, SLOT(DataFormat_Changed()));
     connect(ui->CoBoxChannel       , SIGNAL(currentIndexChanged(int)), this, SLOT(Channel_itemChanged()));
-    connect(ui->btnSendCalData     , SIGNAL(clicked())        , this, SLOT(SendCalDataToVTK()));
-    connect(ui->btnWriteParDataToFlash, SIGNAL(clicked())     , this, SLOT(UpdateFlash())); // btnWriteParData slot
     connect(ui->combo_axis1        , SIGNAL(currentIndexChanged(int)), this, SLOT(combo_axis1_indexChanged(int)));
     connect(ui->combo_axis2        , SIGNAL(currentIndexChanged(int)), this, SLOT(combo_axis2_indexChanged(int)));
     connect(ui->combo_portType     , SIGNAL(currentIndexChanged(int)), this, SLOT(combo_portType_indexChanged(int)));
@@ -686,6 +687,39 @@ void DLCalMenu::Channel_itemChanged()
     ui->btnWriteParDataToFlash  -> setDisabled(true);
     ui->btnWriteParDataToFlash  -> setStyleSheet("color: rgb(210,40,0); font-weight:bold; background-color: "
                                              "qlineargradient(spread:reflect, x1:0, y1:0.5, x2:0, y2:1, stop:0.618812 rgba(90, 90, 90, 255), stop:1 rgba(159, 159, 159, 255));");
+}
+void DLCalMenu::SendCalParToVTK()   //** new
+{
+    QMessageBox message;
+    message.setText("Calibration Data will be send to the VTK845!");
+    message.setIconPixmap(QPixmap(":/icon/okay.png"));
+    message.exec();
+    int chnno;
+    char caldevicechn,caldeviceaddr;
+    SendData = "SCAL P";
+    chnno = ui->CoBoxChannel-> currentIndex();
+    caldeviceaddr  = 48 + (chnno/4);
+    caldevicechn   = 48 + (chnno % 4);
+    DLCalMenu::SaveCalPartoArray(chnno);
+
+    //Send Channel Parameters such as ADCchannel, dp, input type, sample rate, filter type
+    SendData += caldevicechn;//ChnCalArray[chnno][0]; // ADC No = Channel No
+    SendData += caldeviceaddr;//"1";; // Select Slave Device 1
+    SendData += ChnCalArray[chnno][2]; /// Dp Loaction
+    if  (ChnCalArray[chnno][3].size() == 1)
+        SendData += "0";
+    SendData += ChnCalArray[chnno][3]; /// Input Type
+    SendData += ChnCalArray[chnno][4]; /// Sample Rate
+    SendData += ChnCalArray[chnno][5]; /// Filter Type
+    SendData += "0";                   /// Filter Parameter
+    SendData += ChnCalArray[chnno][6]; /// Optional Gain
+    SendData += " ";
+    SendData += "\r\n";
+    ComSendType = "CAL";
+    ui->btnSendParData -> setDisabled(true);
+    ui->btnSendParData -> setStyleSheet("background-color : none; color: rgb(210,120,120); ");
+    ui->btnSendCalData -> setEnabled(true);
+    ui->btnSendCalData -> setStyleSheet("background-color : none; color: rgb(220,0,0); ");
 }
 void DLCalMenu::SendCalDataToVTK()
 {
@@ -1693,6 +1727,4 @@ DLCalMenu::~DLCalMenu()
 {
     delete ui;
 }
-
-
 

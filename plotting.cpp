@@ -99,64 +99,91 @@ void DLCalMenu::on_btn_plotGraph_clicked()
 void DLCalMenu::plot_graphMain()
 {
     static QTime graph_time(QTime::currentTime());
-    double key = graph_time.elapsed()/1000.0;
-    timer_main->setInterval(100);
+    if(!externalSelected){
+        double key = graph_time.elapsed()/1000.0;
+        rec_time = ui->combo_recPeriod->currentText().toInt();
+        rec_time = rec_time/50;
+        timer_main->setInterval(rec_time);
 
-    //timeTicker->setTimeFormat("%h:%m:%s");
-    for (index_x = 0; index_x < MaxChnCounts; ++index_x) {
-        index_x = ui->combo_axis1->currentIndex();
-        if(index_x < MaxChnCounts){
-            displayData_X = realData[index_x] + realData_neg[index_x];
+        //timeTicker->setTimeFormat("%h:%m:%s");
+
+        for (index_x = 0; index_x < MaxChnCounts; ++index_x) {
+           index_x = ui->combo_axis1->currentIndex();
+
+           if(index_x < MaxChnCounts){
+               displayData_X = realData[index_x] + realData_neg[index_x];
+           }
+           else {
+               displayData_X = key;
+               customPlot_main->replot();
+           }
+           break;
+        }
+        for (index_y = 0; index_y < MaxChnCounts; ++index_y) {
+           index_y = ui->combo_axis2->currentIndex();
+           if(index_y < MaxChnCounts)
+               displayData_Y = realData[index_y] + realData_neg[index_y];
+           break;
+        }
+        if(ad_main>=1){
+           for(int index=0; index<ad_main; index++){
+               newDataY[index]=realData[new_index_Y[index]] + realData_neg[new_index_Y[index]];
+               customPlot_main->graph(index+1)->addData(displayData_X,newDataY[index]);
+               customPlot_main->graph(index+1)->rescaleValueAxis(true,true);
+               if(newDataY[index]<axisYLower && customPlot_main -> graph(index+1) -> visible()){
+                   axisYLower=newDataY[index];
+               }
+               if(newDataY[index]>axisYUpper && customPlot_main -> graph(index+1) -> visible()){
+                   axisYUpper=newDataY[index];
+               }
+           }
         }
         else {
-            displayData_X = key;  // disp time val
+           axisYLower=displayData_Y;
+           axisYUpper=displayData_Y;
         }
-        break;
+        customPlot_main -> graph(0)->addData(displayData_X,displayData_Y);
+        customPlot_main -> xAxis->setRange(displayData_X-25, displayData_X+25);
+        customPlot_main -> yAxis->setRange(axisYLower-25, axisYUpper+25);
+        //customPlot_main -> graph() -> setName(customPlot_main->xAxis->label()+" - "+customPlot_main->yAxis->label());
+        customPlot_main -> graph(0) -> setName(ui->combo_axis1->currentText()+" - "+ui->combo_axis2->currentText());
+        customPlot_main -> graph(0)->rescaleValueAxis(true,true);
+        customPlot_main -> replot();
     }
-    for (index_y = 0; index_y < MaxChnCounts; ++index_y) {
-        index_y = ui->combo_axis2->currentIndex();
-        if(index_y < MaxChnCounts)
-            displayData_Y = realData[index_y] + realData_neg[index_y];
-            break;
+    //External Device Plottin
+    if(plot==false){
+        customPlot_main->graph(0)->data().data()->clear();
     }
-    if(ad_main>=1){
-        for(int index=0; index<ad_main; index++){
-            newDataY[index]=realData[new_index_Y[index]] + realData_neg[new_index_Y[index]];
-            if(plot_statu != -1){
-                customPlot_main -> graph(index+1) -> addData(displayData_X, newDataY[index]);
-                customPlot_main -> graph(index+1) -> rescaleValueAxis(true, true);
-            }
-            /*else if(plot_statu = -1) {
-                customPlot_main -> graph(del-1) -> addData(displayData_X, newDataY[index]);
-               // customPlot_main -> graph() -> rescaleValueAxis(true, true);
-            }*/
-            if(newDataY[index]<axisYLower && customPlot_main -> graph(index+1) -> visible()){
-                axisYLower=newDataY[index];
-            }
-            if(newDataY[index]>axisYUpper && customPlot_main -> graph(index+1) -> visible()){
-                axisYUpper=newDataY[index];
-            }
-            /* if(del != del_ctr) {
-                qDebug() <<"del"<<del<<" != delctr"<<del_ctr;
-                customPlot_main->selectedGraphs();
-             }
-             if(del == del_ctr)
-                qDebug() <<"del"<<del<<" == delctr"<<del_ctr;
-             //qDebug() <<"ad_main"<<ad_main<<" ?= del-1 "<<del-1;*/
-        }
-    }
-    else {
-        axisYLower=displayData_Y;
-        axisYUpper=displayData_Y;
-    }
+    plot=true;
+    if(externalSelected && plot==true){
+        int ix;
+        int iy;
+        int value;
+        int timeArray[ItemsList[0].size()];
+        ui->combo_axis1->setDisabled(true);
+        ui->combo_axis2->setDisabled(true);
 
-    customPlot_main -> graph(0) -> addData(displayData_X      , displayData_Y);
-    customPlot_main -> xAxis    -> setRange(displayData_X-10  , displayData_X+10);
-    customPlot_main -> yAxis    -> setRange(axisYLower-10     , axisYUpper+10);
-//    customPlot_main -> graph() -> setName(customPlot_main->xAxis->label()+" - "+customPlot_main->yAxis->label());
-    customPlot_main -> graph(0) -> setName(ui->combo_axis1->currentText()+" - "+ui->combo_axis2->currentText());
-    customPlot_main -> graph(0) -> rescaleValueAxis(true,true);
-    customPlot_main -> replot();
+        ix = ui->combo_axis1->currentIndex();
+        iy = ui->combo_axis2->currentIndex();
+        for (int x=0; x<ItemsList[0].size(); x++){
+            timeArray[x]=x;
+        }
+        if(ix <= MaxChnCounts){
+           for(value=0; value<ItemsList[0].size(); value++){
+                if(ix!=MaxChnCounts){
+                    displayData_X = ItemsList[ix].at(value);
+                }
+                displayData_Y =ItemsList[iy].at(value);
+                if(ix == MaxChnCounts){
+                    displayData_X=timeArray[value];
+                }
+                customPlot_main -> graph(0)->addData(displayData_X,displayData_Y);
+           }
+            customPlot_main -> xAxis->setRange(displayData_X-25, displayData_X+25);
+            customPlot_main -> yAxis->setRange(displayData_Y-25, displayData_Y+25);
+        }
+        plot=false;
+    }
 }
 void DLCalMenu::addGraphDialog_Main()
 {
@@ -246,7 +273,7 @@ void DLCalMenu::hideGraphPlot()
         }
         customPlot_main->graph(foundIndex)->setVisible(false);
         customPlot_main->selectedGraphs().constFirst()->removeFromLegend();
-     // customPlot_main->removeGraph(customPlot_graph->selectedGraphs().first());
+     // customPlot_main->removeGraph(customPlot_main->selectedGraphs().first());
       customPlot_main->replot();
     }
 }
