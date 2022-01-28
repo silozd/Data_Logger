@@ -165,7 +165,7 @@ DLCalMenu::DLCalMenu(QWidget *parent) :
     ui->tabWidget->setCurrentIndex(0);
     tabBar = ui->tabWidget->tabBar();
     ui->tabWidget->setStyleSheet(QString("QTabBar::tab { width: %1px; height: %2px; font-size: %3pt}").arg(TabBarW).arg(TabBarH).arg(FontsizeTab)
-                                 + QString("QLabel{font-family: Times New Roman; font-size: %1pt;} QComboBox,QPushButton,QRadioButton,QPushButton{font-family: Arial; font-size: %1pt; }").arg(Fontsize));
+                   + QString("QLabel{font-family: Times New Roman; font-size: %1pt;} QComboBox,QPushButton,QRadioButton,QPushButton,QCheckbox,QSpinBox{font-family: Arial; font-size: %1pt; }").arg(Fontsize));
     tabBar   ->setStyle(new CustomTabStyle);
 
 // toolbar :
@@ -372,7 +372,7 @@ DLCalMenu::DLCalMenu(QWidget *parent) :
     CalGridLayout   ->  setHorizontalSpacing(SideMargin/SideMargin);
 
     password_correct = false;
-    DisplayCalPar(0);       // OPEN asap
+    DisplayCalPar(0);
     setup_GUI();
 }
 void DLCalMenu::setup_GUI()
@@ -1110,7 +1110,6 @@ int DLCalMenu::GetScreenVRes(int s){
 void DLCalMenu::mousePressEvent(QMouseEvent *event)
 {
     int i = 0;
-//    UserCalLabel[i]->setFont(Fontsize);       // open asap
     if(mouseevent){ //|| !openfile->isChecked()){
         //qDebug()<<"mouse event = enable";
         psw_widget = childAt(event->pos());

@@ -395,8 +395,11 @@ void DLCalMenu::on_btn_newPassword_clicked()
     btn_saveNewPswd =  new QPushButton("Apply");
     btn_cancelNewPswd   =  new QPushButton("Cancel");
     keyicon         =  new QLabel(wdg_dialogPsw);
-    connect(this->btn_saveNewPswd , SIGNAL(clicked()), this, SLOT(btn_saveNewPswd_onClicked()));
 
+    connect(this->btn_saveNewPswd , SIGNAL(clicked()), this, SLOT(btn_saveNewPswd_onClicked()));
+    dialog_newPswd  -> setStyleSheet(QString("QLineEdit,  QPushButton {font-family: Arial; font-size: %1pt; height: %2px}").arg(Fontsize).arg(RealLabelH));
+    btn_saveNewPswd -> setCursor(Qt::PointingHandCursor);
+    btn_cancelNewPswd -> setCursor(Qt::PointingHandCursor);
     oldPswd -> setMaxLength(4);
     oldPswd -> setValidator(validator);
     newPswd -> setValidator(validator);
