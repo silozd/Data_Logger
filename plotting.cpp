@@ -189,8 +189,6 @@ void DLCalMenu::addNewGraph()
     graphPen.setWidthF(rand()/(double)RAND_MAX*2+1);
 
     ad_main++;
-    plot_statu = 1;
-    timer_main      -> start();
     customPlot_main -> addGraph();
     customPlot_main -> graph() -> setPen(graphPen);
     customPlot_main -> graph() -> setName(customPlot_main->xAxis->label()+" - "+customPlot_main->yAxis->label());
