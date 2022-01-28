@@ -333,7 +333,7 @@ DLCalMenu::DLCalMenu(QWidget *parent) :
         UserCalLabel[i]     ->  setMaximumHeight(CalPointW);        // TODO
         ChnCalArray[0][8 + i] = QString::number((i)*200*10);
 
-        ChnRawData[i]       =   new QLabel(QString::number(00).arg(i+1));
+        ChnRawData[i]       =   new QLabel;
         ChnRawData[i]       ->  setText(QString::number((i+1)*2000));
         ChnRawData[i]       ->  setAlignment(Qt::AlignRight | Qt::AlignVCenter);
         ChnRawData[i]       ->  setFont(Font1);
