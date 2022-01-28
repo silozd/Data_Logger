@@ -194,7 +194,7 @@ DLCalMenu::DLCalMenu(QWidget *parent) :
     ui->toolBar -> addSeparator();
     quit = ui->toolBar-> addAction(QIcon(":/icon/quit.png"), "Quit Application");
     connect (quit, &QAction::triggered, qApp, &QApplication::quit);
-//    connect (exportfile, SIGNAL(triggered()), this, SLOT(exportCsv()));       // OPEN
+    connect (exportfile, SIGNAL(triggered()), this, SLOT(exportCsv()));
 
     KeyTimer        = new QTimer(this);
     timer_main      = new QTimer;
@@ -388,6 +388,7 @@ void DLCalMenu::setup_GUI()
 
     connect(this->KeyTimer         , SIGNAL(timeout())        , this, SLOT(update_time()));
     connect(this->KeyTimer         , SIGNAL(timeout())        , this, SLOT(KeyTimerTimeOut()));
+    connect(this->KeyTimer         , SIGNAL(timeout())        , this, SLOT(table_writeData()));
     connect(this->btn_startStop    , SIGNAL(clicked())        , this, SLOT(timer_startStop()));
     connect(this->ScrollBarGain    , SIGNAL(valueChanged(int)), this, SLOT(ScrollBarGain_valueChange(int)));
     connect(ui->CoBoxInputType     , SIGNAL(activated(int))   , this, SLOT(InputType_Warning(int)));
@@ -401,7 +402,15 @@ void DLCalMenu::setup_GUI()
     connect(ui->CoBoxSampeRate     , SIGNAL(currentIndexChanged(int)), this, SLOT(combo_sampeRate_indexChanged(int)));
     connect(ui->CoBoxFilterType    , SIGNAL(currentIndexChanged(int)), this, SLOT(combo_filterType_indexChanged(int)));
     connect(ui->CoBoxInputType     , SIGNAL(currentIndexChanged(int)), this, SLOT(combo_inputType_indexChanged(int)));
+    connect(ui->combo_rawreal      , SIGNAL(currentIndexChanged(int)), this, SLOT(combo_rawreal_indexChanged(int)));
     connect(this->combo_diaMain    , SIGNAL(currentIndexChanged(int)), this, SLOT(combo_diaCh_indexChanged(int)));
+
+    tview_real  = new QTableView;
+    tview_raw   = new QTableView;
+    tview_file  = new QTableView;                 //Added External Read
+    csvModel_real = new QStandardItemModel;
+    csvModel_raw  = new QStandardItemModel;
+    csvModel_realnew = new QStandardItemModel;    //Added External Read
 
     ui->password    -> setEchoMode(QLineEdit::Password);
     ui->password    -> setPlaceholderText("Type password");
@@ -412,9 +421,10 @@ void DLCalMenu::setup_GUI()
     Gain            -> hide();
     btn_startStop   -> hide();
     ui->wdgGraph    -> show();
-//    tview_real              -> hide();
-//    tview_raw               -> hide();
-//    tview_file              -> hide();
+    tview_real  -> hide();
+    tview_raw   -> hide();
+    tview_file  -> hide();
+    customPlot_main->show();
     exportfile -> setDisabled(true);
     ui->btnSendCalData      -> setDisabled(true);
     ui->btnWriteParDataToFlash  -> setDisabled(true);
@@ -1683,4 +1693,6 @@ DLCalMenu::~DLCalMenu()
 {
     delete ui;
 }
+
+
 

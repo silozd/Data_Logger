@@ -32,7 +32,8 @@ SOURCES += \
     qcustomplot.cpp \
     plotting.cpp \
     process.cpp \
-    stopwatch.cpp
+    stopwatch.cpp \
+    export.cpp
 
 HEADERS += \
         dlcalmenu.h \

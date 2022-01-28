@@ -303,19 +303,17 @@ void DLCalMenu::combo_channels_indexChanged(int index)
 void DLCalMenu::combo_rawreal_indexChanged(int index)       // Data type selection combo
 {
     index = ui->combo_rawreal->currentIndex();
-    if(ui->btn_dispList){
-        switch (index) {
-        case 0:
-            tview_real -> show();
-            tview_raw  -> hide();
-            tview_file  ->hide();
-            break;
-        case 1:
-            tview_raw  -> show();
-            tview_real -> hide();
-            tview_file -> hide();
-            break;
-        }
+    switch (index) {
+    case 0:
+        tview_real -> show();
+        tview_raw  -> hide();
+        tview_file  ->hide();
+        break;
+    case 1:
+        tview_raw  -> show();
+        tview_real -> hide();
+        tview_file -> hide();
+        break;
     }
 }
 void DLCalMenu::combo_device_indexChanged(int index)        // Setting device combo
@@ -329,11 +327,11 @@ void DLCalMenu::combo_device_indexChanged(int index)        // Setting device co
         break;
     case 1 : {
         QString fileName;
+        externalFile = new QFile(fileName);
         QString filters("CSV files (*.csv);; All files (*.*)");
         QString defaultFilter("CSV files (*.csv)");
         fileName = QFileDialog::getOpenFileName(this, tr("Choose external tool"),QCoreApplication::applicationDirPath(),
                                                 filters, &defaultFilter);
-        QFile *externalFile = new QFile(fileName);
         dateEdit_1->setDisabled(false);
         dateEdit_2->setDisabled(false);
         timeEdit_1->setDisabled(false);
@@ -344,6 +342,57 @@ void DLCalMenu::combo_device_indexChanged(int index)        // Setting device co
         dateEdit_2->setDisabled(false);
         timeEdit_1->setDisabled(false);
         timeEdit_2->setDisabled(false);
+        break;
+    }
+}
+void DLCalMenu::on_btn_dispList_clicked()
+{
+    static int click = 1;       // TODO asap
+    click++;
+    switch (click%2) {
+    case 0: {
+        QGridLayout *grid_list  = new QGridLayout;
+        tview_file  -> setParent(ui->wdgGraph);
+        tview_real  -> setParent(ui->wdgGraph);
+        tview_raw   -> setParent(ui->wdgGraph);
+        ui->wdgGraph-> setLayout(grid_list);
+        grid_list   -> setContentsMargins(0,0,0,0);
+        grid_list   -> addWidget(tview_real,0,0);
+        grid_list   -> addWidget(tview_raw,0,0);
+        grid_list   -> addWidget(tview_file,0,0);
+        tview_file  -> setGeometry(0,0,ui->wdgGraph->width(),ui->wdgGraph->height());
+        tview_raw   -> setGeometry(0,0,ui->wdgGraph->width(),ui->wdgGraph->height());
+        tview_real  -> setGeometry(0,0,ui->wdgGraph->width(),ui->wdgGraph->height());
+        customPlot_main  -> hide();
+        ui->combo_rawreal -> setEnabled(true);
+        exportfile       -> setEnabled(true);
+        ui->btn_dispList -> setText("Display Graph");
+        if(deviceSelected){
+            if (ui->combo_rawreal->currentIndex() == 0){
+                tview_real -> show();
+                tview_raw  -> hide();
+                tview_file -> hide();
+                customPlot_main -> hide();
+            }
+            else if (ui->combo_rawreal->currentIndex() == 1){
+                tview_raw  -> show();
+                tview_real -> hide();
+                tview_file -> hide();
+            }
+        }
+        if(externalSelected){
+            ui->combo_rawreal -> setEnabled(false);
+             tview_file ->show();
+        }
+    }
+        break;
+    case 1:
+        ui->btn_dispList -> setText("Display Table");
+        tview_real      -> hide();
+        tview_raw       -> hide();
+        tview_file      -> hide();
+        customPlot_main -> show();
+        ui->combo_rawreal -> setEnabled(false);
         break;
     }
 }
@@ -393,7 +442,7 @@ void DLCalMenu::on_btn_newPassword_clicked()
     keyicon         =  new QLabel(wdg_dialogPsw);
 
     connect(this->btn_saveNewPswd , SIGNAL(clicked()), this, SLOT(btn_saveNewPswd_onClicked()));
-    connect(this->btn_cancelNewPswd , SIGNAL(clicked()), this, SLOT(dialog_close()));
+    connect(this->btn_cancelNewPswd , SIGNAL(clicked()), this, SLOT(btn_cancelPswd_onClicked()));
     dialog_newPswd  -> setStyleSheet(QString("QLineEdit,  QPushButton {font-family: Arial; font-size: %1pt; height: %2px}").arg(Fontsize).arg(RealLabelH));
     btn_saveNewPswd -> setCursor(Qt::PointingHandCursor);
     btn_cancelNewPswd -> setCursor(Qt::PointingHandCursor);
@@ -454,6 +503,12 @@ void DLCalMenu::btn_saveNewPswd_onClicked()
     oldPswd -> clear();
     newPswd -> clear();
 }
+void DLCalMenu::btn_cancelPswd_onClicked()
+{
+    oldPswd         -> clear();
+    newPswd         -> clear();
+    dialog_newPswd  -> close();
+}
 void DLCalMenu::on_btn_saveChn_clicked()
 {
     int k = ui->combo_channels -> currentIndex();
@@ -483,7 +538,7 @@ void DLCalMenu::on_btn_graphDialog_clicked()    // 'Set Device' button
     timeEdit_2   = new QTimeEdit;
     connect(combo_device, SIGNAL(currentIndexChanged(int)), this, SLOT(combo_device_indexChanged(int)));
     connect(btn_okDialog, SIGNAL(clicked()) , this, SLOT(btn_okDialog_onClicked()));
-    connect(btn_cancelDialog, SIGNAL(clicked()) , this, SLOT(dialog_close()));
+    connect(btn_cancelDialog, SIGNAL(clicked()) , this, SLOT(btn_cancelDialog_onClicked()));
     dialog_setDevice->setStyleSheet(QString("QPushButton, QComboBox, QLabel, QTimeEdit, QDateEdit {font-size: %1pt}").arg(Fontsize));
     combo_device-> addItem("Current device",0);
     combo_device-> addItem("External",1);
@@ -535,7 +590,10 @@ void DLCalMenu::btn_okDialog_onClicked()            // Setting device approval
     qDebug()<<plot_statu;
     dialog_setDevice -> close();
 }
-
+void DLCalMenu::btn_cancelDialog_onClicked()        // Setting device approval
+{
+    dialog_setDevice -> close();
+}
 void DLCalMenu::btn_addAlert_onClicked()
 {
     //qDebug()<<"Added alarm";
@@ -564,7 +622,6 @@ void DLCalMenu::btn_addAlert_onClicked()
 void DLCalMenu::btn_setAlert_onClicked()
 {
     qDebug()<<"Alarm set at %1 : Channel %1";
-
     // messageBox oluştur
 }
 void DLCalMenu::btn_removeAlert_onClicked()

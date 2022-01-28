@@ -299,6 +299,7 @@ public :
     bool plot;
 
     // table :
+    QFile *externalFile;
     QTableView *tview_real;
     QTableView *tview_raw;
     QTableView *tview_file;
@@ -340,8 +341,6 @@ private slots:
     void saveAs();
     void opening_val();
 
-
-
 public slots:
     int GetScreenHRes(int s);
     int GetScreenVRes(int s);
@@ -370,11 +369,14 @@ public slots:
     void combo_rawreal_indexChanged(int index);
     void combo_device_indexChanged(int index);
     void on_btn_password_clicked();
-    void btn_saveNewPswd_onClicked();
     void on_btn_saveChn_clicked();
+    void btn_saveNewPswd_onClicked();
+    void btn_cancelPswd_onClicked();
     void btn_okDialog_onClicked();
+    void btn_cancelDialog_onClicked();
     void btn_diaGrapOK_onClicked();
     void btn_diaGrapCancel_onClicked();
+    void on_btn_dispList_clicked();
 
     // alarm :
     void alarm_initialize();
@@ -402,6 +404,12 @@ public slots:
     void graphClicked(QCPAbstractPlottable *plottable, int dataIndex);
     void axisLabelDoubleClick(QCPAxis *axis, QCPAxis::SelectablePart part);
     void legendDoubleClick(QCPLegend *legend, QCPAbstractLegendItem *item);
+
+    // export file:
+    void table_writeData();
+    void table_readData();
+    void exportCsv();
+
 };
 
 #endif // DLCALMENU_H
