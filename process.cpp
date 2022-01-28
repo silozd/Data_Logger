@@ -382,6 +382,7 @@ void DLCalMenu::on_btn_password_clicked()
 }
 void DLCalMenu::on_btn_newPassword_clicked()
 {
+    current_dialog  = DIA_PSW;
     QGridLayout *grid_dialogPsw = new QGridLayout;
     dialog_newPswd  =  new QDialog;
     wdg_dialogPsw   =  new QWidget;
@@ -392,6 +393,7 @@ void DLCalMenu::on_btn_newPassword_clicked()
     keyicon         =  new QLabel(wdg_dialogPsw);
 
     connect(this->btn_saveNewPswd , SIGNAL(clicked()), this, SLOT(btn_saveNewPswd_onClicked()));
+    connect(this->btn_cancelNewPswd , SIGNAL(clicked()), this, SLOT(dialog_close()));
     dialog_newPswd  -> setStyleSheet(QString("QLineEdit,  QPushButton {font-family: Arial; font-size: %1pt; height: %2px}").arg(Fontsize).arg(RealLabelH));
     btn_saveNewPswd -> setCursor(Qt::PointingHandCursor);
     btn_cancelNewPswd -> setCursor(Qt::PointingHandCursor);
@@ -452,28 +454,20 @@ void DLCalMenu::btn_saveNewPswd_onClicked()
     oldPswd -> clear();
     newPswd -> clear();
 }
-void DLCalMenu::on_btn_plotGraph_clicked()
+void DLCalMenu::on_btn_saveChn_clicked()
 {
-    static int click = 1;
-    click++;
-    if(click%2 == 0){
-        connect(timer_main, SIGNAL(timeout()), this, SLOT(plot_graphMain()));
-        timer_main -> start();
-        plot_statu =  1;
-        ui->combo_axis1 -> setDisabled(true);
-        ui->combo_axis2 -> setDisabled(true);
-        ui->btn_plotGraph->setText("Pause");
-    }
-    else if(click%2 == 1){
-        plot_statu = 0;
-        timer_main -> stop();
-        ui->combo_axis1 -> setDisabled(false);
-        ui->combo_axis2 -> setDisabled(false);
-        ui->btn_plotGraph->setText("Plot");
-    }
+    int k = ui->combo_channels -> currentIndex();
+    ui->combo_channels  -> setItemText(k   ,ui->channelName->text() + QString(" - Ch %1").arg(k+1));   //
+    ui->combo_axis1     -> setItemText(k   ,ui->channelName->text() + QString(" - Ch %1").arg(k+1));   //      // since 1st index is 'time'
+    ui->combo_axis2     -> setItemText(k   ,ui->channelName->text() + QString(" - Ch %1").arg(k+1));   //
+    ui->CoBoxChannel    -> setItemText(k   ,ui->channelName->text() + QString(" - Ch %1").arg(k+1));   //
+    combo_diaMain       -> setItemText(k   ,ui->channelName->text() + QString(" - Ch %1").arg(k+1));   //
+    for(int i=0; i<AlarmCount; i++)
+        comboBox_alarm[i] -> setItemText(k   ,ui->channelName->text() + QString(" - Ch %1").arg(k+1));   //
 }
 void DLCalMenu::on_btn_graphDialog_clicked()    // 'Set Device' button
 {
+    current_dialog   = DIA_DEVICE;
     QGridLayout *grid_dialogGraph = new QGridLayout;
     dialog_setDevice = new QDialog;
     wdg_dialogSetDev = new QWidget;
@@ -488,6 +482,8 @@ void DLCalMenu::on_btn_graphDialog_clicked()    // 'Set Device' button
     timeEdit_1   = new QTimeEdit;
     timeEdit_2   = new QTimeEdit;
     connect(combo_device, SIGNAL(currentIndexChanged(int)), this, SLOT(combo_device_indexChanged(int)));
+    connect(btn_okDialog, SIGNAL(clicked()) , this, SLOT(btn_okDialog_onClicked()));
+    connect(btn_cancelDialog, SIGNAL(clicked()) , this, SLOT(dialog_close()));
     dialog_setDevice->setStyleSheet(QString("QPushButton, QComboBox, QLabel, QTimeEdit, QDateEdit {font-size: %1pt}").arg(Fontsize));
     combo_device-> addItem("Current device",0);
     combo_device-> addItem("External",1);
@@ -515,6 +511,31 @@ void DLCalMenu::on_btn_graphDialog_clicked()    // 'Set Device' button
     dialog_setDevice -> resize(DialogW,DialogH);
     dialog_setDevice -> exec();
 }
+void DLCalMenu::btn_okDialog_onClicked()            // Setting device approval
+{
+    int index = combo_device -> currentIndex();
+    switch (index) {
+    case 0:
+        dispList = 1;
+        deviceSelected    = true;
+        externalSelected  = false;
+        ui->combo_rawreal -> setEnabled(true);
+        break;
+    case 1:
+        timer_main -> stop();
+        plot_statu = 0;
+        dispList = 1;
+        externalSelected  = true;
+        ui->combo_rawreal -> setDisabled(true);
+        customPlot_main -> graph(0)->data().data()->clear();
+        //table_readData();     // OPEN
+        removeAllPlot();
+        break;
+    }
+    qDebug()<<plot_statu;
+    dialog_setDevice -> close();
+}
+
 void DLCalMenu::btn_addAlert_onClicked()
 {
     //qDebug()<<"Added alarm";

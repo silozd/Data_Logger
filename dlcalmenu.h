@@ -42,6 +42,10 @@ typedef unsigned char u8;
 #define SCR_PORTSET         3
 #define SCR_ALERTS          4
 
+#define DIA_DEVICE          0
+#define DIA_GRAPH           1
+#define DIA_PSW             2
+
 namespace Ui {
 class DLCalMenu;
 }
@@ -66,6 +70,7 @@ public:
     ///int PreFilterType = 0;
     ///
     u8 current_page;                            // to assign index for each tab
+    u8 current_dialog;
 
 private:
     Ui::DLCalMenu *ui;
@@ -125,6 +130,7 @@ public :
     bool mouseevent;
     bool password_correct;
     bool plot_run;
+    int dispList = 0;
 
     // layout :
     int hr;
@@ -143,6 +149,7 @@ public :
     int MainScrollW;
     int TabBarH;
     int TabBarW;
+    int TabAlarmW;
     int AppW;
     int AppH;
     int DialogH;
@@ -334,6 +341,7 @@ private slots:
     void opening_val();
 
 
+
 public slots:
     int GetScreenHRes(int s);
     int GetScreenVRes(int s);
@@ -363,6 +371,10 @@ public slots:
     void combo_device_indexChanged(int index);
     void on_btn_password_clicked();
     void btn_saveNewPswd_onClicked();
+    void on_btn_saveChn_clicked();
+    void btn_okDialog_onClicked();
+    void btn_diaGrapOK_onClicked();
+    void btn_diaGrapCancel_onClicked();
 
     // alarm :
     void alarm_initialize();

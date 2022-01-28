@@ -72,8 +72,30 @@ void DLCalMenu::setup_customPlot()
     }
     combo_diaMain       = new QComboBox;
     combo_diaMain       -> addItems(channels);
-}
 
+}
+void DLCalMenu::on_btn_plotGraph_clicked()
+{
+    static int click = 1;
+    click++;
+    if(click%2 == 0){            // runs graph
+        plot_statu = 1;
+        dispList = 1;
+        connect(timer_main, SIGNAL(timeout()), this, SLOT(plot_graphMain()));
+        timer_main -> start();
+        ui->combo_axis1 -> setDisabled(true);
+        ui->combo_axis2 -> setDisabled(true);
+        ui->btn_plotGraph->setText("Pause");
+    }
+    else if(click%2 == 1){      // displays table widget
+        dispList = 0;
+        plot_statu = 0;
+        timer_main -> stop();
+        ui->combo_axis1 -> setDisabled(false);
+        ui->combo_axis2 -> setDisabled(false);
+        ui->btn_plotGraph->setText("Plot");
+    }
+}
 void DLCalMenu::plot_graphMain()
 {
     static QTime graph_time(QTime::currentTime());
@@ -138,23 +160,27 @@ void DLCalMenu::plot_graphMain()
 }
 void DLCalMenu::addGraphDialog_Main()
 {
+    current_dialog     = DIA_GRAPH;
     grid_dialogAddMain = new QGridLayout;
     dialog_addToMain   = new QDialog;
     wdg_dialogAddMain  = new QWidget;
     btn_diaOKMain      = new QPushButton("Apply");
     btn_diaCancelMain  = new QPushButton("Cancel");
     lbl_diaAxisMain    = new QLabel("Axis Y : ");
-    dialog_addToMain   -> setLayout(grid_dialogAddMain);
-    dialog_addToMain   -> setStyleSheet(QString("QComboBox,QPushButton,QLabel{font-size: %1pt; height: %2px}").arg(Fontsize).arg(RealLCDH));    lbl_diaAxisMain   -> setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
-    combo_diaMain      -> setStyleSheet("color: red");
-    grid_dialogAddMain -> addWidget(lbl_diaAxisMain,0,0);
-    grid_dialogAddMain -> addWidget(combo_diaMain,0,1);  //main
-    grid_dialogAddMain -> addWidget(btn_diaCancelMain,1,0);
-    grid_dialogAddMain -> addWidget(btn_diaOKMain,1,1);
-    wdg_dialogAddMain  -> setParent(dialog_addToMain);
-    dialog_addToMain   -> setWindowTitle("Add Graph");
-    dialog_addToMain   -> resize(DialogW,DialogH);
-    dialog_addToMain   -> exec();
+    grid_dialogAddMain-> addWidget(lbl_diaAxisMain,0,0);
+    grid_dialogAddMain-> addWidget(combo_diaMain,0,1);  //main
+    grid_dialogAddMain-> addWidget(btn_diaCancelMain,1,0);
+    grid_dialogAddMain-> addWidget(btn_diaOKMain,1,1);
+    wdg_dialogAddMain -> setParent(dialog_addToMain);
+    dialog_addToMain  -> setLayout(grid_dialogAddMain);
+    connect(btn_diaOKMain, SIGNAL(clicked()),this,SLOT(btn_diaGrapOK_onClicked()));
+    connect(btn_diaCancelMain, SIGNAL(clicked()),this,SLOT(btn_diaGrapCancel_onClicked()));
+    lbl_diaAxisMain   -> setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+    combo_diaMain     -> setStyleSheet("color: red");
+    dialog_addToMain  -> setWindowTitle("Add Graph");
+    dialog_addToMain  -> setStyleSheet(QString("QComboBox,QPushButton,QLabel{font-size: %1pt; height: %2px}").arg(Fontsize).arg(RealLabelH));
+    dialog_addToMain  -> resize(DialogW,DialogH);
+    dialog_addToMain  -> exec();
 }
 void DLCalMenu::addNewGraph()
 {
@@ -169,8 +195,20 @@ void DLCalMenu::addNewGraph()
     customPlot_main -> graph() -> setPen(graphPen);
     customPlot_main -> graph() -> setName(customPlot_main->xAxis->label()+" - "+customPlot_main->yAxis->label());
     new_index_Y[ad_main-1] = combo_diaMain->currentIndex();     //gets graph channel index
-    ui->btn_plotGraph   -> setDisabled(true);
-    ui->btn_plotGraph   -> hide();
+}
+void DLCalMenu::btn_diaGrapOK_onClicked()           // Additonal graph approval
+{
+    customPlot_main->yAxis->setLabel(combo_diaMain->currentText());
+    customPlot_main->replot(); // del*
+    ui->combo_axis1->setDisabled(true);
+    ui->combo_axis2->setDisabled(true);
+    ui->btn_plotGraph;
+    addNewGraph();
+    dialog_addToMain  -> close();
+}
+void DLCalMenu::btn_diaGrapCancel_onClicked()       // Additonal graph approval
+{
+    dialog_addToMain  -> close();
 }
 void DLCalMenu::removePlot()
 {

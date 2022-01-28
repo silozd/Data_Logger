@@ -63,7 +63,7 @@ DLCalMenu::DLCalMenu(QWidget *parent) :
     }
     else if (ScreenWidth >= 1920){
         Fontsize = 13;
-        FontsizeTab = 14;
+        FontsizeTab = 13;
         Font1.setPointSize(Fontsize);
         SideMargin = hr*10/pr;
         RealLabelH = vr*30/pr;
@@ -78,15 +78,16 @@ DLCalMenu::DLCalMenu(QWidget *parent) :
         MainScrollW = RealLabelW;
         TabBarH = hr*135/pr;
         TabBarW = hr*100/pr;
+        TabAlarmW = hr*240/pr;
         qDebug()<<"Screen Width > 1920 :?"<<ScreenWidth;
     }
-    else if  (ScreenWidth >= 3220){
+    else if  (ScreenWidth >= 2840){
         pr = pr/2;
         Fontsize =17;
-        FontsizeTab = 19;
+        FontsizeTab = 18;
         Font1.setPointSize(Fontsize);
         SideMargin = hr*10/pr;
-        RealLabelH = vr*20/pr;
+        RealLabelH = vr*17/pr;
         RealLabelW = hr*75/pr;
         RealLCDH = vr*30/pr;
         RawLabelW= hr*120/pr;
@@ -94,7 +95,7 @@ DLCalMenu::DLCalMenu(QWidget *parent) :
         CalPointH = vr*20/pr;
         CalPointW = vr*60/pr;
         ToolH = vr*40/pr;
-        CalibScrollH = RawLCDH*2+RealLabelH*2+SideMargin*2;
+        CalibScrollH = RawLCDH*2+RealLabelH*2+SideMargin;
         MainScrollW = RealLabelW;
         TabBarH = hr*90/pr;
         TabBarW = hr*60/pr;
@@ -123,6 +124,8 @@ DLCalMenu::DLCalMenu(QWidget *parent) :
     }
     else if  (ScreenWidth <= 960){        //dlcalmenu org
         pr = 1500;
+        hr = 840;
+        vr = 846;
         Fontsize = 10;
         FontsizeTab = 9;
         Font1.setPointSize(Fontsize);
@@ -165,7 +168,7 @@ DLCalMenu::DLCalMenu(QWidget *parent) :
     ui->tabWidget->setCurrentIndex(0);
     tabBar = ui->tabWidget->tabBar();
     ui->tabWidget->setStyleSheet(QString("QTabBar::tab { width: %1px; height: %2px; font-size: %3pt}").arg(TabBarW).arg(TabBarH).arg(FontsizeTab)
-                   + QString("QLabel{font-family: Times New Roman; font-size: %1pt;} QComboBox,QPushButton,QRadioButton,QPushButton,QCheckbox,QSpinBox{font-family: Arial; font-size: %1pt; }").arg(Fontsize));
+                   + QString("QLabel{font-family: Times New Roman; font-size: %1pt;} QCheckbox,QComboBox,QLineEdit,QPushButton,QRadioButton,QSpinBox{font-family: Arial; font-size: %1pt; }").arg(Fontsize));
     tabBar   ->setStyle(new CustomTabStyle);
 
 // toolbar :
@@ -1618,7 +1621,7 @@ void DLCalMenu::alarm_initialize()
     QTabBar *tabBar2;
     tabBar2 =  ui->tabWidget_alarm -> tabBar();
     tabBar2 -> setStyleSheet(QString("QTabBar {background-color: none;}"
-                                     "QTabBar::tab { height: %1px; width: 150px; }").arg(RealLCDH));
+                                     "QTabBar::tab { height: %1px; width: %2px; }").arg(RealLCDH).arg(TabAlarmW));
     grid_alert = new QGridLayout;
     wdgAlert   = new QWidget;
 
