@@ -28,7 +28,7 @@
 
 DLCalMenu::DLCalMenu(QWidget *parent) :
     QMainWindow(parent),
-    m_serial(new QSerialPort(this)),
+    m_serial(new QSerialPort),
     watch   (new stopwatch()),
     wdgReals(new QWidget),
     dataBox (new QWidget),
@@ -41,7 +41,7 @@ DLCalMenu::DLCalMenu(QWidget *parent) :
     pr = 1000;
     QFont Font1 ("Arial", Fontsize, QFont::Normal);
 
-    if (ScreenWidth <= 1920){
+    if (ScreenWidth < 1920){       // opens properly
         pr = 1000;
         Fontsize = 12;
         FontsizeTab = 13;
@@ -51,7 +51,7 @@ DLCalMenu::DLCalMenu(QWidget *parent) :
         RealLabelW = hr*100/pr;
         RealLCDH = vr*40/pr;
         RawLabelW= hr*157/pr;
-        RawLCDH  = vr*20/pr;
+        RawLCDH  = vr*20/pr;    // increase
         CalPointH = vr*35/pr;
         CalPointW = vr*55/pr;
         ToolH = vr*55/pr;
@@ -61,26 +61,26 @@ DLCalMenu::DLCalMenu(QWidget *parent) :
         TabBarW = hr*85/pr;
         qDebug()<<"Screen Width <= 1920 :?"<<ScreenWidth;
     }
-    else if (ScreenWidth > 1920){
+    else if (ScreenWidth >= 1920){
         Fontsize = 13;
         FontsizeTab = 14;
         Font1.setPointSize(Fontsize);
         SideMargin = hr*10/pr;
         RealLabelH = vr*30/pr;
         RealLabelW = hr*180/pr;
-        RealLCDH = vr*50/pr;
+        RealLCDH = vr*40/pr;
         RawLabelW= hr*180/pr;
-        RawLCDH  = vr*10/pr;
+        RawLCDH  = vr*30/pr;
         CalPointH = vr*38/pr;
         CalPointW = vr*86/pr;
         ToolH = vr*60/pr;
-        CalibScrollH = RealLCDH*2+RealLabelH*2; // BURDA
+        CalibScrollH = RealLCDH*2+RealLabelH*2+SideMargin/2;
         MainScrollW = RealLabelW;
         TabBarH = hr*135/pr;
         TabBarW = hr*100/pr;
         qDebug()<<"Screen Width > 1920 :?"<<ScreenWidth;
     }
-    else if  (ScreenWidth >= 2040){
+    else if  (ScreenWidth >= 3220){
         pr = pr/2;
         Fontsize =17;
         FontsizeTab = 19;
@@ -514,12 +514,12 @@ void DLCalMenu::update_time()
 {
     if(watch->isRunning()){
         qint64 time = watch->getTime();
-        int d ;//= time / 1000 / 60;                         // day      //TODO
+        //int d ;//= time / 1000 / 60;                         // day      //TODO
         int h = time / 1000 / 60 / 60;                       // hour
         int m = (time / 1000 / 60) - (h * 60);               // min
         int s = (time / 1000) - (m * 60);                    // sec
         int ms = time - ( s + ( m + ( h * 60)) * 60) * 1000; // for miliseconds
-        int ms_dis = ms / 10;
+        //int ms_dis = ms / 10;
         /* if(d < 10) {
              daysText->setText(QString("0%1").arg(d));
          }
@@ -856,8 +856,8 @@ void DLCalMenu::saveAs()
 }
 void DLCalMenu::opening_val()   // to run app with saved data
 {
-    mouseevent = false;   // will be used
-    //mouseevent = true;      // will be removed
+    //mouseevent = false;   // will be used TODO
+    mouseevent = true;      // will be removed  TODO
 
     QString fileName = "/home/sila/Desktop/DL_grid/UserCalFile/AllChnCal.abk";  // baslangicta acilan dosya path'i yazilacak TODO
     setWindowTitle(fileName);
@@ -1071,11 +1071,11 @@ void DLCalMenu::ScrollBarGain_valueChange(int value)
 {
     LblScrollBarGain->setText(QString::number(value));
     int LabelScrollW= 40;///fixed
-    int LabelScrollObjH =40;///fixed
-    int y = 490;
+    //int LabelScrollObjH =40;///fixed
+    //int y = 490;
     int CalScrollBarW = 400;
     int lblscrolx = CalScrollBarW-68; ///toplam width - "<" + ">" cÄ±kar kayma uzunluÄŸu
-    int x = 254 +((lblscrolx-LabelScrollW)*value/7); ///254 lbl baslama noktasÄ± + (toplamdan kalan deger (lblscrolx) - lbl width (LabelScrollW) ) *7 x=scrol uzerinde mesafe artis sayisi(tikladica gidilen mesafe)
+    //int x = 254 +((lblscrolx-LabelScrollW)*value/7); ///254 lbl baslama noktasÄ± + (toplamdan kalan deger (lblscrolx) - lbl width (LabelScrollW) ) *7 x=scrol uzerinde mesafe artis sayisi(tikladica gidilen mesafe)
     ///LblScrollBarGain->setGeometry(x,y,LabelScrollW,LabelScrollObjH);
     ///scrolbar width ne kadar olursa hesaplayip lblscrolx artma ve azalma noktasina otomatik donuyor
 }

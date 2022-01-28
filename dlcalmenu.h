@@ -92,7 +92,7 @@ public :
     QVector<QLCDNumber*> ChnLCDReal;
     QVector<QLCDNumber*> ChnLCDReal_Main;       // main page lcd real values
 
-    QSerialPort *m_serial = nullptr;
+    QSerialPort *m_serial;
 
     char port_index;
     int  forsh   = 1;

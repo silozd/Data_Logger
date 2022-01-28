@@ -39,7 +39,7 @@ void DLCalMenu::get_password()
     file.open(QIODevice::ReadOnly|QIODevice::Text);
     str = in.readLine();
     file.close();
-    qDebug()<<"SIFRE :"<<str;
+    qDebug()<<"SIFRE"<<str;
 }
 //
 void DLCalMenu::on_tabWidget_currentChanged(int index)
