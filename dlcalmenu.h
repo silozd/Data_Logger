@@ -299,7 +299,6 @@ public :
     bool plot;
 
     // table :
-    QFile *externalFile;
     QTableView *tview_real;
     QTableView *tview_raw;
     QTableView *tview_file;
@@ -313,7 +312,7 @@ public :
     QList <int> HourList[4];
     QStringList dateItems;
     QStringList timeItems;
-
+    QFile *externalFile;
     bool deviceSelected=true;
     bool externalSelected=false;
     bool sdSelected=false;

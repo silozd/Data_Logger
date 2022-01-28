@@ -327,11 +327,11 @@ void DLCalMenu::combo_device_indexChanged(int index)        // Setting device co
         break;
     case 1 : {
         QString fileName;
-        externalFile = new QFile(fileName);
         QString filters("CSV files (*.csv);; All files (*.*)");
         QString defaultFilter("CSV files (*.csv)");
         fileName = QFileDialog::getOpenFileName(this, tr("Choose external tool"),QCoreApplication::applicationDirPath(),
                                                 filters, &defaultFilter);
+        externalFile = new QFile(fileName);
         dateEdit_1->setDisabled(false);
         dateEdit_2->setDisabled(false);
         timeEdit_1->setDisabled(false);
@@ -363,6 +363,9 @@ void DLCalMenu::on_btn_dispList_clicked()
         tview_file  -> setGeometry(0,0,ui->wdgGraph->width(),ui->wdgGraph->height());
         tview_raw   -> setGeometry(0,0,ui->wdgGraph->width(),ui->wdgGraph->height());
         tview_real  -> setGeometry(0,0,ui->wdgGraph->width(),ui->wdgGraph->height());
+        tview_real -> show();
+        tview_raw  -> hide();
+        tview_file -> hide();
         customPlot_main  -> hide();
         ui->combo_rawreal -> setEnabled(true);
         exportfile       -> setEnabled(true);
@@ -583,7 +586,7 @@ void DLCalMenu::btn_okDialog_onClicked()            // Setting device approval
         externalSelected  = true;
         ui->combo_rawreal -> setDisabled(true);
         customPlot_main -> graph(0)->data().data()->clear();
-        //table_readData();     // OPEN
+        table_readData();
         removeAllPlot();
         break;
     }

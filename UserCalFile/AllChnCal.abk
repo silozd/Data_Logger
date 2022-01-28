@@ -1,14 +1,14 @@
 Channel No   : Channel 1
 Data Format  : 0 #####
-Input Type   : 0 LoadCell 1-2mV/V
+Input Type   : 5 4-20mA Transducer
 Sample Rate  : 2 8
 Filter Type  : 0 None
 User Gain    : 
 Cal Value  0 : ZERO
-Cal Value  1 : 2000
-Cal Value  2 : 4000
-Cal Value  3 : 6000
-Cal Value  4 : 8000
+Cal Value  1 : 0
+Cal Value  2 : 100
+Cal Value  3 : 200
+Cal Value  4 : 300
 Cal Value  5 : 10000
 Cal Value  6 : 12000
 Cal Value  7 : 14000
@@ -20,11 +20,11 @@ Cal Value 12 : 24000
 Cal Value 13 : 26000
 Cal Value 14 : 28000
 Cal Value 15 : 30000
-Raw Value  0 : 2000
-Raw Value  1 : 4000
-Raw Value  2 : 6000
-Raw Value  3 : 8000
-Raw Value  4 : 10000
+Raw Value  0 : -    571
+Raw Value  1 : -    574
+Raw Value  2 : -    574
+Raw Value  3 : -    572
+Raw Value  4 : -    572
 Raw Value  5 : 12000
 Raw Value  6 : 14000
 Raw Value  7 : 16000
@@ -36,4 +36,83 @@ Raw Value 12 : 26000
 Raw Value 13 : 28000
 Raw Value 14 : 30000
 Raw Value 15 : 32000
+....................
+Channel No   : Channel 2
+Data Format  : 0 #####
+Input Type   : 5 4-20mA Transducer
+Sample Rate  : 0 2
+Filter Type  : 0 None
+User Gain    : 
+Cal Value  0 : ZERO
+Cal Value  1 : 2000
+Cal Value  2 : 2500
+Cal Value  3 : 3000
+Cal Value  4 : 
+Cal Value  5 : 
+Cal Value  6 : 
+Cal Value  7 : 
+Cal Value  8 : 
+Cal Value  9 : 
+Cal Value 10 : 
+Cal Value 11 : 
+Cal Value 12 : 
+Cal Value 13 : 
+Cal Value 14 : 
+Cal Value 15 : 
+Raw Value  0 : + 320272
+Raw Value  1 : + 180063
+Raw Value  2 : + 252639
+Raw Value  3 : + 307190
+Raw Value  4 : 
+Raw Value  5 : 
+Raw Value  6 : 
+Raw Value  7 : 
+Raw Value  8 : 
+Raw Value  9 : 
+Raw Value 10 : 
+Raw Value 11 : 
+Raw Value 12 : 
+Raw Value 13 : 
+Raw Value 14 : 
+Raw Value 15 : 
+....................
+Channel No   : Channel 3
+Data Format  : 0 #####
+Input Type   : 5 4-20mA Transducer
+Sample Rate  : 2 8
+Filter Type  : 0 None
+User Gain    : 
+Cal Value  0 : ZERO
+Cal Value  1 : 
+Cal Value  2 : 
+Cal Value  3 : 
+Cal Value  4 : 
+Cal Value  5 : 
+Cal Value  6 : 
+Cal Value  7 : 
+Cal Value  8 : 
+Cal Value  9 : 
+Cal Value 10 : 
+Cal Value 11 : 
+Cal Value 12 : 
+Cal Value 13 : 
+Cal Value 14 : 
+Cal Value 15 : 
+Raw Value  0 : -    333
+Raw Value  1 : -    336
+Raw Value  2 : -    326
+Raw Value  3 : 
+Raw Value  4 : 
+Raw Value  5 : 
+Raw Value  6 : 
+Raw Value  7 : 
+Raw Value  8 : 
+Raw Value  9 : 
+Raw Value 10 : 
+Raw Value 11 : 
+Raw Value 12 : 
+Raw Value 13 : 
+Raw Value 14 : 
+Raw Value 15 : 
+....................
 ....................
