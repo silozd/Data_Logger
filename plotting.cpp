@@ -70,13 +70,7 @@ void DLCalMenu::setup_customPlot()
     for (int i = 0; i < MaxChnCounts; ++i){
         channels.append(QString(tr("Channel %1").arg(i+1)));
     }
-    grid_dialogAddMain  = new QGridLayout;
-    dialog_addToMain    = new QDialog;
-    wdg_dialogAddMain   = new QWidget;
     combo_diaMain       = new QComboBox;
-    btn_diaOKMain       = new QPushButton("Apply");
-    btn_diaCancelMain   = new QPushButton("Cancel");
-    lbl_diaAxisMain     = new QLabel("Axis Y : ");
     combo_diaMain       -> addItems(channels);
 }
 
@@ -145,18 +139,22 @@ void DLCalMenu::plot_graphMain()
 void DLCalMenu::addGraphDialog_Main()
 {
     grid_dialogAddMain = new QGridLayout;
-    lbl_diaAxisMain   -> setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
-    combo_diaMain     -> setStyleSheet("color: red");
-    grid_dialogAddMain-> addWidget(lbl_diaAxisMain,0,0);
-    grid_dialogAddMain-> addWidget(combo_diaMain,0,1);  //main
-    grid_dialogAddMain-> addWidget(btn_diaCancelMain,1,0);
-    grid_dialogAddMain-> addWidget(btn_diaOKMain,1,1);
-    wdg_dialogAddMain -> setParent(dialog_addToMain);
-    wdg_dialogAddMain -> setGeometry(10,10,300,75);
-    dialog_addToMain  -> setLayout(grid_dialogAddMain);
-    dialog_addToMain  -> setWindowTitle("Add Graph");
-    dialog_addToMain  -> resize(DialogW,DialogH);
-    dialog_addToMain  -> exec();
+    dialog_addToMain   = new QDialog;
+    wdg_dialogAddMain  = new QWidget;
+    btn_diaOKMain      = new QPushButton("Apply");
+    btn_diaCancelMain  = new QPushButton("Cancel");
+    lbl_diaAxisMain    = new QLabel("Axis Y : ");
+    dialog_addToMain   -> setLayout(grid_dialogAddMain);
+    dialog_addToMain   -> setStyleSheet(QString("QComboBox,QPushButton,QLabel{font-size: %1pt; height: %2px}").arg(Fontsize).arg(RealLCDH));    lbl_diaAxisMain   -> setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+    combo_diaMain      -> setStyleSheet("color: red");
+    grid_dialogAddMain -> addWidget(lbl_diaAxisMain,0,0);
+    grid_dialogAddMain -> addWidget(combo_diaMain,0,1);  //main
+    grid_dialogAddMain -> addWidget(btn_diaCancelMain,1,0);
+    grid_dialogAddMain -> addWidget(btn_diaOKMain,1,1);
+    wdg_dialogAddMain  -> setParent(dialog_addToMain);
+    dialog_addToMain   -> setWindowTitle("Add Graph");
+    dialog_addToMain   -> resize(DialogW,DialogH);
+    dialog_addToMain   -> exec();
 }
 void DLCalMenu::addNewGraph()
 {

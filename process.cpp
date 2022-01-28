@@ -472,7 +472,7 @@ void DLCalMenu::on_btn_plotGraph_clicked()
         ui->btn_plotGraph->setText("Plot");
     }
 }
-void DLCalMenu::on_btn_graphDialog_clicked()
+void DLCalMenu::on_btn_graphDialog_clicked()    // 'Set Device' button
 {
     QGridLayout *grid_dialogGraph = new QGridLayout;
     dialog_setDevice = new QDialog;
@@ -488,7 +488,7 @@ void DLCalMenu::on_btn_graphDialog_clicked()
     timeEdit_1   = new QTimeEdit;
     timeEdit_2   = new QTimeEdit;
     connect(combo_device, SIGNAL(currentIndexChanged(int)), this, SLOT(combo_device_indexChanged(int)));
-//    dialog_setDevice->setStyleSheet(QString("QPushButton, QComboBox, QLabel {font-size: %1pt}").arg(Fontsize));
+    dialog_setDevice->setStyleSheet(QString("QPushButton, QComboBox, QLabel, QTimeEdit, QDateEdit {font-size: %1pt}").arg(Fontsize));
     combo_device-> addItem("Current device",0);
     combo_device-> addItem("External",1);
     combo_device-> addItem("SD Card",2);
