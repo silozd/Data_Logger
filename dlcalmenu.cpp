@@ -41,27 +41,27 @@ DLCalMenu::DLCalMenu(QWidget *parent) :
     pr = 1000;
     QFont Font1 ("Arial", Fontsize, QFont::Normal);
 
-    if (ScreenWidth < 1920){
+    if (ScreenWidth <= 1920){
         pr = 1000;
-        Fontsize = 11;
+        Fontsize = 12;
         FontsizeTab = 13;
         Font1.setPointSize(Fontsize);
         SideMargin = hr*10/pr;
-        RealLabelH = vr*20/pr;
+        RealLabelH = vr*25/pr;
         RealLabelW = hr*100/pr;
-        RealLCDH = vr*35/pr;
-        RawLabelW= hr*120/pr;
-        RawLCDH  = vr*15/pr;        // todo
-        CalPointH = vr*30/pr;
+        RealLCDH = vr*40/pr;
+        RawLabelW= hr*157/pr;
+        RawLCDH  = vr*20/pr;
+        CalPointH = vr*35/pr;
         CalPointW = vr*55/pr;
-        ToolH = vr*50/pr;
-        CalibScrollH = RealLCDH*2+RealLabelH*2+SideMargin*3;
+        ToolH = vr*55/pr;
+        CalibScrollH = RealLCDH*2+RealLabelH*2+SideMargin*2;
         MainScrollW = RealLabelW;
-        TabBarH = hr*110/pr;
+        TabBarH = hr*120/pr;
         TabBarW = hr*85/pr;
         qDebug()<<"Screen Width <= 1920 :?"<<ScreenWidth;
     }
-    else if (ScreenWidth >= 1920){
+    else if (ScreenWidth > 1920){
         Fontsize = 13;
         FontsizeTab = 14;
         Font1.setPointSize(Fontsize);
@@ -147,16 +147,16 @@ DLCalMenu::DLCalMenu(QWidget *parent) :
     DialogH = hr*300/pr;
     DialogW = hr*500/pr;
     qDebug()<<"AppW"<<AppW<<", AppH"<<AppH;
-    qDebug()<<"pr"<<pr;
-    qDebug()<<"hr = "<<hr;
-    qDebug()<<"vr = "<<vr;
-    qDebug()<<"SideMargin"<<SideMargin;
-    qDebug()<<"RealLabelH"<<RealLabelH;
-    qDebug()<<"RealLabelW"<<RealLabelW;
-    qDebug()<<"RealLcdH"<<RealLCDH;
-    qDebug()<<"CalibScrollH"<<CalibScrollH;
-    qDebug()<<"MainScrollW"<<MainScrollW;
-    qDebug()<<"TabBarW"<<TabBarW;
+//    qDebug()<<"pr"<<pr;
+//    qDebug()<<"hr = "<<hr;
+//    qDebug()<<"vr = "<<vr;
+//    qDebug()<<"SideMargin"<<SideMargin;
+//    qDebug()<<"RealLabelH"<<RealLabelH;
+//    qDebug()<<"RealLabelW"<<RealLabelW;
+//    qDebug()<<"RealLcdH"<<RealLCDH;
+//    qDebug()<<"CalibScrollH"<<CalibScrollH;
+//    qDebug()<<"MainScrollW"<<MainScrollW;
+//    qDebug()<<"TabBarW"<<TabBarW;
 
     resize(AppW,AppH);
     ComSendType = "";
