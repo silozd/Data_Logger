@@ -384,11 +384,6 @@ void DLCalMenu::on_btn_newPassword_clicked()
 {
     QGridLayout *grid_dialogPsw = new QGridLayout;
     dialog_newPswd  =  new QDialog;
-    ui->password    =  new QLineEdit;
-    ui->password    -> setEchoMode(QLineEdit::Password);
-    ui->password    -> setPlaceholderText("Type password");
-    ui->password    -> setClearButtonEnabled(true);
-    ui->password    -> setMaxLength(4);
     wdg_dialogPsw   =  new QWidget;
     newPswd         =  new QLineEdit ;
     oldPswd         =  new QLineEdit;
@@ -403,7 +398,6 @@ void DLCalMenu::on_btn_newPassword_clicked()
     oldPswd -> setMaxLength(4);
     oldPswd -> setValidator(validator);
     newPswd -> setValidator(validator);
-
     keyicon -> setPixmap(QPixmap(":/icon/key.png"));
     keyicon -> setAlignment(Qt::AlignCenter);
     oldPswd -> setEchoMode(QLineEdit::PasswordEchoOnEdit);
@@ -449,7 +443,7 @@ void DLCalMenu::btn_saveNewPswd_onClicked()
 //        qDebug()<<"yeni şifre :"<<str;
 //        qDebug()<<"yeni şifre :"<<newPswd->text();
     }
-    else if(oldPswd->text() != "****"){ // çalışıyo
+    else if(oldPswd->text() != str){ // çalışıyo
         QMessageBox message;
         message.setIconPixmap(QPixmap(":/icon/warning.png"));
         message.setText("Old password is incorrect.\nTry again!");

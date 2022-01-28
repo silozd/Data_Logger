@@ -400,6 +400,10 @@ void DLCalMenu::setup_GUI()
     connect(ui->CoBoxInputType     , SIGNAL(currentIndexChanged(int)), this, SLOT(combo_inputType_indexChanged(int)));
     connect(this->combo_diaMain    , SIGNAL(currentIndexChanged(int)), this, SLOT(combo_diaCh_indexChanged(int)));
 
+    ui->password    -> setEchoMode(QLineEdit::Password);
+    ui->password    -> setPlaceholderText("Type password");
+    ui->password    -> setClearButtonEnabled(true);
+    ui->password    -> setMaxLength(4);
     ScrollBarGain   -> hide();
     LblScrollBarGain-> hide();
     Gain            -> hide();
