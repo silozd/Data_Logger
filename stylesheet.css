@@ -16,7 +16,6 @@ QPushButton#btn_dispList {
     background : rgb(20,20,20);
     color: rgb(120,225,255);
 }
-
 /* CALIB */
 QPushButton#btnSendParData, QPushButton#btnSendAllData{
     background-color : none;
@@ -37,7 +36,6 @@ QPushButton#m_SetSerialPortButton{
     background-color: qlineargradient(spread:reflect, x1:0, y1:0, x2:0, y2:0.516727,
                     stop:0 rgba(202, 202, 202, 255), stop:0.658416 rgba(0, 0, 0, 255));
 }
-
 /* SETTINGS */
 QLabel#lbl_version{
     font: italic;
@@ -51,7 +49,6 @@ QPushButton#btn_newPassword{
     color:rgb(100,150,190);
     text-align: right;
 }
-
 /* PORT SET */
 QFrame#framePortCombo{
     background: rgb(60,60,60);
@@ -63,3 +60,18 @@ QWidget#wdgPort{
 QLabel#lbl_portType{
     color: rgb(255,255,255);
 }
+/* ALARM */
+QScrollArea#scrollAlerts{
+    background-color: rgb(230,225,225);
+}
+
+
+
+
+
+
+
+
+
+
+

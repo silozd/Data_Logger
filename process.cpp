@@ -172,34 +172,34 @@ void DLCalMenu::combo_sampeRate_indexChanged(int index)
 {
     switch(index){
     case 0:
-        ui->info_sampeRate  -> setText(": 2");
+        ui->info_sampeRate  -> setText(" 2");
         break;
     case 1:
-        ui->info_sampeRate  -> setText(": 4");
+        ui->info_sampeRate  -> setText(" 4");
         break;
     case 2:
-        ui->info_sampeRate  -> setText(": 8");
+        ui->info_sampeRate  -> setText(" 8");
         break;
     case 3:
-        ui->info_sampeRate  -> setText(": 16");
+        ui->info_sampeRate  -> setText(" 16");
         break;
     case 4:
-        ui->info_sampeRate  -> setText(": 32");
+        ui->info_sampeRate  -> setText(" 32");
         break;
     case 5:
-        ui->info_sampeRate  -> setText(": 64");
+        ui->info_sampeRate  -> setText(" 64");
         break;
     case 6:
-        ui->info_sampeRate  -> setText(": 128");
+        ui->info_sampeRate  -> setText(" 128");
         break;
     case 7:
-        ui->info_sampeRate  -> setText(": 256");
+        ui->info_sampeRate  -> setText(" 256");
         break;
     case 8:
-        ui->info_sampeRate  -> setText(": 512");
+        ui->info_sampeRate  -> setText(" 512");
         break;
     case 9:
-        ui->info_sampeRate  -> setText(": 1024");
+        ui->info_sampeRate  -> setText(" 1024");
         break;
     }
 }
@@ -207,19 +207,19 @@ void DLCalMenu::combo_filterType_indexChanged(int index)
 {
     switch(index){
     case 0:
-        ui->info_filterType  -> setText(": None");
+        ui->info_filterType  -> setText(" None");
         break;
     case 1:
-        ui->info_filterType  -> setText(": Average");
+        ui->info_filterType  -> setText(" Average");
         break;
     case 2:
-        ui->info_filterType  -> setText(": Moving Average");
+        ui->info_filterType  -> setText(" Moving Average");
         break;
     case 3:
-        ui->info_filterType  -> setText(": EMA");
+        ui->info_filterType  -> setText(" EMA");
         break;
     case 4:
-        ui->info_filterType  -> setText(": Butterworth");
+        ui->info_filterType  -> setText(" Butterworth");
         break;
     }
 }
@@ -227,15 +227,15 @@ void DLCalMenu::combo_inputType_indexChanged(int index)
 {
     switch(index){
     case 0:
-        ui->info_inputType  -> setText(": LoadCell 1-2mV/V");
+        ui->info_inputType  -> setText(" LoadCell 1-2mV/V");
         ui->wdgInput        -> setStyleSheet("border-image: url(:/LoadCell.png);");
         break;
     case 1:
-        ui->info_inputType  -> setText(": LoadCell 3mV/V");
+        ui->info_inputType  -> setText(" LoadCell 3mV/V");
         ui->wdgInput        -> setStyleSheet("border-image: url(:/LoadCell.png);");
         break;
     case 2:
-        ui->info_inputType  -> setText(": 0-100mV Transducer");
+        ui->info_inputType  -> setText(" 0-100mV Transducer");
         ui->wdgInput        -> setStyleSheet("border-image: url(:/Voltaj_Transducer.png);");
         break;
     case 3:
@@ -243,53 +243,53 @@ void DLCalMenu::combo_inputType_indexChanged(int index)
         ui->wdgInput        -> setStyleSheet("border-image: url(:/Voltaj_Transducer.png);");
         break;
     case 4:
-        ui->info_inputType  -> setText(": 0-10V Transducer");
+        ui->info_inputType  -> setText(" 0-10V Transducer");
         ui->wdgInput        -> setStyleSheet("border-image: url(:/Voltaj_Transducer.png);");
         break;
     case 5:
-        ui->info_inputType  -> setText(": 4-20mA Transducer");
+        ui->info_inputType  -> setText(" 4-20mA Transducer");
         ui->wdgInput        -> setStyleSheet("border-image: url(:/Akim_Transducer.png);");
         break;
     case 6:
-        ui->info_inputType  -> setText(": LVTD Single Ended Output");
+        ui->info_inputType  -> setText(" LVTD Single Ended Output");
         ui->wdgInput        -> setStyleSheet("border-image: url(:/LVDT_Single.png);");
         break;
     case 7:
-        ui->info_inputType  -> setText(": LVTD Diffrential Output");
+        ui->info_inputType  -> setText(" LVTD Diffrential Output");
         ui->wdgInput        -> setStyleSheet("border-image: url(:/LVDT_Diff.png);");
         break;
     case 8:
-        ui->info_inputType  -> setText(": 120 Ohm Single strain Gauge");
+        ui->info_inputType  -> setText(" 120 Ohm Single strain Gauge");
         ui->wdgInput        -> setStyleSheet("border-image: url(:/LVDT_Single.png);");
         break;
     case 9:
-        ui->info_inputType  -> setText(": 120 Ohm Dual strain Gauge");
+        ui->info_inputType  -> setText(" 120 Ohm Dual strain Gauge");
         ui->wdgInput        -> setStyleSheet("border-image: url(:/StrainGaugeDual.png);");
         break;
     case 10:
-        ui->info_inputType  -> setText(": 350 Ohm Single strain Gauge");
+        ui->info_inputType  -> setText(" 350 Ohm Single strain Gauge");
         ui->wdgInput        -> setStyleSheet("border-image: url(:/LVDT_Single.png);");
         break;
     case 11:
-        ui->info_inputType  -> setText(": 350 Ohm Dual strain Gauge");
+        ui->info_inputType  -> setText(" 350 Ohm Dual strain Gauge");
         ui->wdgInput        -> setStyleSheet("border-image: url(:/StrainGaugeDual.png);");
         break;
     case 12:
-        ui->info_inputType  -> setText(": 1000 Ohm Single strain Gauge");
+        ui->info_inputType  -> setText(" 1000 Ohm Single strain Gauge");
         ui->wdgInput        -> setStyleSheet("border-image: url(:/LVDT_Single.png);");
         break;
     case 13:
-        ui->info_inputType  -> setText(": 1000 Ohm Dual strain Gauge");
+        ui->info_inputType  -> setText(" 1000 Ohm Dual strain Gauge");
         ui->wdgInput        -> setStyleSheet("border-image: url(:/StrainGaugeDual.png);");
         break;
     case 14:
-        ui->info_inputType  -> setText(": Custom 1");
+        ui->info_inputType  -> setText(" Custom 1");
         break;
     case 15:
-        ui->info_inputType  -> setText(": Custom 2");
+        ui->info_inputType  -> setText(" Custom 2");
         break;
     case 16:
-        ui->info_inputType  -> setText(": Custom 3");
+        ui->info_inputType  -> setText(" Custom 3");
         break;
     }
 }

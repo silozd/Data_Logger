@@ -342,7 +342,7 @@
         <item row="1" column="0">
          <widget class="QTabWidget" name="wdgGraph">
           <property name="currentIndex">
-           <number>1</number>
+           <number>0</number>
           </property>
           <widget class="QWidget" name="pg1">
            <attribute name="title">
@@ -1183,7 +1183,7 @@ color: rgb(250, 250, 250);</string>
         <item row="1" column="0">
          <widget class="QTabWidget" name="tabWidget_alarm">
           <property name="currentIndex">
-           <number>3</number>
+           <number>0</number>
           </property>
           <widget class="QWidget" name="AlarmModes">
            <attribute name="title">

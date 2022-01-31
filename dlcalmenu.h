@@ -100,7 +100,6 @@ public :
     QSerialPort *m_serial;
 
     char port_index;
-    int  forsh   = 1;
     int  ctr     = 0;                           // table listing counter
     int  ScreenWidth, ScreenHeight;
 
@@ -289,7 +288,6 @@ public :
     QGridLayout *grid_wdgGraph;
     QCPPlottableLegendItem *plItem;
     QCustomPlot *customPlot_main;
-    QCustomPlot *customPlot_graph;
     int rec_time;
     int del = 0;                    //removePlot()
     int del_ctr = 0;                //removePlot()

@@ -113,8 +113,8 @@ void DLCalMenu::table_writeData()   // Read External : moved to tableWrite
         time    = QTime::currentTime();
         datestr = date.toString("/dd/MM/yyyy/");
         timestr = time.toString(":hh:mm:ss:");
-        dateStd         = new QStandardItem(datestr);
-        timeStd         = new QStandardItem(timestr);
+        dateStd = new QStandardItem(datestr);
+        timeStd = new QStandardItem(timestr);
         rec_time = ui->combo_recPeriod->currentText().toInt();
         rec_time = rec_time/50;
         ctr++;

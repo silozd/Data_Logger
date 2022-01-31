@@ -59,7 +59,7 @@ DLCalMenu::DLCalMenu(QWidget *parent) :
         MainScrollW = RealLabelW;
         TabBarH = hr*120/pr;
         TabBarW = hr*85/pr;
-        qDebug()<<"Screen Width <= 1920 :?"<<ScreenWidth;
+        qDebug()<<"Screen Width < 1920 :?"<<ScreenWidth;
     }
     else if (ScreenWidth >= 1920){
         Fontsize = 13;
@@ -79,7 +79,7 @@ DLCalMenu::DLCalMenu(QWidget *parent) :
         TabBarH = hr*135/pr;
         TabBarW = hr*100/pr;
         TabAlarmW = hr*240/pr;
-        qDebug()<<"Screen Width > 1920 :?"<<ScreenWidth;
+        qDebug()<<"Screen Width >= 1920 :?"<<ScreenWidth;
     }
     else if  (ScreenWidth >= 3840){
         pr = pr/2;
@@ -1679,7 +1679,7 @@ void DLCalMenu::alarm_initialize()
         checkBox_alarm[i] -> setCursor(Qt::PointingHandCursor);
         comboBox_alarm[i] -> setStyleSheet("background-color : none;");
         checkBox_alarm[i] -> setStyleSheet(QString("QCheckBox::indicator {height: %1px; width: %1px;}"
-                                                              "QCheckBox::indicator:checked{ border-image: url(:/icon/check.png); height: %1px; width: %1px;};").arg(30));
+                                                              "QCheckBox::indicator:checked{ border-image: url(:/icon/check.png); height: %1px; width: %1px;};").arg(RealLabelH));
         for (int j = 0; j < MaxChnCounts; ++j){
             comboBox_alarm[i] -> addItem(QString(tr("Channel %1").arg(j+1)),j);}
 
@@ -1700,9 +1700,7 @@ void DLCalMenu::alarm_initialize()
     grid_alert -> setColumnStretch(3,1);
     grid_alert -> setColumnStretch(4,1);
     grid_alert -> setColumnStretch(5,1);
-    ui->AlertsPage  -> setStyleSheet("background-color : rgb(210,210,210);");   // todo - move to stylesheet
-    wdgAlert        -> setStyleSheet("background-color: rgb(240,240,240);");    // todo - move to stylesheet
-    ui->scrollAlerts-> setStyleSheet("background-color: rgb(240,240,240);");
+    wdgAlert        -> setStyleSheet("background-color: rgb(227,225,225);");
     btn_addAlarm    -> setStyleSheet("background-color : none; border: none; color:rgb(30,60,190); text-align: left");
     btn_removeAlarm -> setStyleSheet("background-color : rgb(220,150,150); color:rgb(255,255,255); ");
     btn_setAlarm    -> setStyleSheet("background-color : rgb(0,130,0); color:rgb(255,255,255); ");
