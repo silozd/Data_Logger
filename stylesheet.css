@@ -49,6 +49,7 @@ QPushButton#btn_newPassword{
     border: none;
     text-decoration: underline;
     color:rgb(100,150,190);
+    text-align: right;
 }
 
 /* PORT SET */

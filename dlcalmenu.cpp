@@ -81,9 +81,9 @@ DLCalMenu::DLCalMenu(QWidget *parent) :
         TabAlarmW = hr*240/pr;
         qDebug()<<"Screen Width > 1920 :?"<<ScreenWidth;
     }
-    else if  (ScreenWidth >= 2840){
+    else if  (ScreenWidth >= 3840){
         pr = pr/2;
-        Fontsize =17;
+        Fontsize =16;
         FontsizeTab = 18;
         Font1.setPointSize(Fontsize);
         SideMargin = hr*10/pr;
@@ -94,7 +94,7 @@ DLCalMenu::DLCalMenu(QWidget *parent) :
         RawLCDH  = vr*20/pr;
         CalPointH = vr*20/pr;
         CalPointW = vr*60/pr;
-        ToolH = vr*40/pr;
+        ToolH = vr*35/pr;
         CalibScrollH = RawLCDH*2+RealLabelH*2+SideMargin;
         MainScrollW = RealLabelW;
         TabBarH = hr*90/pr;
@@ -173,15 +173,13 @@ DLCalMenu::DLCalMenu(QWidget *parent) :
 
 // toolbar :
     ui->toolBar -> toggleViewAction()->setVisible(false);
-    QWidget *spacer = new QWidget();
     QLabel  *logo = new QLabel;
-    spacer  -> setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
-    ui      -> toolBar->addWidget(spacer);
-    // logow-tools = ywni bir boş tool width TODO
-    logo    -> setSizeIncrement(350, ToolH);
+    QWidget *spacer = new QWidget;
     logo    -> setPixmap(QPixmap(":/icon/logo.png"));
-    logo    -> setContentsMargins(0,0,0,0);
-    //ui->toolBar -> addWidget(logo);       // OPEN
+    logo    -> setContentsMargins(SideMargin,0,0,0);
+    spacer  -> setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
+    ui->toolBar -> addWidget(logo);       // OPEN
+    ui      -> toolBar->addWidget(spacer);
     ui->toolBar -> setMaximumHeight(ToolH);
     ui->toolBar -> setIconSize(QSize(ToolH, ToolH));
     ui->toolBar -> setMovable(false);
