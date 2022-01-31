@@ -421,6 +421,7 @@ void DLCalMenu::setup_GUI()
     tview_file  -> hide();
     customPlot_main->show();
     exportfile -> setDisabled(true);
+    ui->btn_dispGrap->hide();
     ui->btnSendCalData      -> setDisabled(true);
     ui->btnWriteParDataToFlash  -> setDisabled(true);
     ui->combo_channels      -> setDisabled(true);
@@ -1721,4 +1722,3 @@ DLCalMenu::~DLCalMenu()
 {
     delete ui;
 }
-

@@ -351,15 +351,13 @@ void DLCalMenu::on_btn_plotGraph_clicked()
     click++;
     if(click%2 == 0){            // runs graph
         plot_statu = 1;
-        dispList = 1;
         connect(timer_main, SIGNAL(timeout()), this, SLOT(plot_graphMain()));
         timer_main -> start();
         ui->combo_axis1 -> setDisabled(true);
         ui->combo_axis2 -> setDisabled(true);
         ui->btn_plotGraph->setText("Pause");
     }
-    else if(click%2 == 1){      // displays table widget
-        dispList = 0;
+    else if(click%2 == 1){      // stops plotting
         plot_statu = 0;
         timer_main -> stop();
         ui->combo_axis1 -> setDisabled(false);
@@ -369,45 +367,109 @@ void DLCalMenu::on_btn_plotGraph_clicked()
 }
 void DLCalMenu::on_btn_dispList_clicked()
 {
-    static int click = 1;       // TODO asap
-    click++;
-    switch (click%2) {
-    case 0: {
-        dispList = 1;
-        tview_real -> show();
+    //dispList = 1;
+    ui->btn_dispList->hide();
+    ui->btn_dispGrap->show();
+    customPlot_main  -> hide();
+    exportfile       -> setEnabled(true);
+    ui->wdgGraph->setCurrentIndex(1);
+    if(deviceSelected){
+        ui->combo_rawreal-> setEnabled(true);
         customPlot_main  -> hide();
-        ui->combo_rawreal -> setEnabled(true);
-        exportfile       -> setEnabled(true);
-        ui->btn_dispList -> setText("Display Graph");
-        if(deviceSelected){
-            if (ui->combo_rawreal->currentIndex() == 0){
-                tview_real -> show();
-                tview_raw  -> hide();
-                tview_file -> hide();
-                customPlot_main -> hide();
-            }
-            else if (ui->combo_rawreal->currentIndex() == 1){
-                tview_raw  -> show();
-                tview_real -> hide();
-                tview_file -> hide();
-            }
+        if (ui->combo_rawreal->currentIndex() == 0){
+            tview_real -> show();
+            tview_raw  -> hide();
+            tview_file -> hide();
         }
-        if(externalSelected){
-            ui->combo_rawreal -> setEnabled(false);
-             tview_file ->show();
+        else if (ui->combo_rawreal->currentIndex() == 1){
+            tview_raw  -> show();
+            tview_real -> hide();
+            tview_file -> hide();
         }
     }
+    if(externalSelected){
+        ui->combo_rawreal -> setEnabled(false);
+        tview_file ->show();
+    }
+}
+void DLCalMenu::on_btn_dispGrap_clicked()
+{
+    customPlot_main -> show();
+    ui->btn_dispList-> show();
+    ui->btn_dispGrap-> hide();
+    tview_real      -> hide();
+    tview_raw       -> hide();
+    tview_file      -> hide();
+    ui->combo_rawreal -> setEnabled(false);
+}
+void DLCalMenu::on_btn_graphDialog_clicked()    // 'Set Device' button
+{
+    current_dialog   = DIA_DEVICE;
+    QGridLayout *grid_dialogGraph = new QGridLayout;
+    dialog_setDevice = new QDialog;
+    wdg_dialogSetDev = new QWidget;
+    combo_device     = new QComboBox;
+    btn_okDialog     = new QPushButton("OK");
+    btn_cancelDialog = new QPushButton("CANCEL");
+    lbl_startDate    = new QLabel("Start :");
+    lbl_endDate  = new QLabel("End :");
+    lbl_device   = new QLabel("Device :");
+    dateEdit_1   = new QDateEdit;
+    dateEdit_2   = new QDateEdit;
+    timeEdit_1   = new QTimeEdit;
+    timeEdit_2   = new QTimeEdit;
+    connect(combo_device, SIGNAL(currentIndexChanged(int)), this, SLOT(combo_device_indexChanged(int)));
+    connect(btn_okDialog, SIGNAL(clicked()) , this, SLOT(btn_okDialog_onClicked()));
+    connect(btn_cancelDialog, SIGNAL(clicked()) , this, SLOT(btn_cancelDialog_onClicked()));
+    dialog_setDevice->setStyleSheet(QString("QPushButton, QComboBox, QLabel, QTimeEdit, QDateEdit {font-size: %1pt}").arg(Fontsize));
+    combo_device-> addItem("Current device",0);
+    combo_device-> addItem("External",1);
+    combo_device-> addItem("SD Card",2);
+    combo_device-> setCurrentIndex(0);
+    dateEdit_1  -> setDateRange(QDate(2021,9,1),QDate::currentDate());
+    dateEdit_2  -> setDateRange(QDate(2021,9,1),QDate(2030,01,01));
+    dateEdit_1  -> setDisabled(true);
+    dateEdit_2  -> setDisabled(true);
+    timeEdit_1  -> setDisabled(true);
+    timeEdit_2  -> setDisabled(true);
+    grid_dialogGraph -> addWidget(lbl_device,0,0);
+    grid_dialogGraph -> addWidget(combo_device,0,1);
+    grid_dialogGraph -> addWidget(lbl_startDate,1,0);
+    grid_dialogGraph -> addWidget(dateEdit_1,1,1);
+    grid_dialogGraph -> addWidget(timeEdit_1,1,2);
+    grid_dialogGraph -> addWidget(lbl_endDate,2,0);
+    grid_dialogGraph -> addWidget(dateEdit_2,2,1);
+    grid_dialogGraph -> addWidget(timeEdit_2,2,2);
+    grid_dialogGraph -> addWidget(btn_okDialog,3,1);
+    grid_dialogGraph -> addWidget(btn_cancelDialog,3,2);
+    wdg_dialogSetDev -> setParent(dialog_setDevice);
+    dialog_setDevice -> setLayout(grid_dialogGraph);
+    dialog_setDevice -> setWindowTitle("Set Device");
+    dialog_setDevice -> resize(DialogW,DialogH);
+    dialog_setDevice -> exec();
+}
+void DLCalMenu::btn_okDialog_onClicked()            // Setting device approval
+{
+    int index = combo_device -> currentIndex();
+    switch (index) {
+    case 0:
+        deviceSelected    = true;
+        externalSelected  = false;
+        ui->combo_rawreal -> setEnabled(true);
+        ui->btn_dispList->clicked();
         break;
     case 1:
-        dispList = 0;
-        ui->btn_dispList -> setText("Display Table");
-        tview_real      -> hide();
-        tview_raw       -> hide();
-        tview_file      -> hide();
-        customPlot_main -> show();
-        ui->combo_rawreal -> setEnabled(false);
+        timer_main -> stop();
+        plot_statu = 0;
+        externalSelected  = true;
+        ui->btn_dispList->clicked();
+        ui->combo_rawreal -> setDisabled(true);
+        customPlot_main -> graph(0)->data().data()->clear();
+        table_readData();
+        removeAllPlot();
         break;
     }
+    dialog_setDevice -> close();
 }
 void DLCalMenu::on_btn_password_clicked()
 {
@@ -533,82 +595,13 @@ void DLCalMenu::on_btn_saveChn_clicked()
     for(int i=0; i<AlarmCount; i++)
         comboBox_alarm[i] -> setItemText(k   ,ui->channelName->text() + QString(" - Ch %1").arg(k+1));   //
 }
-void DLCalMenu::on_btn_graphDialog_clicked()    // 'Set Device' button
-{
-    current_dialog   = DIA_DEVICE;
-    QGridLayout *grid_dialogGraph = new QGridLayout;
-    dialog_setDevice = new QDialog;
-    wdg_dialogSetDev = new QWidget;
-    combo_device     = new QComboBox;
-    btn_okDialog     = new QPushButton("OK");
-    btn_cancelDialog = new QPushButton("CANCEL");
-    lbl_startDate    = new QLabel("Start :");
-    lbl_endDate  = new QLabel("End :");
-    lbl_device   = new QLabel("Device :");
-    dateEdit_1   = new QDateEdit;
-    dateEdit_2   = new QDateEdit;
-    timeEdit_1   = new QTimeEdit;
-    timeEdit_2   = new QTimeEdit;
-    connect(combo_device, SIGNAL(currentIndexChanged(int)), this, SLOT(combo_device_indexChanged(int)));
-    connect(btn_okDialog, SIGNAL(clicked()) , this, SLOT(btn_okDialog_onClicked()));
-    connect(btn_cancelDialog, SIGNAL(clicked()) , this, SLOT(btn_cancelDialog_onClicked()));
-    dialog_setDevice->setStyleSheet(QString("QPushButton, QComboBox, QLabel, QTimeEdit, QDateEdit {font-size: %1pt}").arg(Fontsize));
-    combo_device-> addItem("Current device",0);
-    combo_device-> addItem("External",1);
-    combo_device-> addItem("SD Card",2);
-    combo_device-> setCurrentIndex(0);
-    dateEdit_1  -> setDateRange(QDate(2021,9,1),QDate::currentDate());
-    dateEdit_2  -> setDateRange(QDate(2021,9,1),QDate(2030,01,01));
-    dateEdit_1  -> setDisabled(true);
-    dateEdit_2  -> setDisabled(true);
-    timeEdit_1  -> setDisabled(true);
-    timeEdit_2  -> setDisabled(true);
-    grid_dialogGraph -> addWidget(lbl_device,0,0);
-    grid_dialogGraph -> addWidget(combo_device,0,1);
-    grid_dialogGraph -> addWidget(lbl_startDate,1,0);
-    grid_dialogGraph -> addWidget(dateEdit_1,1,1);
-    grid_dialogGraph -> addWidget(timeEdit_1,1,2);
-    grid_dialogGraph -> addWidget(lbl_endDate,2,0);
-    grid_dialogGraph -> addWidget(dateEdit_2,2,1);
-    grid_dialogGraph -> addWidget(timeEdit_2,2,2);
-    grid_dialogGraph -> addWidget(btn_okDialog,3,1);
-    grid_dialogGraph -> addWidget(btn_cancelDialog,3,2);
-    wdg_dialogSetDev -> setParent(dialog_setDevice);
-    dialog_setDevice -> setLayout(grid_dialogGraph);
-    dialog_setDevice -> setWindowTitle("Set Device");
-    dialog_setDevice -> resize(DialogW,DialogH);
-    dialog_setDevice -> exec();
-}
-void DLCalMenu::btn_okDialog_onClicked()            // Setting device approval
-{
-    int index = combo_device -> currentIndex();
-    switch (index) {
-    case 0:
-        dispList = 1;
-        deviceSelected    = true;
-        externalSelected  = false;
-        ui->combo_rawreal -> setEnabled(true);
-        break;
-    case 1:
-        timer_main -> stop();
-        plot_statu = 0;
-        dispList = 1;
-        externalSelected  = true;
-        ui->combo_rawreal -> setDisabled(true);
-        customPlot_main -> graph(0)->data().data()->clear();
-        table_readData();
-        removeAllPlot();
-        break;
-    }
-    dialog_setDevice -> close();
-}
 void DLCalMenu::btn_cancelDialog_onClicked()        // Setting device approval
 {
     dialog_setDevice -> close();
 }
 void DLCalMenu::btn_addAlert_onClicked()
 {
-    //qDebug()<<"Added alarm";
+    //qDebug()<<"Added alarm";"
     add_alarm++;
     int j = add_alarm;
     int h = RealLCDH;

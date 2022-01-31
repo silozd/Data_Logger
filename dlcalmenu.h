@@ -339,6 +339,7 @@ private slots:
     void saveAs();
     void opening_val();
 
+
 public slots:
     int GetScreenHRes(int s);
     int GetScreenVRes(int s);
@@ -380,6 +381,7 @@ public slots:
     void btn_diaGrapOK_onClicked();
     void btn_diaGrapCancel_onClicked();
     void on_btn_dispList_clicked();
+    void on_btn_dispGrap_clicked();
 
     // alarm :
     void alarm_initialize();

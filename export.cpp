@@ -74,9 +74,9 @@ void DLCalMenu::setup_tableView()
     csvModel_real = new QStandardItemModel;
     csvModel_raw  = new QStandardItemModel;
     csvModel_realnew = new QStandardItemModel;    //Added External Read
-    tview_file  -> setParent(ui->wdgGraph);
-    tview_real  -> setParent(ui->wdgGraph);
-    tview_raw   -> setParent(ui->wdgGraph);
+    tview_file  -> setParent(ui->pg2);
+    tview_real  -> setParent(ui->pg2);
+    tview_raw   -> setParent(ui->pg2);
     grid_wdgGraph -> addWidget(tview_real,0,0);
     grid_wdgGraph -> addWidget(tview_raw,0,0);
     grid_wdgGraph -> addWidget(tview_file,0,0);

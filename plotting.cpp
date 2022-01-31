@@ -12,7 +12,7 @@ void DLCalMenu::setup_customPlot()
     legendFont.setPointSize(Fontsize);
     // main page :
     grid_wdgGraph = new QGridLayout;
-    customPlot_main = new QCustomPlot(ui->wdgGraph);
+    customPlot_main = new QCustomPlot(ui->pg1);
     ui->wdgGraph->setLayout(grid_wdgGraph);
     grid_wdgGraph->setContentsMargins(0,0,0,0);
     grid_wdgGraph->addWidget(customPlot_main,0,0);

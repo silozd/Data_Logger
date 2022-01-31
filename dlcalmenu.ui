@@ -33,7 +33,7 @@
        <enum>QTabWidget::West</enum>
       </property>
       <property name="currentIndex">
-       <number>2</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="MainPage">
        <attribute name="title">
@@ -63,7 +63,7 @@
              <x>0</x>
              <y>0</y>
              <width>193</width>
-             <height>490</height>
+             <height>471</height>
             </rect>
            </property>
           </widget>
@@ -318,6 +318,13 @@
            </widget>
           </item>
           <item>
+           <widget class="QPushButton" name="btn_dispGrap">
+            <property name="text">
+             <string>Display Graph</string>
+            </property>
+           </widget>
+          </item>
+          <item>
            <widget class="QPushButton" name="btn_dispList">
             <property name="cursor">
              <cursorShape>PointingHandCursor</cursorShape>
@@ -330,7 +337,21 @@
          </layout>
         </item>
         <item row="1" column="0">
-         <widget class="QWidget" name="wdgGraph" native="true"/>
+         <widget class="QTabWidget" name="wdgGraph">
+          <property name="currentIndex">
+           <number>1</number>
+          </property>
+          <widget class="QWidget" name="pg1" native="true">
+           <attribute name="title">
+            <string/>
+           </attribute>
+          </widget>
+          <widget class="QWidget" name="pg2">
+           <attribute name="title">
+            <string>Page</string>
+           </attribute>
+          </widget>
+         </widget>
         </item>
        </layout>
       </widget>
