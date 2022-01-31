@@ -374,9 +374,6 @@ void DLCalMenu::on_btn_dispList_clicked()
     switch (click%2) {
     case 0: {
         dispList = 1;
-        tview_file  -> setGeometry(0,0,ui->wdgGraph->width(),ui->wdgGraph->height());
-        tview_raw   -> setGeometry(0,0,ui->wdgGraph->width(),ui->wdgGraph->height());
-        tview_real  -> setGeometry(0,0,ui->wdgGraph->width(),ui->wdgGraph->height());
         tview_real -> show();
         customPlot_main  -> hide();
         ui->combo_rawreal -> setEnabled(true);

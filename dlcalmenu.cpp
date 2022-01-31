@@ -385,6 +385,7 @@ void DLCalMenu::setup_GUI()
     alarm_initialize();
     get_password();
     opening_val();          // open with saved values
+    setup_tableView();
 
     connect(this->KeyTimer         , SIGNAL(timeout())        , this, SLOT(update_time()));
     connect(this->KeyTimer         , SIGNAL(timeout())        , this, SLOT(KeyTimerTimeOut()));
@@ -405,21 +406,6 @@ void DLCalMenu::setup_GUI()
     connect(ui->CoBoxInputType     , SIGNAL(currentIndexChanged(int)), this, SLOT(combo_inputType_indexChanged(int)));
     connect(ui->combo_rawreal      , SIGNAL(currentIndexChanged(int)), this, SLOT(combo_rawreal_indexChanged(int)));
     connect(this->combo_diaMain    , SIGNAL(currentIndexChanged(int)), this, SLOT(combo_diaCh_indexChanged(int)));
-
-    grid_wdgGraph  = new QGridLayout;
-    tview_real  = new QTableView;
-    tview_raw   = new QTableView;
-    tview_file  = new QTableView;                 //Added External Read
-    csvModel_real = new QStandardItemModel;
-    csvModel_raw  = new QStandardItemModel;
-    csvModel_realnew = new QStandardItemModel;    //Added External Read
-    tview_file  -> setParent(ui->wdgGraph);
-    tview_real  -> setParent(ui->wdgGraph);
-    tview_raw   -> setParent(ui->wdgGraph);
-    grid_wdgGraph -> addWidget(tview_real,0,0);
-    grid_wdgGraph -> addWidget(tview_raw,0,0);
-    grid_wdgGraph -> addWidget(tview_file,0,0);
-    grid_wdgGraph -> setContentsMargins(0,0,0,0);
 
     ui->password    -> setEchoMode(QLineEdit::Password);
     ui->password    -> setPlaceholderText("Type password");

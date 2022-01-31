@@ -353,6 +353,7 @@ public slots:
     void ClearKey();
 
     void get_password();
+    void setup_tableView();
 
     void setup_combobox();
     void on_tabWidget_currentChanged(int index);

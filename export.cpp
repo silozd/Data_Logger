@@ -66,7 +66,29 @@ void DLCalMenu::exportCsv()
         }
     }
 }
+void DLCalMenu::setup_tableView()
+{
+    tview_real  = new QTableView;
+    tview_raw   = new QTableView;
+    tview_file  = new QTableView;                 //Added External Read
+    csvModel_real = new QStandardItemModel;
+    csvModel_raw  = new QStandardItemModel;
+    csvModel_realnew = new QStandardItemModel;    //Added External Read
+    tview_file  -> setParent(ui->wdgGraph);
+    tview_real  -> setParent(ui->wdgGraph);
+    tview_raw   -> setParent(ui->wdgGraph);
+    grid_wdgGraph -> addWidget(tview_real,0,0);
+    grid_wdgGraph -> addWidget(tview_raw,0,0);
+    grid_wdgGraph -> addWidget(tview_file,0,0);
+    grid_wdgGraph -> setContentsMargins(0,0,0,0);
+    tview_file  -> setGeometry(0,0,ui->wdgGraph->width(),ui->wdgGraph->height());
+    tview_raw   -> setGeometry(0,0,ui->wdgGraph->width(),ui->wdgGraph->height());
+    tview_real  -> setGeometry(0,0,ui->wdgGraph->width(),ui->wdgGraph->height());
+    tview_file  -> resize(ui->wdgGraph->width(),ui->wdgGraph->height());
+    tview_raw   -> resize(ui->wdgGraph->width(),ui->wdgGraph->height());
+    tview_real  -> resize(ui->wdgGraph->width(),ui->wdgGraph->height());
 
+}
 void DLCalMenu::table_writeData()   // Read External : moved to tableWrite
 {
     QList<QStandardItem *> standardItemsReal;
