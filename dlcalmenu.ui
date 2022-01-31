@@ -319,6 +319,9 @@
           </item>
           <item>
            <widget class="QPushButton" name="btn_dispGrap">
+            <property name="cursor">
+             <cursorShape>PointingHandCursor</cursorShape>
+            </property>
             <property name="text">
              <string>Display Graph</string>
             </property>
@@ -341,14 +344,14 @@
           <property name="currentIndex">
            <number>1</number>
           </property>
-          <widget class="QWidget" name="pg1" native="true">
+          <widget class="QWidget" name="pg1">
            <attribute name="title">
-            <string/>
+            <string>plot</string>
            </attribute>
           </widget>
           <widget class="QWidget" name="pg2">
            <attribute name="title">
-            <string>Page</string>
+            <string>list</string>
            </attribute>
           </widget>
          </widget>

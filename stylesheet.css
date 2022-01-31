@@ -3,11 +3,18 @@ QTabWidget{
 }
 QPushButton{
 }
-
-/* ALARM */
-QTabBar#tabBar_alarm::tab{
-    height : 40px;
-
+/* MAIN */
+QPushButton#btn_plotGraph {
+    background : rgb(20,20,20);
+    color: rgb(0,255,0);
+}
+QPushButton#btn_dispGrap {
+    background : rgb(20,20,20);
+    color: rgb(0,255,0);
+}
+QPushButton#btn_dispList {
+    background : rgb(20,20,20);
+    color: rgb(120,225,255);
 }
 
 /* CALIB */
@@ -36,6 +43,12 @@ QLabel#lbl_version{
     font: italic;
     background: rgb(255,255,255);
     margin: 5px;
+}
+QPushButton#btn_newPassword{
+    background-color : none;
+    border: none;
+    text-decoration: underline;
+    color:rgb(100,150,190);
 }
 
 /* PORT SET */
