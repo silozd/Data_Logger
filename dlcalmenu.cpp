@@ -43,8 +43,8 @@ DLCalMenu::DLCalMenu(QWidget *parent) :
 
     if (ScreenWidth < 1680){       // opens properly
         pr = 1000;
-        Fontsize = 12;
-        FontsizeTab = 13;
+        Fontsize = 11;
+        FontsizeTab = 11;
         Font1.setPointSize(Fontsize);
         SideMargin = hr*10/pr;
         RealLabelH = vr*23/pr;
@@ -63,9 +63,9 @@ DLCalMenu::DLCalMenu(QWidget *parent) :
         AppH = vr*730/pr;
         qDebug()<<"Screen Width < 1680 :?"<<ScreenWidth;
     }
-    else if (ScreenWidth >= 1680){
-        Fontsize = 13;
-        FontsizeTab = 13;
+    if (ScreenWidth >= 1680){
+        Fontsize = 12;
+        FontsizeTab = 12;
         Font1.setPointSize(Fontsize);
         SideMargin = hr*10/pr;
         RealLabelH = vr*30/pr;
@@ -84,29 +84,31 @@ DLCalMenu::DLCalMenu(QWidget *parent) :
         AppH = vr*795/pr;
         qDebug()<<"Screen Width >= 1680 :?"<<ScreenWidth;
     }
-    else if  (ScreenWidth >= 3840){
+    if  (ScreenWidth >= 3840){
         pr = pr/2;
-        Fontsize =16;
-        FontsizeTab = 18;
+        Fontsize =12;
+        FontsizeTab = 13;
         Font1.setPointSize(Fontsize);
         SideMargin = hr*10/pr;
         RealLabelH = vr*17/pr;
-        RealLabelW = hr*75/pr;
-        RealLCDH = vr*30/pr;
-        RawLabelW= hr*120/pr;
-        RawLCDH  = vr*20/pr;
-        CalPointH = vr*20/pr;
+        RealLabelW = hr*90/pr;
+        RealLCDH = vr*35/pr;
+        RawLabelW= hr*140/pr;
+        RawLCDH  = vr*30/pr;
+        CalPointH = vr*30/pr;
         CalPointW = vr*60/pr;
-        ToolH = vr*35/pr;
-        CalibScrollH = RawLCDH*2+RealLabelH*2+SideMargin;
+        ToolH = vr*40/pr;
+        CalibScrollH = RawLCDH*2+RealLabelH*2+SideMargin*2;
         MainScrollW = RealLabelW;
-        TabBarH = hr*90/pr;
+        TabBarH = hr*120/pr;
         TabBarW = hr*60/pr;
+        AppW = hr*1210/pr;
+        AppH = vr*690/pr;
         qDebug()<<"Screen Width == 3840 :?"<<ScreenWidth;
     }
     if  (ScreenHeight <= 720){        //dlcalmenu org
         pr = 1500;
-        Fontsize = 10;
+        Fontsize = 8;
         FontsizeTab = 9;
         Font1.setPointSize(Fontsize);
         SideMargin = hr*10/pr;
@@ -127,11 +129,11 @@ DLCalMenu::DLCalMenu(QWidget *parent) :
         qDebug()<<"Screen Width :?"<<ScreenWidth;
         qDebug()<<"Screen Height <= 720 :?"<<ScreenHeight;
     }
-    else if  (ScreenWidth <= 1024){        //dlcalmenu org
+    if  (ScreenWidth <= 1024){        //dlcalmenu org
         pr = 1500;
         hr = 840;
         vr = 846;
-        Fontsize = 10;
+        Fontsize = 8;
         FontsizeTab = 9;
         Font1.setPointSize(Fontsize);
         SideMargin = hr*10/pr;
@@ -256,6 +258,7 @@ DLCalMenu::DLCalMenu(QWidget *parent) :
         grid_reals          -> setVerticalSpacing(SideMargin/3);
         grid_reals          -> addWidget(ChnRealLabel[i]   , i*2   , 0);
         grid_reals          -> addWidget(ChnLCDReal_Main[i], i*2+1 , 0);
+        ui->scrollReals     -> setMinimumWidth(RealLabelW);
         ui->scrollReals     -> setMaximumWidth(RealLabelW*2);
 // real raw data - calibration page :
         if(int j = 1){
@@ -311,7 +314,7 @@ DLCalMenu::DLCalMenu(QWidget *parent) :
     boxLayout   -> setContentsMargins(0,0,0,0);
     dataBox -> setMaximumHeight(CalibScrollH*1.2);
     ui->scrollArea->setMinimumHeight(CalibScrollH+SideMargin);
-    ui->scrollArea->setMaximumHeight((CalibScrollH+SideMargin)*1.1);
+    ui->scrollArea->setMaximumHeight((CalibScrollH+SideMargin)*1.2);
 
     // scrollbar - calib:
     scroll_bar  = new QScrollBar;
