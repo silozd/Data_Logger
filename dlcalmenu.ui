@@ -33,7 +33,7 @@
        <enum>QTabWidget::West</enum>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>4</number>
       </property>
       <widget class="QWidget" name="MainPage">
        <attribute name="title">
@@ -1248,6 +1248,48 @@ color: rgb(250, 250, 250);</string>
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <tabstops>
+  <tabstop>tabWidget</tabstop>
+  <tabstop>combo_axis1</tabstop>
+  <tabstop>combo_axis2</tabstop>
+  <tabstop>m_serialPortComboBox</tabstop>
+  <tabstop>combo_recPeriod</tabstop>
+  <tabstop>combo_rawreal</tabstop>
+  <tabstop>btn_graphDialog</tabstop>
+  <tabstop>btn_plotGraph</tabstop>
+  <tabstop>btn_dispGrap</tabstop>
+  <tabstop>btn_dispList</tabstop>
+  <tabstop>scrollReals</tabstop>
+  <tabstop>wdgGraph</tabstop>
+  <tabstop>scrollArea</tabstop>
+  <tabstop>scrollCalPoint</tabstop>
+  <tabstop>CoBoxChannel</tabstop>
+  <tabstop>CoBoxInputType</tabstop>
+  <tabstop>CoBoxSampeRate</tabstop>
+  <tabstop>CoBoxDataFormat</tabstop>
+  <tabstop>CoBoxFilterType</tabstop>
+  <tabstop>btnSendParData</tabstop>
+  <tabstop>btnSendCalData</tabstop>
+  <tabstop>btnWriteParDataToFlash</tabstop>
+  <tabstop>m_SetSerialPortButton</tabstop>
+  <tabstop>password</tabstop>
+  <tabstop>btn_password</tabstop>
+  <tabstop>btn_newPassword</tabstop>
+  <tabstop>combo_channels</tabstop>
+  <tabstop>channelName</tabstop>
+  <tabstop>btn_saveChn</tabstop>
+  <tabstop>radioBtn_csv</tabstop>
+  <tabstop>radioBtn_pdf</tabstop>
+  <tabstop>combo_portType</tabstop>
+  <tabstop>pushButton_11</tabstop>
+  <tabstop>COMport</tabstop>
+  <tabstop>adres</tabstop>
+  <tabstop>timeout</tabstop>
+  <tabstop>IP</tabstop>
+  <tabstop>scrollAlerts</tabstop>
+  <tabstop>tabWidget_alarm</tabstop>
+  <tabstop>table_alarm</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>
