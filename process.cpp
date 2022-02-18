@@ -28,7 +28,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-QFile file("/home/sila/Desktop/DL_tab_new/get_password.txt");
+QString path = QDir::currentPath();
+QFile file(path + "/get_password.txt");
 QTextStream  in(&file);
 QString str;
 QRegularExpression rx("(^([0-9]{4})$)"); // TODO : 4ten az da kabul ediyor?
@@ -40,6 +41,7 @@ void DLCalMenu::get_password()
     str = in.readLine();
     file.close();
     qDebug()<<"SIFRE"<<str;
+    qDebug()<<"path"<<QString(path);
 }
 //
 void DLCalMenu::on_tabWidget_currentChanged(int index)
@@ -407,7 +409,6 @@ void DLCalMenu::on_btn_graphDialog_clicked()    // 'Set Device' button
     current_dialog   = DIA_DEVICE;
     QGridLayout *grid_dialogGraph = new QGridLayout;
     dialog_setDevice = new QDialog;
-    wdg_dialogSetDev = new QWidget;
     combo_device     = new QComboBox;
     btn_okDialog     = new QPushButton("OK");
     btn_cancelDialog = new QPushButton("CANCEL");
@@ -442,7 +443,6 @@ void DLCalMenu::on_btn_graphDialog_clicked()    // 'Set Device' button
     grid_dialogGraph -> addWidget(timeEdit_2,2,2);
     grid_dialogGraph -> addWidget(btn_okDialog,3,1);
     grid_dialogGraph -> addWidget(btn_cancelDialog,3,2);
-    wdg_dialogSetDev -> setParent(dialog_setDevice);
     dialog_setDevice -> setLayout(grid_dialogGraph);
     dialog_setDevice -> setWindowTitle("Set Device");
     dialog_setDevice -> resize(DialogW,DialogH);

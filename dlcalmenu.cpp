@@ -258,7 +258,6 @@ DLCalMenu::DLCalMenu(QWidget *parent) :
         grid_reals          -> setVerticalSpacing(SideMargin/3);
         grid_reals          -> addWidget(ChnRealLabel[i]   , i*2   , 0);
         grid_reals          -> addWidget(ChnLCDReal_Main[i], i*2+1 , 0);
-        ui->scrollReals     -> setMinimumWidth(RealLabelW);
         ui->scrollReals     -> setMaximumWidth(RealLabelW*2);
 // real raw data - calibration page :
         if(int j = 1){
@@ -314,7 +313,7 @@ DLCalMenu::DLCalMenu(QWidget *parent) :
     boxLayout   -> setContentsMargins(0,0,0,0);
     dataBox -> setMaximumHeight(CalibScrollH*1.2);
     ui->scrollArea->setMinimumHeight(CalibScrollH+SideMargin);
-    ui->scrollArea->setMaximumHeight((CalibScrollH+SideMargin)*1.2);
+    ui->scrollArea->setMaximumHeight((CalibScrollH+SideMargin)*1.1);
 
     // scrollbar - calib:
     scroll_bar  = new QScrollBar;
@@ -908,11 +907,11 @@ void DLCalMenu::opening_val()   // to run app with saved data
     //mouseevent = false;   // will be used TODO
     mouseevent = true;      // will be removed  TODO
 
-    QString fileName = "/home/sila/Desktop/DL_grid/UserCalFile/AllChnCal.abk";  // baslangicta acilan dosya path'i yazilacak TODO
+    QString fileName = "/home/sila/Desktop/DL_grid2/UserCalFile/AllChnCal.abk";  // baslangicta acilan dosya path'i yazilacak TODO
     setWindowTitle(fileName);
 
     QFile file;
-    file.setFileName("/home/sila/Desktop/DL_grid/UserCalFile/AllChnCal.abk"); // baslangicta acilan dosya path'i yazilacak TODO
+    file.setFileName("/home/sila/Desktop/DL_grid2/UserCalFile/AllChnCal.abk"); // baslangicta acilan dosya path'i yazilacak TODO
     file.open(QIODevice::ReadOnly | QIODevice::Text);
 
     QTextStream in(&file);
