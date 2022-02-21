@@ -22,6 +22,7 @@
 #include <QStandardItemModel>
 #include <QStringListModel>
 #include <QSpinBox>
+#include <QSqlQuery>
 #include <QTabBar>
 #include <QTabWidget>
 #include <QTableView>
@@ -352,7 +353,6 @@ public slots:
     void ClearKey();
 
     void get_password();
-    void setup_tableView();
 
     void setup_combobox();
     void on_tabWidget_currentChanged(int index);
@@ -409,10 +409,13 @@ public slots:
     void legendDoubleClick(QCPLegend *legend, QCPAbstractLegendItem *item);
 
     // export file:
+    void export_file();
+    void export_asPDF();
+    bool createConnection();
+    void PrintTable (QPrinter* printer, QSqlQuery&  Query);
+    void setup_tableView();
     void table_writeData();
     void table_readData();
-    void exportCsv();
-
 };
 
 #endif // DLCALMENU_H

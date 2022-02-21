@@ -1,70 +1,175 @@
 #include "dlcalmenu.h"
 #include "ui_dlcalmenu.h"
 #include <QTextStream>
-#include <QtSql/QSqlTableModel>
+#include <QtSql>
 
-void DLCalMenu::exportCsv()
+void DLCalMenu::export_file()       // TODO : filtera göre slot emit :: BURDA KALDI
 {
-    QString filters("CSV files (*.csv);; Text files (*.txt);;All files (*.*)");
-    QString defaultFilter("CSV files (*.csv)");
-    QString fileName = QFileDialog::getSaveFileName(0, "Save file", QCoreApplication::applicationDirPath(),
-                       filters, &defaultFilter);
-    QFile file(fileName);
+    QString fileName;
+    QFile file;
 
-    if(ui->combo_rawreal->currentIndex() == 0){
-        QAbstractItemModel *model = tview_real->model();
-        if (file.open(QFile::WriteOnly | QFile::Truncate)) {
-            QTextStream data(&file);
-            QStringList strList;
-            for (int i = 0; i < model->columnCount(); i++) {
-                if (model->headerData(i, Qt::Horizontal, Qt::DisplayRole).toString().length() > 0)
-                    strList.append("\"" + model->headerData(i, Qt::Horizontal, Qt::DisplayRole).toString() + "\"");
-                else
-                    strList.append("");
-            }
-            data << strList.join(";") << "\n";
-            for (int i = 0; i < model->rowCount(); i++) {
-                strList.clear();
-                for (int j = 0; j < model->columnCount(); j++) {
+    if(ui->radioBtn_csv->isChecked()){
+       fileName = QFileDialog::getSaveFileName(0, "Save file", QDir::currentPath(), "CSV (*.csv)");
+       file.setFileName(fileName);
+       if(ui->combo_rawreal->currentIndex() == 0){     // REAL displays
+           QAbstractItemModel *model = tview_real->model();
+           if (file.open(QFile::WriteOnly | QFile::Truncate)) {
+               QTextStream data(&file);
+               QStringList strList;
+               for (int i = 0; i < model->columnCount(); i++) {
+                   if (model->headerData(i, Qt::Horizontal, Qt::DisplayRole).toString().length() > 0)
+                       strList.append("\"" + model->headerData(i, Qt::Horizontal, Qt::DisplayRole).toString() + "\"");
+                   else
+                       strList.append("");
+               }
+               data << strList.join(";") << "\n";
+               for (int i = 0; i < model->rowCount(); i++) {
+                   strList.clear();
+                   for (int j = 0; j < model->columnCount(); j++) {
 
-                    if (model->data(model->index(i, j)).toString().length() > 0)
-                        strList.append("\"" + model->data(model->index(i, j)).toString() + "\"");
-                    else
-                        strList.append("");
-                }
-                data << strList.join(";") + "\n";
-            }
-            file.close();
-            qDebug()<<"Real file exported as .csv";
-        }
+                       if (model->data(model->index(i, j)).toString().length() > 0)
+                           strList.append("\"" + model->data(model->index(i, j)).toString() + "\"");
+                       else
+                           strList.append("");
+                   }
+                   data << strList.join(";") + "\n";
+               }
+               qDebug()<<"Real file exported as .csv";
+               }
+           }
+       if(ui->combo_rawreal->currentIndex() == 1){     // RAW displays
+           QAbstractItemModel *model = tview_raw->model();
+           if (file.open(QFile::WriteOnly | QFile::Truncate)) {
+               QTextStream data(&file);
+               QStringList strList;
+               for (int i = 0; i < model->columnCount(); i++) {
+                   if (model->headerData(i, Qt::Horizontal, Qt::DisplayRole).toString().length() > 0)
+                       strList.append("\"" + model->headerData(i, Qt::Horizontal, Qt::DisplayRole).toString() + "\"");
+                   else
+                       strList.append("");
+               }
+               data << strList.join(";") << "\n";
+               for (int i = 0; i < model->rowCount(); i++) {
+                   strList.clear();
+                   for (int j = 0; j < model->columnCount(); j++) {
+
+                       if (model->data(model->index(i, j)).toString().length() > 0)
+                           strList.append("\"" + model->data(model->index(i, j)).toString() + "\"");
+                       else
+                           strList.append("");
+                   }
+                   data << strList.join(";") + "\n";
+               }
+               qDebug()<<"Raw file exported as .csv";
+           }
+       }
+       file.close();
     }
-    if(ui->combo_rawreal->currentIndex() == 1){
-        QAbstractItemModel *model = tview_raw->model();
-        if (file.open(QFile::WriteOnly | QFile::Truncate)) {
-            QTextStream data(&file);
-            QStringList strList;
-            for (int i = 0; i < model->columnCount(); i++) {
-                if (model->headerData(i, Qt::Horizontal, Qt::DisplayRole).toString().length() > 0)
-                    strList.append("\"" + model->headerData(i, Qt::Horizontal, Qt::DisplayRole).toString() + "\"");
-                else
-                    strList.append("");
-            }
-            data << strList.join(";") << "\n";
-            for (int i = 0; i < model->rowCount(); i++) {
-                strList.clear();
-                for (int j = 0; j < model->columnCount(); j++) {
-
-                    if (model->data(model->index(i, j)).toString().length() > 0)
-                        strList.append("\"" + model->data(model->index(i, j)).toString() + "\"");
-                    else
-                        strList.append("");
-                }
-                data << strList.join(";") + "\n";
-            }
-            file.close();
-            qDebug()<<"Raw file exported as .csv";
-        }
+    if(ui->radioBtn_pdf->isChecked()){
+       export_asPDF();
     }
+    if(ui->radioBtn_txt->isChecked()){
+        fileName = QFileDialog::getSaveFileName(0, "Save file", QDir::currentPath(), "TEXT (*.txt)");
+        file.setFileName(fileName);
+        if(ui->combo_rawreal->currentIndex() == 0){     // REAL displays
+           file.open(QIODevice::WriteOnly);
+           QTextStream lines(&file);
+           lines.setCodec("UTF-8");
+           lines << QString("TEST RESULTS \n");
+        //            lines << QString("Line_1 :") << ui->lineEdit_1->text() << "\n";
+           qDebug()<<"Real file exported as .txt";
+        }
+        if(ui->combo_rawreal->currentIndex() == 1){     // RAW displays
+           file.open(QIODevice::WriteOnly);
+           QTextStream lines(&file);
+           lines.setCodec("UTF-8");
+           lines << QString("TEST RESULTS \n");
+           qDebug()<<"Raw file exported as .txt";
+        }
+       file.close();
+    }
+}
+void DLCalMenu::export_asPDF()
+{
+    QPrinter printer(QPrinter::HighResolution);
+    printer.setOrientation(QPrinter::Portrait);
+    printer.setPageSize(QPrinter::A4);
+    printer.setOutputFormat(QPrinter::PdfFormat);
+    //  printer.setOutputFileName("e:/file.pdf"); // just for me testing
+    QPrintDialog dlg(&printer, 0);
+    if(dlg.exec() == QDialog::Accepted) {
+        QSqlQuery query;
+        query.exec("SELECT * from person");
+        PrintTable(&printer, query);
+    }
+    qDebug()<<"export_PDF";
+}
+bool DLCalMenu::createConnection()
+{
+    QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
+    db.setDatabaseName(":memory:");
+    if (!db.open()) {
+        QMessageBox::critical(0, qApp->tr("Cannot open database"), "Click Cancel to exit.", QMessageBox::Cancel);
+        qDebug()<<"açılmadı database :(";
+        return false;
+    }
+    QSqlQuery query;
+    qDebug() << "table:" <<   query.exec("create table person (id int primary key, "
+                                       "firstname varchar(20), lastname varchar(20), num int )");
+    query.exec("insert into person values(101, 'Dennis', 'Young','1')");
+    query.exec("insert into person values(102, 'Christine', 'Holand','2')");
+    query.exec("insert into person values(103, 'Lars junior', 'Gordon','4')");
+    query.exec("insert into person values(104, 'Roberto', 'Robitaille','5')");
+    query.exec("insert into person values(105, 'Maria', 'Papadopoulos','3')");
+    return true;
+    qDebug()<<"createConnection";
+}
+void DLCalMenu::PrintTable (QPrinter* printer, QSqlQuery&  Query)
+{
+    QString strStream;
+    QTextStream out(&strStream);
+
+    const int rowCount = Query.size();
+    const int columnCount = MaxChnCounts+2;//Query.record().count();     // TODO FIX
+
+    if(ui->combo_rawreal->currentIndex() == 0){     // REAL displays
+        out <<  "<html>\n"
+          "<head>\n"
+          "<meta Content=\"Text/html; charset=Windows-1251\">\n"
+          <<  QString("<title>%1</title>\n").arg("TITLE OF TABLE")
+          <<  "</head>\n"
+          "<body bgcolor=#ffffff link=#5000A0>\n"
+          "<table border=1 cellspacing=0 cellpadding=2>\n";
+
+        // headers
+        out << "<thead><tr bgcolor=#f0f0f0>";
+        for (int column = 0; column < columnCount; column++)
+        out << QString("<th>%1</th>").arg("a b c d e ");     // TODO FIX
+        out << "</tr></thead>\n";
+
+        while (Query.next()) {
+        out << "<tr>";
+        for (int column = 0; column < columnCount; column++) {
+          QString data = Query.value(column).toString();
+          out << QString("<td bkcolor=0>%1</td>").arg((!data.isEmpty()) ? data : QString("&nbsp;"));
+        }
+        out << "</tr>\n";
+        }
+
+        out <<  "</table>\n"
+          "</body>\n"
+          "</html>\n";
+
+        qDebug()<<"Real file exported as .pdf";
+    }
+    if(ui->combo_rawreal->currentIndex() == 1){     // RAW displays
+        qDebug()<<"Raw file exported as .pdf";
+    }
+    QTextDocument document;
+    document.setHtml(strStream);
+    document.print(printer);
+    qDebug()<<"PrintTable";
+
 }
 void DLCalMenu::setup_tableView()
 {

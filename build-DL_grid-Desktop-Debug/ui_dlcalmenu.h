@@ -118,7 +118,6 @@ public:
     QGridLayout *gridLayout_15;
     QLabel *activeChannels;
     QLabel *currentPort;
-    QRadioButton *radioBtn_csv;
     QLabel *label_26;
     QLabel *label_28;
     QLabel *label_23;
@@ -126,9 +125,13 @@ public:
     QComboBox *combo_channels;
     QLabel *label_24;
     QPushButton *btn_saveChn;
-    QRadioButton *radioBtn_pdf;
     QLabel *label_22;
     QProgressBar *memory;
+    QFrame *horizontalFrame;
+    QHBoxLayout *horizontalLayout_2;
+    QRadioButton *radioBtn_csv;
+    QRadioButton *radioBtn_pdf;
+    QRadioButton *radioBtn_txt;
     QWidget *widget_2;
     QGridLayout *gridLayout_16;
     QLabel *label_20;
@@ -673,12 +676,6 @@ public:
 
         gridLayout_15->addWidget(currentPort, 4, 1, 1, 2);
 
-        radioBtn_csv = new QRadioButton(widget);
-        radioBtn_csv->setObjectName(QStringLiteral("radioBtn_csv"));
-        radioBtn_csv->setCursor(QCursor(Qt::PointingHandCursor));
-
-        gridLayout_15->addWidget(radioBtn_csv, 2, 1, 1, 1);
-
         label_26 = new QLabel(widget);
         label_26->setObjectName(QStringLiteral("label_26"));
 
@@ -731,12 +728,6 @@ public:
 
         gridLayout_15->addWidget(btn_saveChn, 1, 2, 1, 1);
 
-        radioBtn_pdf = new QRadioButton(widget);
-        radioBtn_pdf->setObjectName(QStringLiteral("radioBtn_pdf"));
-        radioBtn_pdf->setCursor(QCursor(Qt::PointingHandCursor));
-
-        gridLayout_15->addWidget(radioBtn_pdf, 2, 2, 1, 1);
-
         label_22 = new QLabel(widget);
         label_22->setObjectName(QStringLiteral("label_22"));
 
@@ -747,6 +738,32 @@ public:
         memory->setValue(24);
 
         gridLayout_15->addWidget(memory, 5, 1, 1, 2);
+
+        horizontalFrame = new QFrame(widget);
+        horizontalFrame->setObjectName(QStringLiteral("horizontalFrame"));
+        horizontalLayout_2 = new QHBoxLayout(horizontalFrame);
+        horizontalLayout_2->setSpacing(6);
+        horizontalLayout_2->setContentsMargins(11, 11, 11, 11);
+        horizontalLayout_2->setObjectName(QStringLiteral("horizontalLayout_2"));
+        radioBtn_csv = new QRadioButton(horizontalFrame);
+        radioBtn_csv->setObjectName(QStringLiteral("radioBtn_csv"));
+        radioBtn_csv->setCursor(QCursor(Qt::PointingHandCursor));
+
+        horizontalLayout_2->addWidget(radioBtn_csv);
+
+        radioBtn_pdf = new QRadioButton(horizontalFrame);
+        radioBtn_pdf->setObjectName(QStringLiteral("radioBtn_pdf"));
+        radioBtn_pdf->setCursor(QCursor(Qt::PointingHandCursor));
+
+        horizontalLayout_2->addWidget(radioBtn_pdf);
+
+        radioBtn_txt = new QRadioButton(horizontalFrame);
+        radioBtn_txt->setObjectName(QStringLiteral("radioBtn_txt"));
+
+        horizontalLayout_2->addWidget(radioBtn_txt);
+
+
+        gridLayout_15->addWidget(horizontalFrame, 2, 1, 1, 2);
 
         gridLayout_15->setRowStretch(0, 1);
         gridLayout_15->setRowStretch(1, 1);
@@ -1051,9 +1068,7 @@ public:
         QWidget::setTabOrder(btn_newPassword, combo_channels);
         QWidget::setTabOrder(combo_channels, channelName);
         QWidget::setTabOrder(channelName, btn_saveChn);
-        QWidget::setTabOrder(btn_saveChn, radioBtn_csv);
-        QWidget::setTabOrder(radioBtn_csv, radioBtn_pdf);
-        QWidget::setTabOrder(radioBtn_pdf, combo_portType);
+        QWidget::setTabOrder(btn_saveChn, combo_portType);
         QWidget::setTabOrder(combo_portType, pushButton_11);
         QWidget::setTabOrder(pushButton_11, COMport);
         QWidget::setTabOrder(COMport, adres);
@@ -1065,7 +1080,7 @@ public:
 
         retranslateUi(DLCalMenu);
 
-        tabWidget->setCurrentIndex(4);
+        tabWidget->setCurrentIndex(0);
         wdgGraph->setCurrentIndex(1);
         tabWidget_alarm->setCurrentIndex(0);
 
@@ -1090,7 +1105,7 @@ public:
         btn_graphDialog->setText(QApplication::translate("DLCalMenu", "Set Device", Q_NULLPTR));
         btn_plotGraph->setText(QApplication::translate("DLCalMenu", "Plot Graph", Q_NULLPTR));
         btn_dispGrap->setText(QApplication::translate("DLCalMenu", "Display Graph", Q_NULLPTR));
-        btn_dispList->setText(QApplication::translate("DLCalMenu", "Display Table", Q_NULLPTR));
+        btn_dispList->setText(QApplication::translate("DLCalMenu", "Display Results", Q_NULLPTR));
         wdgGraph->setTabText(wdgGraph->indexOf(pg1), QApplication::translate("DLCalMenu", "plot", Q_NULLPTR));
         wdgGraph->setTabText(wdgGraph->indexOf(pg2), QApplication::translate("DLCalMenu", "list", Q_NULLPTR));
         tabWidget->setTabText(tabWidget->indexOf(MainPage), QApplication::translate("DLCalMenu", "Main", Q_NULLPTR));
@@ -1115,14 +1130,15 @@ public:
         label->setText(QApplication::translate("DLCalMenu", ":", Q_NULLPTR));
         activeChannels->setText(QApplication::translate("DLCalMenu", "-", Q_NULLPTR));
         currentPort->setText(QApplication::translate("DLCalMenu", "-", Q_NULLPTR));
-        radioBtn_csv->setText(QApplication::translate("DLCalMenu", ".csv", Q_NULLPTR));
         label_26->setText(QApplication::translate("DLCalMenu", "Connected Port :", Q_NULLPTR));
         label_28->setText(QApplication::translate("DLCalMenu", "Memory :", Q_NULLPTR));
         label_23->setText(QApplication::translate("DLCalMenu", "Export Format :", Q_NULLPTR));
         label_24->setText(QApplication::translate("DLCalMenu", "Active Channel :", Q_NULLPTR));
         btn_saveChn->setText(QApplication::translate("DLCalMenu", "Save", Q_NULLPTR));
-        radioBtn_pdf->setText(QApplication::translate("DLCalMenu", ".pdf", Q_NULLPTR));
         label_22->setText(QApplication::translate("DLCalMenu", "Channel :", Q_NULLPTR));
+        radioBtn_csv->setText(QApplication::translate("DLCalMenu", ".csv", Q_NULLPTR));
+        radioBtn_pdf->setText(QApplication::translate("DLCalMenu", ".pdf", Q_NULLPTR));
+        radioBtn_txt->setText(QApplication::translate("DLCalMenu", ".txt", Q_NULLPTR));
         label_20->setText(QApplication::translate("DLCalMenu", "Password    :     ", Q_NULLPTR));
         btn_password->setText(QApplication::translate("DLCalMenu", "OK", Q_NULLPTR));
         btn_newPassword->setText(QApplication::translate("DLCalMenu", "Change password", Q_NULLPTR));

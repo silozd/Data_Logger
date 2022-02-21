@@ -485,7 +485,8 @@ void DLCalMenu::on_btn_password_clicked()
          ui->btn_saveChn     -> setDisabled(false);
          ui->channelName     -> setDisabled(false);
          ui->radioBtn_csv    -> setDisabled(false);
-         //ui->radioBtn_pdf    -> setDisabled(false);        // TODO : pdf secenegi yok
+         ui->radioBtn_pdf    -> setDisabled(false);
+         ui->radioBtn_txt    -> setDisabled(false);
          ui->btn_newPassword -> setDisabled(false);
          ui->btn_newPassword -> setStyleSheet("background-color : none; border: none; text-decoration: underline; color:rgb(30,60,190); text-align: right");
 

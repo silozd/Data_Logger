@@ -191,16 +191,16 @@ DLCalMenu::DLCalMenu(QWidget *parent) :
     ui->toolBar -> setMaximumHeight(ToolH);
     ui->toolBar -> setIconSize(QSize(ToolH, ToolH));
     ui->toolBar -> setMovable(false);
-    clear      = ui->toolBar -> addAction(QIcon(":/icon/clear.png") ,"Clear"       ,this, SLOT(ClearKey()));
-    exportfile = ui->toolBar -> addAction(QIcon(":/icon/export.png"),"Export File");
-    savefile   = ui->toolBar -> addAction(QIcon(":/icon/save.png")  ,"Save File"   ,this, SLOT(save()));
-    openfile   = ui->toolBar -> addAction(QIcon(":/icon/open.png")  ,"Open File"   ,this, SLOT(open()));
+    clear      = ui->toolBar -> addAction(QIcon(":/icon/clear.png") ,"Clear Cal Data"       ,this, SLOT(ClearKey()));
+    savefile   = ui->toolBar -> addAction(QIcon(":/icon/save.png")  ,"Save Cal Data"   ,this, SLOT(save()));
+    openfile   = ui->toolBar -> addAction(QIcon(":/icon/open.png")  ,"Open Cal Data"   ,this, SLOT(open()));
+    exportfile = ui->toolBar -> addAction(QIcon(":/icon/export.png"),"Export Results");
     ui->toolBar -> addSeparator();
     help = ui->toolBar-> addAction(QIcon(":/icon/info.png"), "Open Document");
     ui->toolBar -> addSeparator();
     quit = ui->toolBar-> addAction(QIcon(":/icon/quit.png"), "Quit Application");
     connect (quit, &QAction::triggered, qApp, &QApplication::quit);
-    connect (exportfile, SIGNAL(triggered()), this, SLOT(exportCsv()));
+    connect (exportfile, SIGNAL(triggered()), this, SLOT(export_file()));
 
     KeyTimer        = new QTimer(this);
     timer_main      = new QTimer;
@@ -441,6 +441,7 @@ void DLCalMenu::setup_GUI()
     ui->radioBtn_csv        -> setChecked(true);
     ui->radioBtn_csv        -> setDisabled(true);
     ui->radioBtn_pdf        -> setDisabled(true);
+    ui->radioBtn_txt        -> setDisabled(true);
     ui->btn_newPassword     -> setDisabled(true);
 }
 void DLCalMenu::setup_combobox()
