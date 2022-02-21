@@ -21,8 +21,8 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_DLCalMenu_t {
-    QByteArrayData data[103];
-    char stringdata0[1701];
+    QByteArrayData data[102];
+    char stringdata0[1690];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -124,16 +124,15 @@ QT_MOC_LITERAL(89, 1531, 6), // "legend"
 QT_MOC_LITERAL(90, 1538, 22), // "QCPAbstractLegendItem*"
 QT_MOC_LITERAL(91, 1561, 4), // "item"
 QT_MOC_LITERAL(92, 1566, 11), // "export_file"
-QT_MOC_LITERAL(93, 1578, 12), // "export_asPDF"
-QT_MOC_LITERAL(94, 1591, 16), // "createConnection"
-QT_MOC_LITERAL(95, 1608, 10), // "PrintTable"
-QT_MOC_LITERAL(96, 1619, 9), // "QPrinter*"
-QT_MOC_LITERAL(97, 1629, 7), // "printer"
-QT_MOC_LITERAL(98, 1637, 10), // "QSqlQuery&"
-QT_MOC_LITERAL(99, 1648, 5), // "Query"
-QT_MOC_LITERAL(100, 1654, 15), // "setup_tableView"
-QT_MOC_LITERAL(101, 1670, 15), // "table_writeData"
-QT_MOC_LITERAL(102, 1686, 14) // "table_readData"
+QT_MOC_LITERAL(93, 1578, 14), // "sql_connection"
+QT_MOC_LITERAL(94, 1593, 14), // "table_printPDF"
+QT_MOC_LITERAL(95, 1608, 9), // "QPrinter*"
+QT_MOC_LITERAL(96, 1618, 7), // "printer"
+QT_MOC_LITERAL(97, 1626, 10), // "QSqlQuery&"
+QT_MOC_LITERAL(98, 1637, 5), // "Query"
+QT_MOC_LITERAL(99, 1643, 15), // "setup_tableView"
+QT_MOC_LITERAL(100, 1659, 15), // "table_writeData"
+QT_MOC_LITERAL(101, 1675, 14) // "table_readData"
 
     },
     "DLCalMenu\0setup_GUI\0\0scroll_movement\0"
@@ -184,10 +183,9 @@ QT_MOC_LITERAL(102, 1686, 14) // "table_readData"
     "axis\0QCPAxis::SelectablePart\0part\0"
     "legendDoubleClick\0QCPLegend*\0legend\0"
     "QCPAbstractLegendItem*\0item\0export_file\0"
-    "export_asPDF\0createConnection\0PrintTable\0"
-    "QPrinter*\0printer\0QSqlQuery&\0Query\0"
-    "setup_tableView\0table_writeData\0"
-    "table_readData"
+    "sql_connection\0table_printPDF\0QPrinter*\0"
+    "printer\0QSqlQuery&\0Query\0setup_tableView\0"
+    "table_writeData\0table_readData"
 };
 #undef QT_MOC_LITERAL
 
@@ -197,7 +195,7 @@ static const uint qt_meta_data_DLCalMenu[] = {
        7,       // revision
        0,       // classname
        0,    0, // classinfo
-      81,   14, // methods
+      80,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -205,87 +203,86 @@ static const uint qt_meta_data_DLCalMenu[] = {
        0,       // signalCount
 
  // slots: name, argc, parameters, tag, flags
-       1,    0,  419,    2, 0x08 /* Private */,
-       3,    0,  420,    2, 0x08 /* Private */,
-       4,    0,  421,    2, 0x08 /* Private */,
-       5,    0,  422,    2, 0x08 /* Private */,
-       6,    1,  423,    2, 0x08 /* Private */,
-       8,    1,  426,    2, 0x08 /* Private */,
-       9,    0,  429,    2, 0x08 /* Private */,
-      10,    1,  430,    2, 0x08 /* Private */,
-      11,    0,  433,    2, 0x08 /* Private */,
-      12,    0,  434,    2, 0x08 /* Private */,
-      13,    0,  435,    2, 0x08 /* Private */,
-      14,    0,  436,    2, 0x08 /* Private */,
-      15,    0,  437,    2, 0x08 /* Private */,
-      16,    1,  438,    2, 0x0a /* Public */,
-      18,    1,  441,    2, 0x0a /* Public */,
-      19,    1,  444,    2, 0x0a /* Public */,
-      21,    0,  447,    2, 0x0a /* Public */,
-      22,    0,  448,    2, 0x0a /* Public */,
-      23,    0,  449,    2, 0x0a /* Public */,
-      24,    0,  450,    2, 0x0a /* Public */,
-      25,    0,  451,    2, 0x0a /* Public */,
-      26,    0,  452,    2, 0x0a /* Public */,
-      27,    0,  453,    2, 0x0a /* Public */,
-      28,    0,  454,    2, 0x0a /* Public */,
-      29,    0,  455,    2, 0x0a /* Public */,
-      30,    0,  456,    2, 0x0a /* Public */,
-      31,    1,  457,    2, 0x0a /* Public */,
-      33,    0,  460,    2, 0x0a /* Public */,
-      34,    1,  461,    2, 0x0a /* Public */,
-      35,    1,  464,    2, 0x0a /* Public */,
-      36,    0,  467,    2, 0x0a /* Public */,
-      37,    0,  468,    2, 0x0a /* Public */,
-      38,    0,  469,    2, 0x0a /* Public */,
-      39,    1,  470,    2, 0x0a /* Public */,
-      40,    1,  473,    2, 0x0a /* Public */,
-      41,    1,  476,    2, 0x0a /* Public */,
-      42,    1,  479,    2, 0x0a /* Public */,
-      43,    1,  482,    2, 0x0a /* Public */,
-      44,    1,  485,    2, 0x0a /* Public */,
-      45,    1,  488,    2, 0x0a /* Public */,
-      46,    1,  491,    2, 0x0a /* Public */,
-      47,    0,  494,    2, 0x0a /* Public */,
-      48,    0,  495,    2, 0x0a /* Public */,
-      49,    0,  496,    2, 0x0a /* Public */,
-      50,    0,  497,    2, 0x0a /* Public */,
-      51,    0,  498,    2, 0x0a /* Public */,
-      52,    0,  499,    2, 0x0a /* Public */,
-      53,    0,  500,    2, 0x0a /* Public */,
-      54,    0,  501,    2, 0x0a /* Public */,
-      55,    0,  502,    2, 0x0a /* Public */,
-      56,    0,  503,    2, 0x0a /* Public */,
-      57,    0,  504,    2, 0x0a /* Public */,
-      58,    0,  505,    2, 0x0a /* Public */,
-      59,    0,  506,    2, 0x0a /* Public */,
-      60,    0,  507,    2, 0x0a /* Public */,
-      61,    0,  508,    2, 0x0a /* Public */,
-      62,    0,  509,    2, 0x0a /* Public */,
-      63,    0,  510,    2, 0x0a /* Public */,
-      64,    0,  511,    2, 0x0a /* Public */,
-      65,    0,  512,    2, 0x0a /* Public */,
-      66,    0,  513,    2, 0x0a /* Public */,
-      67,    0,  514,    2, 0x0a /* Public */,
-      68,    0,  515,    2, 0x0a /* Public */,
-      69,    0,  516,    2, 0x0a /* Public */,
-      70,    0,  517,    2, 0x0a /* Public */,
-      71,    0,  518,    2, 0x0a /* Public */,
-      72,    0,  519,    2, 0x0a /* Public */,
-      73,    0,  520,    2, 0x0a /* Public */,
-      74,    0,  521,    2, 0x0a /* Public */,
-      75,    1,  522,    2, 0x0a /* Public */,
-      77,    0,  525,    2, 0x0a /* Public */,
-      78,    2,  526,    2, 0x0a /* Public */,
-      82,    2,  531,    2, 0x0a /* Public */,
-      87,    2,  536,    2, 0x0a /* Public */,
-      92,    0,  541,    2, 0x0a /* Public */,
-      93,    0,  542,    2, 0x0a /* Public */,
-      94,    0,  543,    2, 0x0a /* Public */,
-      95,    2,  544,    2, 0x0a /* Public */,
-     100,    0,  549,    2, 0x0a /* Public */,
-     101,    0,  550,    2, 0x0a /* Public */,
-     102,    0,  551,    2, 0x0a /* Public */,
+       1,    0,  414,    2, 0x08 /* Private */,
+       3,    0,  415,    2, 0x08 /* Private */,
+       4,    0,  416,    2, 0x08 /* Private */,
+       5,    0,  417,    2, 0x08 /* Private */,
+       6,    1,  418,    2, 0x08 /* Private */,
+       8,    1,  421,    2, 0x08 /* Private */,
+       9,    0,  424,    2, 0x08 /* Private */,
+      10,    1,  425,    2, 0x08 /* Private */,
+      11,    0,  428,    2, 0x08 /* Private */,
+      12,    0,  429,    2, 0x08 /* Private */,
+      13,    0,  430,    2, 0x08 /* Private */,
+      14,    0,  431,    2, 0x08 /* Private */,
+      15,    0,  432,    2, 0x08 /* Private */,
+      16,    1,  433,    2, 0x0a /* Public */,
+      18,    1,  436,    2, 0x0a /* Public */,
+      19,    1,  439,    2, 0x0a /* Public */,
+      21,    0,  442,    2, 0x0a /* Public */,
+      22,    0,  443,    2, 0x0a /* Public */,
+      23,    0,  444,    2, 0x0a /* Public */,
+      24,    0,  445,    2, 0x0a /* Public */,
+      25,    0,  446,    2, 0x0a /* Public */,
+      26,    0,  447,    2, 0x0a /* Public */,
+      27,    0,  448,    2, 0x0a /* Public */,
+      28,    0,  449,    2, 0x0a /* Public */,
+      29,    0,  450,    2, 0x0a /* Public */,
+      30,    0,  451,    2, 0x0a /* Public */,
+      31,    1,  452,    2, 0x0a /* Public */,
+      33,    0,  455,    2, 0x0a /* Public */,
+      34,    1,  456,    2, 0x0a /* Public */,
+      35,    1,  459,    2, 0x0a /* Public */,
+      36,    0,  462,    2, 0x0a /* Public */,
+      37,    0,  463,    2, 0x0a /* Public */,
+      38,    0,  464,    2, 0x0a /* Public */,
+      39,    1,  465,    2, 0x0a /* Public */,
+      40,    1,  468,    2, 0x0a /* Public */,
+      41,    1,  471,    2, 0x0a /* Public */,
+      42,    1,  474,    2, 0x0a /* Public */,
+      43,    1,  477,    2, 0x0a /* Public */,
+      44,    1,  480,    2, 0x0a /* Public */,
+      45,    1,  483,    2, 0x0a /* Public */,
+      46,    1,  486,    2, 0x0a /* Public */,
+      47,    0,  489,    2, 0x0a /* Public */,
+      48,    0,  490,    2, 0x0a /* Public */,
+      49,    0,  491,    2, 0x0a /* Public */,
+      50,    0,  492,    2, 0x0a /* Public */,
+      51,    0,  493,    2, 0x0a /* Public */,
+      52,    0,  494,    2, 0x0a /* Public */,
+      53,    0,  495,    2, 0x0a /* Public */,
+      54,    0,  496,    2, 0x0a /* Public */,
+      55,    0,  497,    2, 0x0a /* Public */,
+      56,    0,  498,    2, 0x0a /* Public */,
+      57,    0,  499,    2, 0x0a /* Public */,
+      58,    0,  500,    2, 0x0a /* Public */,
+      59,    0,  501,    2, 0x0a /* Public */,
+      60,    0,  502,    2, 0x0a /* Public */,
+      61,    0,  503,    2, 0x0a /* Public */,
+      62,    0,  504,    2, 0x0a /* Public */,
+      63,    0,  505,    2, 0x0a /* Public */,
+      64,    0,  506,    2, 0x0a /* Public */,
+      65,    0,  507,    2, 0x0a /* Public */,
+      66,    0,  508,    2, 0x0a /* Public */,
+      67,    0,  509,    2, 0x0a /* Public */,
+      68,    0,  510,    2, 0x0a /* Public */,
+      69,    0,  511,    2, 0x0a /* Public */,
+      70,    0,  512,    2, 0x0a /* Public */,
+      71,    0,  513,    2, 0x0a /* Public */,
+      72,    0,  514,    2, 0x0a /* Public */,
+      73,    0,  515,    2, 0x0a /* Public */,
+      74,    0,  516,    2, 0x0a /* Public */,
+      75,    1,  517,    2, 0x0a /* Public */,
+      77,    0,  520,    2, 0x0a /* Public */,
+      78,    2,  521,    2, 0x0a /* Public */,
+      82,    2,  526,    2, 0x0a /* Public */,
+      87,    2,  531,    2, 0x0a /* Public */,
+      92,    0,  536,    2, 0x0a /* Public */,
+      93,    0,  537,    2, 0x0a /* Public */,
+      94,    2,  538,    2, 0x0a /* Public */,
+      99,    0,  543,    2, 0x0a /* Public */,
+     100,    0,  544,    2, 0x0a /* Public */,
+     101,    0,  545,    2, 0x0a /* Public */,
 
  // slots: parameters
     QMetaType::Void,
@@ -363,9 +360,8 @@ static const uint qt_meta_data_DLCalMenu[] = {
     QMetaType::Void, 0x80000000 | 83, 0x80000000 | 85,   84,   86,
     QMetaType::Void, 0x80000000 | 88, 0x80000000 | 90,   89,   91,
     QMetaType::Void,
-    QMetaType::Void,
     QMetaType::Bool,
-    QMetaType::Void, 0x80000000 | 96, 0x80000000 | 98,   97,   99,
+    QMetaType::Void, 0x80000000 | 95, 0x80000000 | 97,   96,   98,
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
@@ -456,13 +452,12 @@ void DLCalMenu::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, v
         case 72: _t->axisLabelDoubleClick((*reinterpret_cast< QCPAxis*(*)>(_a[1])),(*reinterpret_cast< QCPAxis::SelectablePart(*)>(_a[2]))); break;
         case 73: _t->legendDoubleClick((*reinterpret_cast< QCPLegend*(*)>(_a[1])),(*reinterpret_cast< QCPAbstractLegendItem*(*)>(_a[2]))); break;
         case 74: _t->export_file(); break;
-        case 75: _t->export_asPDF(); break;
-        case 76: { bool _r = _t->createConnection();
+        case 75: { bool _r = _t->sql_connection();
             if (_a[0]) *reinterpret_cast< bool*>(_a[0]) = std::move(_r); }  break;
-        case 77: _t->PrintTable((*reinterpret_cast< QPrinter*(*)>(_a[1])),(*reinterpret_cast< QSqlQuery(*)>(_a[2]))); break;
-        case 78: _t->setup_tableView(); break;
-        case 79: _t->table_writeData(); break;
-        case 80: _t->table_readData(); break;
+        case 76: _t->table_printPDF((*reinterpret_cast< QPrinter*(*)>(_a[1])),(*reinterpret_cast< QSqlQuery(*)>(_a[2]))); break;
+        case 77: _t->setup_tableView(); break;
+        case 78: _t->table_writeData(); break;
+        case 79: _t->table_readData(); break;
         default: ;
         }
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
@@ -522,13 +517,13 @@ int DLCalMenu::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 81)
+        if (_id < 80)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 81;
+        _id -= 80;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 81)
+        if (_id < 80)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 81;
+        _id -= 80;
     }
     return _id;
 }

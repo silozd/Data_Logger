@@ -329,10 +329,7 @@ void DLCalMenu::combo_device_indexChanged(int index)        // Setting device co
         break;
     case 1 : {
         QString fileName;
-        QString filters("CSV files (*.csv);; All files (*.*)");
-        QString defaultFilter("CSV files (*.csv)");
-        fileName = QFileDialog::getOpenFileName(this, tr("Choose external tool"),QCoreApplication::applicationDirPath(),
-                                                filters, &defaultFilter);
+        fileName = QFileDialog::getOpenFileName(this, tr("Choose external tool"), QDir::currentPath(),"CSV files (*.csv)");
         externalFile = new QFile(fileName);
         dateEdit_1->setDisabled(false);
         dateEdit_2->setDisabled(false);

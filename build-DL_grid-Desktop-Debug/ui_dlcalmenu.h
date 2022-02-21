@@ -759,6 +759,7 @@ public:
 
         radioBtn_txt = new QRadioButton(horizontalFrame);
         radioBtn_txt->setObjectName(QStringLiteral("radioBtn_txt"));
+        radioBtn_txt->setCursor(QCursor(Qt::PointingHandCursor));
 
         horizontalLayout_2->addWidget(radioBtn_txt);
 
@@ -1080,7 +1081,7 @@ public:
 
         retranslateUi(DLCalMenu);
 
-        tabWidget->setCurrentIndex(0);
+        tabWidget->setCurrentIndex(2);
         wdgGraph->setCurrentIndex(1);
         tabWidget_alarm->setCurrentIndex(0);
 
@@ -1102,7 +1103,7 @@ public:
         lbl_axis1->setText(QApplication::translate("DLCalMenu", "Axis X :", Q_NULLPTR));
         label_2->setText(QApplication::translate("DLCalMenu", "Period :", Q_NULLPTR));
         lbl_filterType->setText(QApplication::translate("DLCalMenu", "Filter Type :", Q_NULLPTR));
-        btn_graphDialog->setText(QApplication::translate("DLCalMenu", "Set Device", Q_NULLPTR));
+        btn_graphDialog->setText(QApplication::translate("DLCalMenu", "Read From ..", Q_NULLPTR));
         btn_plotGraph->setText(QApplication::translate("DLCalMenu", "Plot Graph", Q_NULLPTR));
         btn_dispGrap->setText(QApplication::translate("DLCalMenu", "Display Graph", Q_NULLPTR));
         btn_dispList->setText(QApplication::translate("DLCalMenu", "Display Results", Q_NULLPTR));

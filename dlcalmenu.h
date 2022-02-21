@@ -47,6 +47,10 @@ typedef unsigned char u8;
 #define DIA_GRAPH           1
 #define DIA_PSW             2
 
+#define _CSV                0
+#define _PDF                1
+#define _TXT                2
+
 namespace Ui {
 class DLCalMenu;
 }
@@ -121,6 +125,7 @@ public :
     int ChecKutuNo      = 0;
     int RawDigitCount   = 7;
     int RealDigitCount  = 7;
+    int export_format;
     bool KeyTimerEnd    = false;
     bool KeyPressWait   = true;
     bool UserCalLabelActive = false;
@@ -410,9 +415,8 @@ public slots:
 
     // export file:
     void export_file();
-    void export_asPDF();
-    bool createConnection();
-    void PrintTable (QPrinter* printer, QSqlQuery&  Query);
+    bool sql_connection();
+    void table_printPDF (QPrinter *printer, QSqlQuery&  Query);
     void setup_tableView();
     void table_writeData();
     void table_readData();

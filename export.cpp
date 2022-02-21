@@ -66,7 +66,17 @@ void DLCalMenu::export_file()       // TODO : filtera göre slot emit :: BURDA K
        file.close();
     }
     if(ui->radioBtn_pdf->isChecked()){
-       export_asPDF();
+        QPrinter printer(QPrinter::HighResolution);
+        printer.setOrientation(QPrinter::Portrait);
+        printer.setPageSize(QPrinter::A4);
+        printer.setOutputFormat(QPrinter::PdfFormat);
+        printer.setOutputFileName(QDir::currentPath() + "/example.pdf");
+        QPrintDialog dlg(&printer, 0);
+        if(dlg.exec() == QDialog::Accepted) {
+            QSqlQuery query;
+            query.exec("SELECT * from person");
+            table_printPDF(&printer, query);
+        }
     }
     if(ui->radioBtn_txt->isChecked()){
         fileName = QFileDialog::getSaveFileName(0, "Save file", QDir::currentPath(), "TEXT (*.txt)");
@@ -89,22 +99,7 @@ void DLCalMenu::export_file()       // TODO : filtera göre slot emit :: BURDA K
        file.close();
     }
 }
-void DLCalMenu::export_asPDF()
-{
-    QPrinter printer(QPrinter::HighResolution);
-    printer.setOrientation(QPrinter::Portrait);
-    printer.setPageSize(QPrinter::A4);
-    printer.setOutputFormat(QPrinter::PdfFormat);
-    //  printer.setOutputFileName("e:/file.pdf"); // just for me testing
-    QPrintDialog dlg(&printer, 0);
-    if(dlg.exec() == QDialog::Accepted) {
-        QSqlQuery query;
-        query.exec("SELECT * from person");
-        PrintTable(&printer, query);
-    }
-    qDebug()<<"export_PDF";
-}
-bool DLCalMenu::createConnection()
+bool DLCalMenu::sql_connection()
 {
     QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
     db.setDatabaseName(":memory:");
@@ -114,62 +109,147 @@ bool DLCalMenu::createConnection()
         return false;
     }
     QSqlQuery query;
-    qDebug() << "table:" <<   query.exec("create table person (id int primary key, "
-                                       "firstname varchar(20), lastname varchar(20), num int )");
-    query.exec("insert into person values(101, 'Dennis', 'Young','1')");
-    query.exec("insert into person values(102, 'Christine', 'Holand','2')");
-    query.exec("insert into person values(103, 'Lars junior', 'Gordon','4')");
-    query.exec("insert into person values(104, 'Roberto', 'Robitaille','5')");
-    query.exec("insert into person values(105, 'Maria', 'Papadopoulos','3')");
+//    qDebug() << "table:" <<   query.exec("create table person (id int primary key, "
+//                                       "firstname varchar(20), lastname varchar(20), num int )");
+//    query.exec("insert into person values(101, 'Dennis', 'Young','1')");
+//    ..
     return true;
-    qDebug()<<"createConnection";
+    qDebug()<<"sql_connection";
 }
-void DLCalMenu::PrintTable (QPrinter* printer, QSqlQuery&  Query)
+void DLCalMenu::table_printPDF (QPrinter* printer, QSqlQuery&  Query)
 {
-    QString strStream;
-    QTextStream out(&strStream);
-
-    const int rowCount = Query.size();
-    const int columnCount = MaxChnCounts+2;//Query.record().count();     // TODO FIX
-
+    printer->setOutputFormat(QPrinter::PdfFormat);
+    printer->setPageSize(QPageSize(QPageSize::A4));
+    QPainter painter;
+    painter.begin(printer);
+    int y = 300;
+    int x = y;
     if(ui->combo_rawreal->currentIndex() == 0){     // REAL displays
-        out <<  "<html>\n"
-          "<head>\n"
-          "<meta Content=\"Text/html; charset=Windows-1251\">\n"
-          <<  QString("<title>%1</title>\n").arg("TITLE OF TABLE")
-          <<  "</head>\n"
-          "<body bgcolor=#ffffff link=#5000A0>\n"
-          "<table border=1 cellspacing=0 cellpadding=2>\n";
+        painter.drawText( x, y, "REAL DATA VALUES");
+        painter.drawText( x, 2*y, "Line 1 :     " );
+        painter.drawText( x, 3*y, "Line 2 :     " );
 
-        // headers
-        out << "<thead><tr bgcolor=#f0f0f0>";
-        for (int column = 0; column < columnCount; column++)
-        out << QString("<th>%1</th>").arg("a b c d e ");     // TODO FIX
-        out << "</tr></thead>\n";
-
-        while (Query.next()) {
-        out << "<tr>";
-        for (int column = 0; column < columnCount; column++) {
-          QString data = Query.value(column).toString();
-          out << QString("<td bkcolor=0>%1</td>").arg((!data.isEmpty()) ? data : QString("&nbsp;"));
-        }
-        out << "</tr>\n";
-        }
-
-        out <<  "</table>\n"
-          "</body>\n"
-          "</html>\n";
-
+        painter.end();
         qDebug()<<"Real file exported as .pdf";
     }
     if(ui->combo_rawreal->currentIndex() == 1){     // RAW displays
+        painter.drawText( x, y, "RAW DATA VALUES");
+
         qDebug()<<"Raw file exported as .pdf";
     }
-    QTextDocument document;
-    document.setHtml(strStream);
-    document.print(printer);
-    qDebug()<<"PrintTable";
 
+////  Just write to PDF
+//    QString strStream;
+//    QTextStream out(&strStream);
+
+//    const int rowCount = Query.size();
+//    const int columnCount = MaxChnCounts+2;//Query.record().count();     // TODO FIX
+
+//    if(ui->combo_rawreal->currentIndex() == 0){     // REAL displays
+//        out <<  "<html>\n"
+//          "<head>\n"
+//          "<meta Content=\"Text/html; charset=Windows-1251\">\n"
+//          <<  QString("<title>%1</title>\n").arg("REAL-TIME SONUÇLAR")
+//          <<  "</head>\n"
+//          "<body bgcolor=#ffffff link=#5000A0>\n"
+//          "<table border=1 cellspacing=0 cellpadding=2>\n";
+
+//        // headers
+//        out << "<thead><tr bgcolor=#f0f0f0>";
+//        for (int column = 0; column < columnCount; column++)
+//        out << QString("<th>%1</th>").arg("abcd");     // TODO FIX
+//        out << "</tr></thead>\n";
+
+//        while (Query.next()) {
+//        out << "<tr>";
+//        for (int column = 0; column < columnCount; column++) {
+//          QString data = Query.value(column).toString();
+//          out << QString("<td bkcolor=0>%1</td>").arg((!data.isEmpty()) ? data : QString("&nbsp;"));
+//        }
+//        out << "</tr>\n";
+//        }
+
+//        out <<  "</table>\n"
+//          "</body>\n"
+//          "</html>\n";
+
+//        qDebug()<<"Real file exported as .pdf";
+//    }
+//    if(ui->combo_rawreal->currentIndex() == 1){     // RAW displays
+//        qDebug()<<"Raw file exported as .pdf";
+//    }
+//    QTextDocument document;
+//    document.setHtml(strStream);
+//    document.print(printer);
+
+////  QTableView to PDF
+//    QTextDocument *doc = new QTextDocument;
+//    doc->setDocumentMargin(10);
+//    QTextCursor cursor(doc);
+
+//    cursor.movePosition(QTextCursor::Start);
+
+//    QTextTable *table = cursor.insertTable(properties.size() + 1, 2, tableFormat);
+//    QTextTableCell headerCell = table->cellAt(0, 0);
+//    QTextCursor headerCellCursor = headerCell.firstCursorPosition();
+//    headerCellCursor.insertText(QObject::tr("Name"), boldFormat);
+//    headerCell = table->cellAt(0, 1);
+//    headerCellCursor = headerCell.firstCursorPosition();
+//    headerCellCursor.insertText(QObject::tr("Value"), boldFormat);
+
+//    for(int i = 0; i < properties.size(); i++){
+//       QTextCharFormat cellFormat = i % 2 == 0 ? textFormat : alternateCellFormat;
+//       QTextTableCell cell = table->cellAt(i + 1, 0);
+//       cell.setFormat(cellFormat);
+//       QTextCursor cellCursor = cell.firstCursorPosition();
+//       cellCursor.insertText(properties.at(i)->name());
+
+//       cell = table->cellAt(i + 1, 1);
+//       cell.setFormat(cellFormat);
+//       cellCursor = cell.firstCursorPosition();
+//       cellCursor.insertText(properties.at(i)->value().toString() + " " + properties.at(i)->unit());
+//    }
+
+//    cursor.movePosition(QTextCursor::End);
+//    cursor.insertBlock();
+//    printer(QPrinter::HighResolution);
+//    printer->setOutputFormat(QPrinter::PdfFormat);
+//    printer->setOutputFileName(filename);
+//    doc->print(printer);
+
+    //    // QTableWidget to PDF
+//    QString strFile = QDir::currentPath()+ "/pdf_deneme.pdf";
+//    printer->setResolution(QPrinter::HighResolution);
+//    printer->setOutputFormat(QPrinter::PdfFormat);
+//    printer->setPaperSize(QPrinter::A4);
+//    printer->setOrientation(QPrinter::Landscape);
+//    printer->setOutputFileName(strFile);
+
+//    QTextDocument doc;
+
+//    QString text("<table><thead>");
+//    text.append("<tr>");
+//    for (int i = 0; i < csvModel_real->columnCount(); i++) {
+//        text.append("<th>").append(csvModel_real->horizontalHeaderItem(i)->data(Qt::DisplayRole).toString()).append("</th>");
+//    }
+//    text.append("</tr></thead>");
+//    text.append("<tbody>");
+//    for (int i = 0; i < csvModel_real->rowCount(); i++) {
+//        text.append("<tr>");
+//        for (int j = 0; j < csvModel_real->columnCount(); j++) {
+//            QTableWidget *a;
+//            QTableWidgetItem *item = a->item(i, j);
+//            if (!item || item->text().isEmpty()) {
+//                csvModel_real->setItem(i, j, new QTableWidgetItem("0"));
+//            }
+//            text.append("<td>").append(csvModel_real->item(i, j)->text()).append("</td>");
+//        }
+//        text.append("</tr>");
+//    }
+//    text.append("</tbody></table>");
+//    doc.setHtml(text);
+//    doc.setPageSize(printer->pageRect().size());
+//    doc.print(printer);
 }
 void DLCalMenu::setup_tableView()
 {
