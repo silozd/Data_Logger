@@ -67,7 +67,7 @@ void DLCalMenu::export_file()       // TODO : filtera göre slot emit :: BURDA K
     }
     if(ui->radioBtn_pdf->isChecked()){
         QPrinter printer(QPrinter::HighResolution);
-        printer.setOrientation(QPrinter::Portrait);
+        printer.setOrientation(QPrinter::Landscape);
         printer.setPageSize(QPrinter::A4);
         printer.setOutputFormat(QPrinter::PdfFormat);
         printer.setOutputFileName(QDir::currentPath() + "/example.pdf");
@@ -126,7 +126,18 @@ void DLCalMenu::table_printPDF (QPrinter* printer, QSqlQuery&  Query)
 //    int y = 300;
 //    int x = y;
 //    if(ui->combo_rawreal->currentIndex() == 0){     // REAL displays
-//        painter.drawText( x, y, "REAL DATA VALUES");
+//        QPixmap pix(ui->wdgGraph->size());
+//        double xscale = printer->pageRect().width() / double(pix.width());
+//        double yscale = printer->pageRect().height() / double(pix.height());
+//        double scale = qMin(xscale, yscale);
+//        painter.translate(printer->paperRect().x() + printer->pageRect().width() / 2,
+//                          printer->paperRect().y() + printer->pageRect().height() / 2);
+//        painter.scale(scale, scale);
+//        painter.translate(-ui->wdgGraph->width() / 2, -ui->wdgGraph->height() / 2);
+//        painter.drawPixmap(0, 0, pix);
+//        painter.end();
+//        for (int column = 1; column < MaxChnCounts-2; column++)
+//        painter.drawText( x, y, QString("CH %1").arg(column));
 //        painter.drawText( x, 2*y, "Line 1 :     " );
 //        painter.drawText( x, 3*y, "Line 2 :     " );
 
@@ -140,6 +151,28 @@ void DLCalMenu::table_printPDF (QPrinter* printer, QSqlQuery&  Query)
 //    }
 
 //  2. Just write to PDF
+    QStringList timeList;
+    QStringList dateList;
+    QStringList horizontalHeader;
+    QString     itemstr;
+    QString     datestr;
+    QString     timestr;
+    QDateTime   date;
+    QTime       time;
+    int         itemint;
+    int col = 0 ;
+    if(ui->m_SetSerialPortButton){
+        timeList. append(QString("Time"));
+        dateList. append(QString("Date"));
+        date    . setDate(QDate::currentDate());
+        time    = QTime::currentTime();
+        datestr = date.toString("/dd/MM/yyyy/");
+        timestr = time.toString(":hh:mm:ss:");
+        rec_time = ui->combo_recPeriod->currentText().toInt();
+        rec_time = rec_time/50;
+        ctr++;
+    }
+    ////            https://www.cplusplus.com/forum/general/276345/  // BURDA KALDI kodu dene
     QString strStream;
     QTextStream out(&strStream);
 
@@ -153,16 +186,18 @@ void DLCalMenu::table_printPDF (QPrinter* printer, QSqlQuery&  Query)
           <<  QString("<title>%1</title>\n").arg("REAL-TIME SONUÇLAR")
           <<  "</head>\n"
           "<body bgcolor=#ffffff link=#5000A0>\n"
-          "<table border=0 cellspacing=0 cellpadding=0>\n";
+          "<table border=0 cellspacing=5 cellpadding=0>\n";
 
         // headers
         out << "<thead><tr bgcolor=#f0f0f0>";
-        out << QString("<th>Date </th>");
-        out << QString("<th> Time </th>");
+        out << "<th>Date : "<<datestr<<"</th>\n";
+        out << "<th> Time </th>";
         for (int column = 1; column < columnCount-2; column++)
-        out << QString("<th> CH-%1 </th>").arg(column);     // TODO FIX
+            out << QString("<th> CH-%1 </th>").arg(column);     // TODO FIX
         out << "</tr></thead>\n";
-
+        out << timestr;
+        out << ChnRealDataQString[MaxChnCounts];
+        out << "tttttttt\n";
         while (Query.next()) {
         out << "<tr>";
         for (int column = 0; column < columnCount; column++) {
@@ -171,7 +206,6 @@ void DLCalMenu::table_printPDF (QPrinter* printer, QSqlQuery&  Query)
         }
         out << "</tr>\n";
         }
-
         out <<  "</table>\n"
           "</body>\n"
           "</html>\n";
@@ -185,40 +219,33 @@ void DLCalMenu::table_printPDF (QPrinter* printer, QSqlQuery&  Query)
     document.setHtml(strStream);
     document.print(printer);
 
-////  3. QTableView to PDF
-//    QTextDocument *doc = new QTextDocument;
-//    doc->setDocumentMargin(10);
-//    QTextCursor cursor(doc);
-
-//    cursor.movePosition(QTextCursor::Start);
-
-//    QTextTable *table = cursor.insertTable(properties.size() + 1, 2, tableFormat);
-//    QTextTableCell headerCell = table->cellAt(0, 0);
-//    QTextCursor headerCellCursor = headerCell.firstCursorPosition();
-//    headerCellCursor.insertText(QObject::tr("Name"), boldFormat);
-//    headerCell = table->cellAt(0, 1);
-//    headerCellCursor = headerCell.firstCursorPosition();
-//    headerCellCursor.insertText(QObject::tr("Value"), boldFormat);
-
-//    for(int i = 0; i < properties.size(); i++){
-//       QTextCharFormat cellFormat = i % 2 == 0 ? textFormat : alternateCellFormat;
-//       QTextTableCell cell = table->cellAt(i + 1, 0);
-//       cell.setFormat(cellFormat);
-//       QTextCursor cellCursor = cell.firstCursorPosition();
-//       cellCursor.insertText(properties.at(i)->name());
-
-//       cell = table->cellAt(i + 1, 1);
-//       cell.setFormat(cellFormat);
-//       cellCursor = cell.firstCursorPosition();
-//       cellCursor.insertText(properties.at(i)->value().toString() + " " + properties.at(i)->unit());
-//    }
-
-//    cursor.movePosition(QTextCursor::End);
-//    cursor.insertBlock();
-//    printer(QPrinter::HighResolution);
+////  3. SCREENSHOT :
+//    QPixmap pix(this->size());
+//    QPainter painter(&pix);
+//    this->render(&painter);
+//    painter.end();
+//    printer->setResolution(QPrinter::HighResolution);
+//    printer->setOrientation(QPrinter::Landscape);
 //    printer->setOutputFormat(QPrinter::PdfFormat);
-//    printer->setOutputFileName(filename);
-//    doc->print(printer);
+//    printer->setPaperSize(QPrinter::A4);
+//    printer->setOutputFileName("test.pdf"); // will be in build folder
+
+//    painter.begin(printer);
+//    double xscale = printer->pageRect().width() / double(pix.width());
+//    double yscale = printer->pageRect().height() / double(pix.height());
+//    double scale = qMin(xscale, yscale);
+//    painter.translate(printer->paperRect().x() + printer->pageRect().width() / 2,
+//                   printer->paperRect().y() + printer->pageRect().height() / 2);
+//    painter.scale(scale, scale);
+//    painter.translate(-this->width() / 2, -this->height() / 2);
+//    painter.drawPixmap(0, 0, pix);
+
+//    QTextDocument doc;
+
+//    doc.setHtml("htmlcontent");
+//    doc.drawContents(&painter);
+
+//    painter.end();
 
 //// 4. QTableWidget to PDF
 //    QString strFile = QDir::currentPath()+ "/pdf_deneme.pdf";

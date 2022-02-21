@@ -441,7 +441,7 @@ void DLCalMenu::on_btn_graphDialog_clicked()    // 'Set Device' button
     grid_dialogGraph -> addWidget(btn_okDialog,3,1);
     grid_dialogGraph -> addWidget(btn_cancelDialog,3,2);
     dialog_setDevice -> setLayout(grid_dialogGraph);
-    dialog_setDevice -> setWindowTitle("Set Device");
+    dialog_setDevice -> setWindowTitle("Device");
     dialog_setDevice -> resize(DialogW,DialogH);
     dialog_setDevice -> exec();
 }

@@ -1081,7 +1081,7 @@ public:
 
         retranslateUi(DLCalMenu);
 
-        tabWidget->setCurrentIndex(2);
+        tabWidget->setCurrentIndex(0);
         wdgGraph->setCurrentIndex(1);
         tabWidget_alarm->setCurrentIndex(0);
 
