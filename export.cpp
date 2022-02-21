@@ -113,76 +113,79 @@ bool DLCalMenu::sql_connection()
 //                                       "firstname varchar(20), lastname varchar(20), num int )");
 //    query.exec("insert into person values(101, 'Dennis', 'Young','1')");
 //    ..
+    qDebug()<<"checked sql_connection";
     return true;
-    qDebug()<<"sql_connection";
 }
 void DLCalMenu::table_printPDF (QPrinter* printer, QSqlQuery&  Query)
 {
-    printer->setOutputFormat(QPrinter::PdfFormat);
-    printer->setPageSize(QPageSize(QPageSize::A4));
-    QPainter painter;
-    painter.begin(printer);
-    int y = 300;
-    int x = y;
-    if(ui->combo_rawreal->currentIndex() == 0){     // REAL displays
-        painter.drawText( x, y, "REAL DATA VALUES");
-        painter.drawText( x, 2*y, "Line 1 :     " );
-        painter.drawText( x, 3*y, "Line 2 :     " );
-
-        painter.end();
-        qDebug()<<"Real file exported as .pdf";
-    }
-    if(ui->combo_rawreal->currentIndex() == 1){     // RAW displays
-        painter.drawText( x, y, "RAW DATA VALUES");
-
-        qDebug()<<"Raw file exported as .pdf";
-    }
-
-////  Just write to PDF
-//    QString strStream;
-//    QTextStream out(&strStream);
-
-//    const int rowCount = Query.size();
-//    const int columnCount = MaxChnCounts+2;//Query.record().count();     // TODO FIX
-
+//// 1. Printerla deneme
+//    printer->setOutputFormat(QPrinter::PdfFormat);
+//    printer->setPageSize(QPageSize(QPageSize::A4));
+//    QPainter painter;
+//    painter.begin(printer);
+//    int y = 300;
+//    int x = y;
 //    if(ui->combo_rawreal->currentIndex() == 0){     // REAL displays
-//        out <<  "<html>\n"
-//          "<head>\n"
-//          "<meta Content=\"Text/html; charset=Windows-1251\">\n"
-//          <<  QString("<title>%1</title>\n").arg("REAL-TIME SONUÇLAR")
-//          <<  "</head>\n"
-//          "<body bgcolor=#ffffff link=#5000A0>\n"
-//          "<table border=1 cellspacing=0 cellpadding=2>\n";
+//        painter.drawText( x, y, "REAL DATA VALUES");
+//        painter.drawText( x, 2*y, "Line 1 :     " );
+//        painter.drawText( x, 3*y, "Line 2 :     " );
 
-//        // headers
-//        out << "<thead><tr bgcolor=#f0f0f0>";
-//        for (int column = 0; column < columnCount; column++)
-//        out << QString("<th>%1</th>").arg("abcd");     // TODO FIX
-//        out << "</tr></thead>\n";
-
-//        while (Query.next()) {
-//        out << "<tr>";
-//        for (int column = 0; column < columnCount; column++) {
-//          QString data = Query.value(column).toString();
-//          out << QString("<td bkcolor=0>%1</td>").arg((!data.isEmpty()) ? data : QString("&nbsp;"));
-//        }
-//        out << "</tr>\n";
-//        }
-
-//        out <<  "</table>\n"
-//          "</body>\n"
-//          "</html>\n";
-
+//        painter.end();
 //        qDebug()<<"Real file exported as .pdf";
 //    }
 //    if(ui->combo_rawreal->currentIndex() == 1){     // RAW displays
+//        painter.drawText( x, y, "RAW DATA VALUES");
+
 //        qDebug()<<"Raw file exported as .pdf";
 //    }
-//    QTextDocument document;
-//    document.setHtml(strStream);
-//    document.print(printer);
 
-////  QTableView to PDF
+//  2. Just write to PDF
+    QString strStream;
+    QTextStream out(&strStream);
+
+    const int rowCount = Query.size();
+    const int columnCount = MaxChnCounts+3;//Query.record().count();     // TODO FIX
+
+    if(ui->combo_rawreal->currentIndex() == 0){     // REAL displays
+        out <<  "<html>\n"
+          "<head>\n"
+          "<meta Content=\"Text/html; charset=Windows-1251\">\n"
+          <<  QString("<title>%1</title>\n").arg("REAL-TIME SONUÇLAR")
+          <<  "</head>\n"
+          "<body bgcolor=#ffffff link=#5000A0>\n"
+          "<table border=0 cellspacing=0 cellpadding=0>\n";
+
+        // headers
+        out << "<thead><tr bgcolor=#f0f0f0>";
+        out << QString("<th>Date </th>");
+        out << QString("<th> Time </th>");
+        for (int column = 1; column < columnCount-2; column++)
+        out << QString("<th> CH-%1 </th>").arg(column);     // TODO FIX
+        out << "</tr></thead>\n";
+
+        while (Query.next()) {
+        out << "<tr>";
+        for (int column = 0; column < columnCount; column++) {
+          QString data = Query.value(column).toString();
+          out << QString("<td bkcolor=0>%1</td>").arg((!data.isEmpty()) ? data : QString("&nbsp;"));
+        }
+        out << "</tr>\n";
+        }
+
+        out <<  "</table>\n"
+          "</body>\n"
+          "</html>\n";
+
+        qDebug()<<"Real file exported as .pdf";
+    }
+    if(ui->combo_rawreal->currentIndex() == 1){     // RAW displays
+        qDebug()<<"Raw file exported as .pdf";
+    }
+    QTextDocument document;
+    document.setHtml(strStream);
+    document.print(printer);
+
+////  3. QTableView to PDF
 //    QTextDocument *doc = new QTextDocument;
 //    doc->setDocumentMargin(10);
 //    QTextCursor cursor(doc);
@@ -217,7 +220,7 @@ void DLCalMenu::table_printPDF (QPrinter* printer, QSqlQuery&  Query)
 //    printer->setOutputFileName(filename);
 //    doc->print(printer);
 
-    //    // QTableWidget to PDF
+//// 4. QTableWidget to PDF
 //    QString strFile = QDir::currentPath()+ "/pdf_deneme.pdf";
 //    printer->setResolution(QPrinter::HighResolution);
 //    printer->setOutputFormat(QPrinter::PdfFormat);

@@ -585,13 +585,13 @@ void DLCalMenu::btn_cancelPswd_onClicked()
 void DLCalMenu::on_btn_saveChn_clicked()
 {
     int k = ui->combo_channels -> currentIndex();
-    ui->combo_channels  -> setItemText(k   ,ui->channelName->text() + QString(" - Ch %1").arg(k+1));   //
-    ui->combo_axis1     -> setItemText(k   ,ui->channelName->text() + QString(" - Ch %1").arg(k+1));   //      // since 1st index is 'time'
-    ui->combo_axis2     -> setItemText(k   ,ui->channelName->text() + QString(" - Ch %1").arg(k+1));   //
-    ui->CoBoxChannel    -> setItemText(k   ,ui->channelName->text() + QString(" - Ch %1").arg(k+1));   //
-    combo_diaMain       -> setItemText(k   ,ui->channelName->text() + QString(" - Ch %1").arg(k+1));   //
+    ui->combo_channels  -> setItemText(k   ,ui->channelName->text() + QString(" Ch %1").arg(k+1));   //
+    ui->combo_axis1     -> setItemText(k   ,ui->channelName->text() + QString(" Ch %1").arg(k+1));   //      // since 1st index is 'time'
+    ui->combo_axis2     -> setItemText(k   ,ui->channelName->text() + QString(" Ch %1").arg(k+1));   //
+    ui->CoBoxChannel    -> setItemText(k   ,ui->channelName->text() + QString(" Ch %1").arg(k+1));   //
+    combo_diaMain       -> setItemText(k   ,ui->channelName->text() + QString(" Ch %1").arg(k+1));   //
     for(int i=0; i<AlarmCount; i++)
-        comboBox_alarm[i] -> setItemText(k   ,ui->channelName->text() + QString(" - Ch %1").arg(k+1));   //
+        comboBox_alarm[i] -> setItemText(k   ,ui->channelName->text() + QString(" Ch %1").arg(k+1));   //
 }
 void DLCalMenu::btn_cancelDialog_onClicked()        // Setting device approval
 {
