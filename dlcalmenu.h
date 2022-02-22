@@ -289,7 +289,6 @@ public :
     QScrollBar *ScrollBarGain;
     QLabel *Gain;
     QLabel *LblScrollBarGain;
-
     // graph :
     QGridLayout *grid_wdgGraph;
     QCPPlottableLegendItem *plItem;
@@ -322,6 +321,10 @@ public :
     bool externalSelected=false;
     bool sdSelected=false;
     int linecnt=0;
+
+    // PDF :
+    QStringList pdf_header;
+
 
     int Fontsize;
     int FontsizeTab;

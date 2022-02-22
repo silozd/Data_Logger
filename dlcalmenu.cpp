@@ -395,8 +395,8 @@ void DLCalMenu::setup_GUI()
 
     connect(this->KeyTimer         , SIGNAL(timeout())        , this, SLOT(update_time()));
     connect(this->KeyTimer         , SIGNAL(timeout())        , this, SLOT(KeyTimerTimeOut()));
-    connect(this->KeyTimer         , SIGNAL(timeout())        , this, SLOT(table_writeData()));
     connect(this->btn_startStop    , SIGNAL(clicked())        , this, SLOT(timer_startStop()));
+    connect(this->KeyTimer         , SIGNAL(timeout())        , this, SLOT(table_writeData()));
     connect(this->ScrollBarGain    , SIGNAL(valueChanged(int)), this, SLOT(ScrollBarGain_valueChange(int)));
     connect(ui->btnSendParData     , SIGNAL(clicked())        , this, SLOT(SendCalParToVTK()));
     connect(ui->btnSendCalData     , SIGNAL(clicked())        , this, SLOT(SendCalDataToVTK()));

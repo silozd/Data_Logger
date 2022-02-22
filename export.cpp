@@ -75,7 +75,7 @@ void DLCalMenu::export_file()
         if(dlg.exec() == QDialog::Accepted) {
             QSqlQuery query;
             query.exec("SELECT * from person");
-            table_printPDF(&printer, query);
+            table_printPDF(&printer,query);
         }
     }
     if(ui->radioBtn_txt->isChecked()){
@@ -109,16 +109,120 @@ bool DLCalMenu::sql_connection()
         return false;
     }
     QSqlQuery query;
-//    qDebug() << "table:" <<   query.exec("create table person (id int primary key, "
-//                                       "firstname varchar(20), lastname varchar(20), num int )");
-//    query.exec("insert into person values(101, 'Dennis', 'Young','1')");
-//    ..
+    qDebug() << "table:" <<   query.exec("create table person (id int primary key, "
+                                       "firstname varchar(20), lastname varchar(20), num int )");
+    query.exec("insert into person values(101, 'Dennis', 'Young','1')");
+    query.exec("insert into person values(102, 'Christine', 'Holand','2')");
+ //    ..
     qDebug()<<"checked sql_connection";
     return true;
 }
 void DLCalMenu::table_printPDF (QPrinter* printer, QSqlQuery&  Query)
 {
-//// 1. Printerla deneme
+    QString strStream;
+    QTextStream out(&strStream);
+
+    const int rowCount = Query.size();
+    const int columnCount = Query.record().count();
+
+    out <<  "<html>\n"
+     "<head>\n"
+     "<meta Content=\"Text/html; charset=Windows-1251\">\n"
+     <<  QString("<title>%1</title>\n").arg("TITLE OF TABLE")
+     <<  "</head>\n"
+     "<body bgcolor=#ffffff link=#5000A0>\n"
+     "<table border=1 cellspacing=0 cellpadding=2>\n";
+
+    // headers
+    out << "<thead><tr bgcolor=#f0f0f0>";
+    for (int column = 0; column < columnCount; column++)
+    out << QString("<th>%1</th>").arg(Query.record().fieldName(column));
+    out << "</tr></thead>\n";
+
+    while (Query.next()) {
+    out << "<tr>";
+    for (int column = 0; column < columnCount; column++) {
+     QString data = Query.value(column).toString();
+     out << QString("<td bkcolor=0>%1</td>").arg((!data.isEmpty()) ? data : QString("&nbsp;"));
+    }
+    out << "</tr>\n";
+    }
+
+    out <<  "</table>\n"
+     "</body>\n"
+     "</html>\n";
+
+    QTextDocument document;
+    document.setHtml(strStream);
+    document.print(printer);
+////  2. Just write to PDF
+//    QStringList timeList;
+//    QStringList dateList;
+//    QStringList horizontalHeader;
+//    QString     itemstr;
+//    QString     datestr;
+//    QString     timestr;
+//    QString     strStream;
+//    QTextStream out(&strStream);
+//    QDateTime   date;
+//    QTime       time;
+//    int         itemint;
+//    int col = 0 ;
+
+//    const int columnCount = MaxChnCounts+3;//Query.record().count();     // TODO FIX
+//    const int rowCount = Query.size();
+
+//    timeList. append(QString("Time"));
+//    dateList. append(QString("Date"));
+//    date    . setDate(QDate::currentDate());
+//    time    = QTime::currentTime();
+//    datestr = date.toString("/dd/MM/yyyy/");
+//    timestr = time.toString(":hh:mm:ss:");
+//    out <<  "<html>\n"
+//     "<head>\n"
+//     "<meta Content=\"Text/html; charset=Windows-1251\">\n"
+//     <<  QString("<title>%1</title>\n").arg("REAL-TIME SONUÇLAR")
+//     <<  "</head>\n"
+//     "<body bgcolor=#ffffff link=#5000A0>\n"
+//     "<table border=0 cellspacing=1 cellpadding=0>\n";
+//    //        // headers
+//    out << "<thead><tr bgcolor=#f0f0f0>";
+//    out << "<th>Date "<<"</th>\n";
+//    out << "<th> | Time "<<"</th>\n";
+//    for (int column = 1; column < columnCount-2; column++)
+//        out << "<th>" << QString(" | CH-%1").arg(column)<<"</th>\n";
+//    out << "<tr>"<<"<td>"<<datestr<<"</td>"
+//        <<"<td>"<<timestr<<"</td>"
+//        <<"<td>"<<itemstr<<"</td\n>"<<"</tr>\n";
+//    out <<  "</table>\n"
+//      "</body>\n"
+//      "</html>\n";
+
+//    qDebug()<<"itemstr"<<itemstr;
+//    qDebug()<<"File exported as .pdf";
+
+//////            https://www.cplusplus.com/forum/general/276345/  // BURDA
+
+
+////            out << QString("<th> CH-%1 </th>").arg(column);     // TODO FIX
+////        out << "</tr></thead>\n";
+////        out << timestr;
+////        out << ChnRealDataQString[MaxChnCounts];
+////        out << "tttttttt\n";
+////        while (Query.next()) {
+////        out << "<tr>";
+////        for (int column = 0; column < columnCount; column++) {
+////          QString data = Query.value(column).toString();
+////          out << QString("<td bkcolor=0>%1</td>").arg((!data.isEmpty()) ? data : QString("&nbsp;"));
+////        }
+////        out << "</tr>\n";
+////        }
+
+//    QTextDocument document;
+//    document.setHtml(strStream);
+//    document.print(printer);
+
+//// 2. Printerla deneme
 //    printer->setOutputFormat(QPrinter::PdfFormat);
 //    printer->setPageSize(QPageSize(QPageSize::A4));
 //    QPainter painter;
@@ -149,73 +253,6 @@ void DLCalMenu::table_printPDF (QPrinter* printer, QSqlQuery&  Query)
 
 //        qDebug()<<"Raw file exported as .pdf";
 //    }
-
-//  2. Just write to PDF
-    QStringList timeList;
-    QStringList dateList;
-    QStringList horizontalHeader;
-    QString     itemstr;
-    QString     datestr;
-    QString     timestr;
-    QString     strStream;
-    QTextStream out(&strStream);
-    QDateTime   date;
-    QTime       time;
-    int         itemint;
-    int col = 0 ;
-
-    const int columnCount = MaxChnCounts+3;//Query.record().count();     // TODO FIX
-    const int rowCount = Query.size();
-
-    timeList. append(QString("Time"));
-    dateList. append(QString("Date"));
-    date    . setDate(QDate::currentDate());
-    time    = QTime::currentTime();
-    datestr = date.toString("/dd/MM/yyyy/");
-    timestr = time.toString(":hh:mm:ss:");
-    out <<  "<html>\n"
-     "<head>\n"
-     "<meta Content=\"Text/html; charset=Windows-1251\">\n"
-     <<  QString("<title>%1</title>\n").arg("REAL-TIME SONUÇLAR")
-     <<  "</head>\n"
-     "<body bgcolor=#ffffff link=#5000A0>\n"
-     "<table border=0 cellspacing=1 cellpadding=0>\n";
-    //        // headers
-    out << "<thead><tr bgcolor=#f0f0f0>";
-    out << "<th>Date "<<"</th>\n";
-    out << "<th> | Time "<<"</th>\n";
-    for (int column = 1; column < columnCount-2; column++)
-        out << "<th>" << QString(" | CH-%1").arg(column)<<"</th>\n";
-    out << "<tr>"<<"<td>"<<datestr<<"</td>"
-        <<"<td>"<<timestr<<"</td>"
-        <<"<td>"<<itemstr<<"</td\n>"<<"</tr>\n";
-    out <<  "</table>\n"
-      "</body>\n"
-      "</html>\n";
-
-    qDebug()<<"itemstr"<<itemstr;
-    qDebug()<<"File exported as .pdf";
-
-////            https://www.cplusplus.com/forum/general/276345/  // BURDA
-
-
-//            out << QString("<th> CH-%1 </th>").arg(column);     // TODO FIX
-//        out << "</tr></thead>\n";
-//        out << timestr;
-//        out << ChnRealDataQString[MaxChnCounts];
-//        out << "tttttttt\n";
-//        while (Query.next()) {
-//        out << "<tr>";
-//        for (int column = 0; column < columnCount; column++) {
-//          QString data = Query.value(column).toString();
-//          out << QString("<td bkcolor=0>%1</td>").arg((!data.isEmpty()) ? data : QString("&nbsp;"));
-//        }
-//        out << "</tr>\n";
-//        }
-
-    QTextDocument document;
-    document.setHtml(strStream);
-    document.print(printer);
 
 ////  3. SCREENSHOT :
 //    QPixmap pix(this->size());
@@ -364,6 +401,9 @@ void DLCalMenu::table_writeData()   // Read External : moved to tableWrite
         csvModel_real -> setParent(tview_real);
         tview_raw     -> setModel(csvModel_raw);
         csvModel_raw  -> setParent(tview_raw);
+
+        pdf_header = dateList + timeList + horizontalHeader;
+
     }
 }
 void DLCalMenu::table_readData()       // External table
