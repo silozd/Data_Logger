@@ -323,8 +323,7 @@ public :
     int linecnt=0;
 
     // PDF :
-    QStringList pdf_header;
-
+    QString itemstr_pdf;
 
     int Fontsize;
     int FontsizeTab;
